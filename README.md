@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
-[![Tests](https://github.com/ft-tech/ftshare-python-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/ft-tech/ftshare-python-sdk/actions/workflows/ci.yml)
+[![Tests](https://github.com/ftshare-lab/ftshare-python-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/ftshare-lab/ftshare-python-sdk/actions/workflows/ci.yml)
 
 `ftshare` 是 FTShare 行情与金融数据接口的 Python SDK。它把 `ftshare-doc/api-doc/` 中的接口封装成 Python 方法，默认访问：
 
@@ -358,9 +358,8 @@ FTSHARE_RUN_INTEGRATION=1 python3 -m pytest tests/test_integration_market.py
 
 | 指标 | 数量 |
 |---|---:|
-| SDK 方法总数 | 210 |
+| SDK 方法总数 | 176 |
 | 可正常调用 | 161 |
-| 服务端未暴露 public path | 34 |
 | 真实调用失败 | 15 |
 
 失败接口主要是服务端 HTTP 500、HTTP 429 限流或大响应 chunk 传输截断。SDK 会把这些错误按异常类型抛出。

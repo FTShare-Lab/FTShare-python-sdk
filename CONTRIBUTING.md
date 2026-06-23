@@ -7,7 +7,7 @@ Thanks for your interest in contributing! This is a short guide to get you start
 Clone the repository and install the package with its test dependencies in editable mode:
 
 ```bash
-git clone https://github.com/ft-tech/ftshare-python-sdk
+git clone https://github.com/ftshare-lab/ftshare-python-sdk
 cd ftshare-python-sdk
 pip install -e ".[test]"
 ```

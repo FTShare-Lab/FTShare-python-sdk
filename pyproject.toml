@@ -37,9 +37,9 @@ dev = ["pytest>=7.0"]
 [project.urls]
 Homepage = "https://market.ft.tech/"
 Documentation = "https://market.ft.tech/"
-Source = "https://github.com/ft-tech/ftshare-python-sdk"
-Issues = "https://github.com/ft-tech/ftshare-python-sdk/issues"
-Changelog = "https://github.com/ft-tech/ftshare-python-sdk/blob/main/CHANGELOG.md"
+Source = "https://github.com/ftshare-lab/ftshare-python-sdk"
+Issues = "https://github.com/ftshare-lab/ftshare-python-sdk/issues"
+Changelog = "https://github.com/ftshare-lab/ftshare-python-sdk/blob/main/CHANGELOG.md"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/ftshare"]
