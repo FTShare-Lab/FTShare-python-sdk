@@ -1,0 +1,52 @@
+[build-system]
+requires = ["hatchling>=1.21"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ftshare"
+version = "0.1.0"
+description = "Python SDK for FTShare market data APIs."
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+authors = [
+  { name = "FTShare", email = "liulei@ft.tech" }
+]
+keywords = ["ftshare", "market-data", "finance", "sdk"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "License :: OSI Approved :: MIT License",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Financial and Insurance Industry",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Typing :: Typed",
+]
+dependencies = [
+  "pandas>=1.5",
+  "requests>=2.31.0",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7.0"]
+dev = ["pytest>=7.0"]
+
+[project.urls]
+Homepage = "https://market.ft.tech/"
+Documentation = "https://market.ft.tech/"
+Source = "https://github.com/ft-tech/ftshare-python-sdk"
+Issues = "https://github.com/ft-tech/ftshare-python-sdk/issues"
+Changelog = "https://github.com/ft-tech/ftshare-python-sdk/blob/main/CHANGELOG.md"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ftshare"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+markers = [
+  "integration: tests that call the real FTShare API",
+]
