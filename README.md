@@ -350,20 +350,6 @@ python3 -m pytest
 FTSHARE_RUN_INTEGRATION=1 python3 -m pytest tests/test_integration_market.py
 ```
 
-最近一次全量检查结果见：
-
-[SDK接口测试报告.md](SDK接口测试报告.md)
-
-概要：
-
-| 指标 | 数量 |
-|---|---:|
-| SDK 方法总数 | 176 |
-| 可正常调用 | 161 |
-| 真实调用失败 | 15 |
-
-失败接口主要是服务端 HTTP 500、HTTP 429 限流或大响应 chunk 传输截断。SDK 会把这些错误按异常类型抛出。
-
 ## 项目结构
 
 ```text
