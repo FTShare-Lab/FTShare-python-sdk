@@ -1,4 +1,4 @@
-"""FTShare etf endpoint methods generated from ``ftshare-doc/api-doc``."""
+"""FTShare etf endpoint methods for FTShare market data."""
 
 from __future__ import annotations
 
@@ -29,7 +29,6 @@ class EtfApiMixin:
 
         Endpoint: ``api/v1/market/data/etf-adjust-factor``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/ETF复权因子.md``.
         Documented endpoint: ``etf_adjust_factor``.
 
         Args:
@@ -72,7 +71,6 @@ class EtfApiMixin:
 
         Endpoint: ``api/v1/market/data/etf-component``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/ETF成份股.md``.
         Documented endpoint: ``get_etf_components_handler``.
 
         Args:
@@ -109,7 +107,6 @@ class EtfApiMixin:
 
         Endpoint: ``api/v1/market/data/etf-components-all``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/ETF成份列表.md``.
         Documented endpoint: ``etf_components_all``.
 
         Args:
@@ -145,7 +142,6 @@ class EtfApiMixin:
 
         Endpoint: ``api/v1/market/data/etf-description-all``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/ETF基础信息.md``.
         Documented endpoint: ``etf_description_all``.
 
         Args:
@@ -187,7 +183,6 @@ class EtfApiMixin:
 
         Endpoint: ``api/v1/market/data/etf/zhitou-etf``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/指数ETF基金导出.md``.
         Documented endpoint: ``etf_fund_export``.
 
         Args:
@@ -241,7 +236,6 @@ class EtfApiMixin:
 
         Endpoint: ``api/v1/market/data/etf-pcf/etf-pcfs``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/ETF-PCF清单列表.md``.
         Documented endpoint: ``etf_pcf_list_handler``.
 
         Args:
@@ -291,7 +285,6 @@ class EtfApiMixin:
 
         Endpoint: ``api/v1/market/data/etf-pre-data``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/ETF盘前数据.md``.
         Documented endpoint: ``get_etf_pre``.
 
         Args:
@@ -330,7 +323,6 @@ class EtfApiMixin:
 
         Endpoint: ``api/v1/market/data/etf-pre-single``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/单只ETF盘前数据.md``.
         Documented endpoint: ``get_etf_pre_single_handler``.
 
         Args:

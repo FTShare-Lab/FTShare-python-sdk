@@ -1,4 +1,4 @@
-"""FTShare index endpoint methods generated from ``ftshare-doc/api-doc``."""
+"""FTShare index endpoint methods for FTShare market data."""
 
 from __future__ import annotations
 
@@ -28,7 +28,6 @@ class IndexApiMixin:
 
         Endpoint: ``api/v1/market/data/index/index_description``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/中证指数描述列表.md``.
         Documented endpoint: ``index_description_list_handler``.
 
         Args:
@@ -83,7 +82,6 @@ class IndexApiMixin:
 
         Endpoint: ``api/v1/market/data/index/index_weight``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/指数权重列表.md``.
         Documented endpoint: ``index_weight_list_handler``.
 
         Args:
@@ -138,7 +136,6 @@ class IndexApiMixin:
 
         Endpoint: ``api/v1/market/data/index/index_weight_summary``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/指数权重汇总.md``.
         Documented endpoint: ``index_weight_summary_handler``.
 
         Args:

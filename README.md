@@ -360,5 +360,5 @@ src/ftshare/
   fields.py            # fields 参数解析和列筛选
   pagination.py        # page/page_size/limit/max_pages 校验
   response.py          # API 业务错误、records/items 提取、总页数解析
-  apis/                # 从 ftshare-doc/api-doc 按业务域生成的接口 mixin
+  apis/                # 按业务域组织的接口 mixin
 ```

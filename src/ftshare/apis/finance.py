@@ -1,4 +1,4 @@
-"""FTShare finance endpoint methods generated from ``ftshare-doc/api-doc``."""
+"""FTShare finance endpoint methods for FTShare market data."""
 
 from __future__ import annotations
 
@@ -31,7 +31,6 @@ class FinanceApiMixin:
 
         Endpoint: ``api/v1/market/data/finance/financial-calendar/baidu``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/百度财经日历.md``.
         Documented endpoint: ``baidu_financial_calendar``.
 
         Args:
@@ -89,7 +88,6 @@ class FinanceApiMixin:
 
         Endpoint: ``api/v1/market/data/finance/balance``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/A股资产负债表.md``.
         Documented endpoint: ``balance``.
 
         Args:
@@ -148,7 +146,6 @@ class FinanceApiMixin:
 
         Endpoint: ``api/v1/market/data/finance/cashflow``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/A股现金流量表.md``.
         Documented endpoint: ``cashflow``.
 
         Args:
@@ -199,7 +196,6 @@ class FinanceApiMixin:
 
         Endpoint: ``api/v1/market/data/finance/cashflow-stock-code``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/现金流支持股票代码.md``.
         Documented endpoint: ``get_cashflow_stock_code``.
 
         Args:
@@ -243,7 +239,6 @@ class FinanceApiMixin:
 
         Endpoint: ``api/v1/market/data/finance/stock-performance-express``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/业绩快报.md``.
         Documented endpoint: ``earnings_reports_paginated``.
 
         Args:
@@ -302,7 +297,6 @@ class FinanceApiMixin:
 
         Endpoint: ``api/v1/market/data/finance/income``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/A股利润表.md``.
         Documented endpoint: ``income``.
 
         Args:
@@ -361,7 +355,6 @@ class FinanceApiMixin:
 
         Endpoint: ``api/v1/market/data/finance/stock-performance-forecast``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/业绩预告.md``.
         Documented endpoint: ``performance_forecasts_paginated``.
 
         Args:
@@ -419,7 +412,6 @@ class FinanceApiMixin:
 
         Endpoint: ``api/v1/market/data/finance/financial-calendar/wallstreetcn``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/华尔街见闻财经日历.md``.
         Documented endpoint: ``wallstreetcn_financial_calendar``.
 
         Args:

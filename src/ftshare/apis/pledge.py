@@ -1,4 +1,4 @@
-"""FTShare pledge endpoint methods generated from ``ftshare-doc/api-doc``."""
+"""FTShare pledge endpoint methods for FTShare market data."""
 
 from __future__ import annotations
 
@@ -28,7 +28,6 @@ class PledgeApiMixin:
 
         Endpoint: ``api/v1/market/data/pledge/pledge-summary``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/股权质押汇总.md``.
         Documented endpoint: ``stock_pledge_summary``.
 
         Args:
@@ -82,7 +81,6 @@ class PledgeApiMixin:
 
         Endpoint: ``api/v1/market/data/pledge/pledge-detail``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/股权质押明细.md``.
         Documented endpoint: ``stock_pledge_detail``.
 
         Args:
@@ -136,7 +134,6 @@ class PledgeApiMixin:
 
         Endpoint: ``api/v1/market/data/pledge/pledge-summary``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/股权质押汇总.md``.
         Documented endpoint: ``stock_pledge_summary``.
 
         Args:

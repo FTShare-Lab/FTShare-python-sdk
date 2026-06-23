@@ -1,4 +1,4 @@
-"""FTShare global_index endpoint methods generated from ``ftshare-doc/api-doc``."""
+"""FTShare global_index endpoint methods for FTShare market data."""
 
 from __future__ import annotations
 
@@ -26,7 +26,6 @@ class GlobalIndexApiMixin:
 
         Endpoint: ``api/v1/market/data/global-index/daily-kline``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/全球指数日K线.md``.
         Documented endpoint: ``global_index_daily_kline``.
 
         Args:

@@ -1,4 +1,4 @@
-"""FTShare holder endpoint methods generated from ``ftshare-doc/api-doc``."""
+"""FTShare holder endpoint methods for FTShare market data."""
 
 from __future__ import annotations
 
@@ -30,7 +30,6 @@ class HolderApiMixin:
 
         Endpoint: ``api/v1/market/data/holder/stock-holder-ften``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/十大流通股东.md``.
         Documented endpoint: ``stock_float_holders``.
 
         Args:
@@ -85,7 +84,6 @@ class HolderApiMixin:
 
         Endpoint: ``api/v1/market/data/holder/stock-ggcg-em``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/东方财富股东增减持.md``.
         Documented endpoint: ``stock_ggcg_em_handler``.
 
         Args:
@@ -142,7 +140,6 @@ class HolderApiMixin:
 
         Endpoint: ``api/v1/market/data/holder/stock-ggmx``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/董监高持股变动.md``.
         Documented endpoint: ``stock_ggmx_handler``.
 
         Args:
@@ -199,7 +196,6 @@ class HolderApiMixin:
 
         Endpoint: ``api/v1/market/data/holder/stock-ggmx-buy-ranking``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/董监高增持排名.md``.
         Documented endpoint: ``stock_ggmx_buy_ranking_handler``.
 
         Args:
@@ -253,7 +249,6 @@ class HolderApiMixin:
 
         Endpoint: ``api/v1/market/data/holder/stock-ggmx-sell-ranking``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/董监高减持排名.md``.
         Documented endpoint: ``stock_ggmx_sell_ranking_handler``.
 
         Args:
@@ -308,7 +303,6 @@ class HolderApiMixin:
 
         Endpoint: ``api/v1/market/data/holder/stock-holder-ten``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/十大股东.md``.
         Documented endpoint: ``stock_holders``.
 
         Args:
@@ -364,7 +358,6 @@ class HolderApiMixin:
 
         Endpoint: ``api/v1/market/data/holder/stock-holder-nums``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/股东人数.md``.
         Documented endpoint: ``stock_holders_number``.
 
         Args:
@@ -420,7 +413,6 @@ class HolderApiMixin:
 
         Endpoint: ``api/v1/market/data/holder/stock-share-chg``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/股东增减持.md``.
         Documented endpoint: ``stock_share_chg``.
 
         Args:

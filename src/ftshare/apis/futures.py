@@ -1,4 +1,4 @@
-"""FTShare futures endpoint methods generated from ``ftshare-doc/api-doc``."""
+"""FTShare futures endpoint methods for FTShare market data."""
 
 from __future__ import annotations
 
@@ -25,7 +25,6 @@ class FuturesApiMixin:
 
         Endpoint: ``api/v1/market/data/futures/futures-base-data``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/中国期货基础数据.md``.
         Documented endpoint: ``get_china_futures_base_data_handler``.
 
         Args:
@@ -64,7 +63,6 @@ class FuturesApiMixin:
 
         Endpoint: ``api/v1/market/data/futures/futures-lists``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/中国期货列表.md``.
         Documented endpoint: ``get_china_futures_lists_handler``.
 
         Args:
@@ -113,7 +111,6 @@ class FuturesApiMixin:
 
         Endpoint: ``api/v1/market/data/eastmoney-futures-position``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/东方财富期货持仓.md``.
         Documented endpoint: ``get_eastmoney_futures_position``.
 
         Args:
@@ -179,7 +176,6 @@ class FuturesApiMixin:
 
         Endpoint: ``api/v1/market/data/eastmoney-futures-position``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/东方财富期货持仓.md``.
         Documented endpoint: ``get_eastmoney_futures_position``.
 
         Args:
@@ -238,7 +234,6 @@ class FuturesApiMixin:
 
         Endpoint: ``api/v1/market/data/futures/kline``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/期货合约K线.md``.
         Documented endpoint: ``futures_contract_kline``.
 
         Args:
@@ -284,7 +279,6 @@ class FuturesApiMixin:
 
         Endpoint: ``api/v1/market/data/futures/kline``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/期货合约K线.md``.
         Documented endpoint: ``futures_contract_kline``.
 
         Args:

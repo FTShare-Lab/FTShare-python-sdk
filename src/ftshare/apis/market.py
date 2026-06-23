@@ -1,4 +1,4 @@
-"""FTShare market endpoint methods generated from ``ftshare-doc/api-doc``."""
+"""FTShare market endpoint methods for FTShare market data."""
 
 from __future__ import annotations
 
@@ -32,7 +32,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/auction-results``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/集合竞价结果.md``.
         Documented endpoint: ``auction_results``.
 
         Args:
@@ -85,7 +84,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/bse-mapping``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/北交所映射.md``.
         Documented endpoint: ``get_bse_mapping``.
 
         Args:
@@ -131,7 +129,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/bullion/price``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/贵金属价格.md``.
         Documented endpoint: ``get_bullion_price``.
 
         Args:
@@ -181,7 +178,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/bullion/support-symbol``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/贵金属支持标的.md``.
         Documented endpoint: ``get_bullion_support_symbol``.
 
         Args:
@@ -218,7 +214,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/cb/cb-base-data``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/可转债基础数据.md``.
         Documented endpoint: ``get_cb_base_data_handler``.
 
         Args:
@@ -255,7 +250,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/cb/cb-lists``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/可转债列表.md``.
         Documented endpoint: ``get_cb_lists_handler``.
 
         Args:
@@ -298,7 +292,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/company-list``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/公司列表.md``.
         Documented endpoint: ``get_company_list``.
 
         Args:
@@ -348,7 +341,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/eastmoney-board-constituents``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/东方财富板块成份股.md``.
         Documented endpoint: ``eastmoney_board_constituents``.
 
         Args:
@@ -393,7 +385,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/eastmoney-board-daily-ohlc``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/东方财富板块日线OHLC.md``.
         Documented endpoint: ``eastmoney_board_daily_kline``.
 
         Args:
@@ -449,7 +440,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/eastmoney-board-latest-ohlc``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/东方财富板块最新OHLC.md``.
         Documented endpoint: ``eastmoney_board_latest_kline``.
 
         Args:
@@ -497,7 +487,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/eastmoney-concept-boards``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/东方财富概念板块.md``.
         Documented endpoint: ``eastmoney_concept_boards``.
 
         Args:
@@ -541,7 +530,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/eastmoney-dapan-flow``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/东方财富大盘资金流.md``.
         Documented endpoint: ``get_eastmoney_dapan_flow``.
 
         Args:
@@ -600,7 +588,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/eastmoney-hk-index-daily-kline``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/东方财富港股指数日K.md``.
         Documented endpoint: ``get_eastmoney_hk_index_daily_kline``.
 
         Args:
@@ -660,7 +647,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/eastmoney-market-valuation``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/东方财富市场估值.md``.
         Documented endpoint: ``get_eastmoney_market_valuation``.
 
         Args:
@@ -714,7 +700,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/eastmoney-rank``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/东方财富股票排名.md``.
         Documented endpoint: ``eastmoney_rank``.
 
         Args:
@@ -763,7 +748,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/eastmoney-sector-flow``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/东方财富板块资金流.md``.
         Documented endpoint: ``get_eastmoney_sector_flow``.
 
         Args:
@@ -824,7 +808,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/eastmoney-stock-flow``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/东方财富个股资金流.md``.
         Documented endpoint: ``get_eastmoney_stock_flow``.
 
         Args:
@@ -884,7 +867,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/eastmoney-stock-valuation``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/东方财富个股估值.md``.
         Documented endpoint: ``get_eastmoney_stock_valuation``.
 
         Args:
@@ -943,7 +925,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/eastmoney-us-stock-daily-ohlc``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/东方财富美股日OHLC.md``.
         Documented endpoint: ``eastmoney_us_stock_daily_kline``.
 
         Args:
@@ -1001,7 +982,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/eastmoney-us-stock-daily-ohlc``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/东方财富美股日OHLC.md``.
         Documented endpoint: ``eastmoney_us_stock_daily_kline``.
 
         Args:
@@ -1057,7 +1037,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/eastmoney-us-stock-latest-ohlc``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/东方财富美股最新OHLC.md``.
         Documented endpoint: ``eastmoney_us_stock_latest_kline``.
 
         Args:
@@ -1111,7 +1090,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/eastmoney-us-stock-latest-ohlc``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/东方财富美股最新OHLC.md``.
         Documented endpoint: ``eastmoney_us_stock_latest_kline``.
 
         Args:
@@ -1165,7 +1143,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/eastmoney-us-stock-list``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/东方财富美股列表.md``.
         Documented endpoint: ``eastmoney_us_stock_list``.
 
         Args:
@@ -1213,7 +1190,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/hk-sh-stock-connect-members``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/沪港通成份.md``.
         Documented endpoint: ``hk_sh_stock_connect_members``.
 
         Args:
@@ -1249,7 +1225,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/hk-sz-stock-connect-members``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/深港通成份.md``.
         Documented endpoint: ``hk_sz_stock_connect_members``.
 
         Args:
@@ -1285,7 +1260,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/index-description-all``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/指数基础信息.md``.
         Documented endpoint: ``index_description_all``.
 
         Args:
@@ -1322,7 +1296,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/northbound``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/北向资金交易.md``.
         Documented endpoint: ``northbound``.
 
         Args:
@@ -1360,7 +1333,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/time/get-nth-trade-date``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/第N个交易日.md``.
         Documented endpoint: ``get_nth_trade_date``.
 
         Args:
@@ -1401,7 +1373,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/price/get-price-change``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/价格变动.md``.
         Documented endpoint: ``get_price_change``.
 
         Args:
@@ -1443,7 +1414,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/security/search``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/标的搜索.md``.
         Documented endpoint: ``search``.
 
         Args:
@@ -1486,7 +1456,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/semantic-search-news``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/新闻语义搜索.md``.
         Documented endpoint: ``semantic_search_news_handler``.
 
         Args:
@@ -1527,7 +1496,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/sh-hk-stock-connect-members``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/沪股通成份.md``.
         Documented endpoint: ``sh_hk_stock_connect_members``.
 
         Args:
@@ -1564,7 +1532,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/southbound``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/南向资金交易.md``.
         Documented endpoint: ``southbound``.
 
         Args:
@@ -1607,7 +1574,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/suspension-list``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/停牌列表.md``.
         Documented endpoint: ``suspension_list``.
 
         Args:
@@ -1656,7 +1622,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/sw-industry/constituent-history``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/申万行业成份股历史.md``.
         Documented endpoint: ``sw_industry_constituent_history``.
 
         Args:
@@ -1702,7 +1667,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/sw-industry/daily-metrics``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/申万行业日度指标.md``.
         Documented endpoint: ``sw_industry_daily_metrics``.
 
         Args:
@@ -1760,7 +1724,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/sw-industry/overview``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/申万行业总览.md``.
         Documented endpoint: ``sw_industry_overview``.
 
         Args:
@@ -1809,7 +1772,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/sz-hk-stock-connect-members``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/深股通成份.md``.
         Documented endpoint: ``sz_hk_stock_connect_members``.
 
         Args:
@@ -1852,7 +1814,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/ths-all-board-kline``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/同花顺全板块K线.md``.
         Documented endpoint: ``ths_all_board_kline``.
 
         Args:
@@ -1907,7 +1868,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/ths-board-kline``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/同花顺板块K线.md``.
         Documented endpoint: ``ths_board_kline``.
 
         Args:
@@ -1955,7 +1915,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/ths-board-list``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/同花顺板块列表.md``.
         Documented endpoint: ``ths_board_list``.
 
         Args:
@@ -1999,7 +1958,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/report/type-reports``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/研报分类.md``.
         Documented endpoint: ``type_reports``.
 
         Args:
@@ -2059,7 +2017,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/us/us-balance``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/美股资产负债表.md``.
         Documented endpoint: ``us_balance``.
 
         Args:
@@ -2118,7 +2075,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/us/us-basic``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/美股基础信息.md``.
         Documented endpoint: ``us_basic``.
 
         Args:
@@ -2177,7 +2133,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/us/us-cashflow``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/美股现金流.md``.
         Documented endpoint: ``us_cashflow``.
 
         Args:
@@ -2240,7 +2195,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/us/us-income``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/美股利润表.md``.
         Documented endpoint: ``us_income``.
 
         Args:
@@ -2301,7 +2255,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/xueqiu-rank``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/雪球股票排名.md``.
         Documented endpoint: ``xueqiu_rank``.
 
         Args:
@@ -2360,7 +2313,6 @@ class MarketApiMixin:
 
         Endpoint: ``api/v1/market/data/yzxdr-detail``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/除权除息明细.md``.
         Documented endpoint: ``get_yzxdr_detail``.
 
         Args:

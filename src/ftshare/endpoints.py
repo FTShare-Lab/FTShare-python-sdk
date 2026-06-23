@@ -1,4 +1,4 @@
-"""Endpoint registry generated from ``ftshare-doc/api-doc``."""
+"""Endpoint registry for FTShare market data."""
 
 from __future__ import annotations
 

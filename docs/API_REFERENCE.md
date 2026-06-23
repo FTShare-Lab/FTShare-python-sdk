@@ -292,7 +292,6 @@ df = market.baidu_financial_calendar(
 
 Endpoint: ``api/v1/market/data/finance/financial-calendar/baidu``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/百度财经日历.md``.
 Documented endpoint: ``baidu_financial_calendar``.
 
 Args:
@@ -335,7 +334,6 @@ A股资产负债表.
 
 Endpoint: ``api/v1/market/data/finance/balance``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/A股资产负债表.md``.
 Documented endpoint: ``balance``.
 
 Args:
@@ -378,7 +376,6 @@ A股现金流量表.
 
 Endpoint: ``api/v1/market/data/finance/cashflow``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/A股现金流量表.md``.
 Documented endpoint: ``cashflow``.
 
 Args:
@@ -421,7 +418,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/finance/cashflow-stock-code``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/现金流支持股票代码.md``.
 Documented endpoint: ``get_cashflow_stock_code``.
 
 Args:
@@ -456,7 +452,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/finance/stock-performance-express``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/业绩快报.md``.
 Documented endpoint: ``earnings_reports_paginated``.
 
 Args:
@@ -499,7 +494,6 @@ A股利润表.
 
 Endpoint: ``api/v1/market/data/finance/income``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/A股利润表.md``.
 Documented endpoint: ``income``.
 
 Args:
@@ -542,7 +536,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/finance/stock-performance-forecast``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/业绩预告.md``.
 Documented endpoint: ``performance_forecasts_paginated``.
 
 Args:
@@ -585,7 +578,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/finance/financial-calendar/wallstreetcn``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/华尔街见闻财经日历.md``.
 Documented endpoint: ``wallstreetcn_financial_calendar``.
 
 Args:
@@ -629,7 +621,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/economic/china-credit-loans``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/社融信贷.md``.
 Documented endpoint: ``consumer_credit_monthly``.
 
 Args:
@@ -664,7 +655,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/economic/china-customs-trade``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/进出口.md``.
 Documented endpoint: ``consumer_customs_trade_monthly``.
 
 Args:
@@ -699,7 +689,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/economic/china-fiscal-revenue``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/财政收入.md``.
 Documented endpoint: ``consumer_fiscal_revenue_monthly``.
 
 Args:
@@ -734,7 +723,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/economic/china-fixed-asset-investment``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/固定资产投资.md``.
 Documented endpoint: ``consumer_fixed_asset_monthly``.
 
 Args:
@@ -769,7 +757,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/economic/china-forex-gold``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/外汇黄金.md``.
 Documented endpoint: ``consumer_forex_gold_monthly``.
 
 Args:
@@ -804,7 +791,6 @@ GDP.
 
 Endpoint: ``api/v1/market/data/economic/china-gdp``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/GDP.md``.
 Documented endpoint: ``consumer_gdp_quarterly``.
 
 Args:
@@ -839,7 +825,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/economic/china-industrial-added-value``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/工业增加值.md``.
 Documented endpoint: ``consumer_industrial_added_value_monthly``.
 
 Args:
@@ -874,7 +859,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/economic/china-money-supply``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/货币供应.md``.
 Documented endpoint: ``consumer_money_supply_monthly``.
 
 Args:
@@ -909,7 +893,6 @@ PMI.
 
 Endpoint: ``api/v1/market/data/economic/china-pmi``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/PMI.md``.
 Documented endpoint: ``consumer_pmi_monthly``.
 
 Args:
@@ -944,7 +927,6 @@ PPI.
 
 Endpoint: ``api/v1/market/data/economic/china-ppi``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/PPI.md``.
 Documented endpoint: ``consumer_ppi_monthly``.
 
 Args:
@@ -979,7 +961,6 @@ CPI.
 
 Endpoint: ``api/v1/market/data/economic/china-cpi``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/CPI.md``.
 Documented endpoint: ``consumer_price_index_monthly``.
 
 Args:
@@ -1014,7 +995,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/economic/china-retail-sales``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/社零.md``.
 Documented endpoint: ``consumer_retail_sales_monthly``.
 
 Args:
@@ -1049,7 +1029,6 @@ LPR.
 
 Endpoint: ``api/v1/market/data/economic/china-lpr``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/LPR.md``.
 Documented endpoint: ``lpr_monthly``.
 
 Args:
@@ -1084,7 +1063,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/economic/china-reserve-ratio``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/存款准备金率.md``.
 Documented endpoint: ``reserve_ratio_monthly``.
 
 Args:
@@ -1119,7 +1097,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/economic/china-tax-revenue``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/税收.md``.
 Documented endpoint: ``tax_revenue_monthly``.
 
 Args:
@@ -1154,7 +1131,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/economic/us-economic``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/美国经济指标.md``.
 Documented endpoint: ``us_economic``.
 
 Args:
@@ -1192,7 +1168,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/abnormal-trading-details``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/龙虎榜明细.md``.
 Documented endpoint: ``abnormal_trading_details``.
 
 Args:
@@ -1228,7 +1203,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/abnormal-trading-overview``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/龙虎榜总览.md``.
 Documented endpoint: ``abnormal_trading_overview``.
 
 Args:
@@ -1264,7 +1238,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/auction-results``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/集合竞价结果.md``.
 Documented endpoint: ``auction_results``.
 
 Args:
@@ -1308,7 +1281,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/block-trades``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/大宗交易.md``.
 Documented endpoint: ``block_trades``.
 
 Args:
@@ -1344,7 +1316,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/limit-down-pool``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/跌停池.md``.
 Documented endpoint: ``limit_down_pool``.
 
 Args:
@@ -1379,7 +1350,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/limit-event-timeline-3s``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/涨跌停事件时间线.md``.
 Documented endpoint: ``limit_event_timeline_3s``.
 
 Args:
@@ -1415,7 +1385,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/limit-up-break-pool``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/炸板池.md``.
 Documented endpoint: ``limit_up_break_pool``.
 
 Args:
@@ -1450,7 +1419,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/limit-up-pool``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/涨停池.md``.
 Documented endpoint: ``limit_up_pool``.
 
 Args:
@@ -1485,7 +1453,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/limit-up-pool-yesterday``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/昨日涨停池.md``.
 Documented endpoint: ``limit_up_pool_yesterday``.
 
 Args:
@@ -1520,7 +1487,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/margin-trading-details``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/融资融券明细.md``.
 Documented endpoint: ``margin_trading_details``.
 
 Args:
@@ -1561,7 +1527,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/margin-trading-details``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/融资融券明细分页.md``.
 Documented endpoint: ``margin_trading_details_paginated``.
 
 Args:
@@ -1602,7 +1567,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/risk-warning-stocks/quotes``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/风险警示股行情.md``.
 Documented endpoint: ``risk_warning_stock_quotes``.
 
 Args:
@@ -1638,7 +1602,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/risk-warning-stocks``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/风险警示股.md``.
 Documented endpoint: ``risk_warning_stocks``.
 
 Args:
@@ -1674,7 +1637,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/stk-limit``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/涨跌停价.md``.
 Documented endpoint: ``stk_limit``.
 
 Args:
@@ -1721,7 +1683,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/stk-premarket``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/盘前数据.md``.
 Documented endpoint: ``stk_premarket``.
 
 Args:
@@ -1765,7 +1726,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/stock-adjust-factor``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/股票复权因子.md``.
 Documented endpoint: ``stock_adjust_factor``.
 
 Args:
@@ -1806,7 +1766,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/announcements/stock-announcements``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/公告列表.md``.
 Documented endpoint: ``stock_announcements``.
 
 Args:
@@ -1850,7 +1809,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/stock-candlesticks``.
 Method: ``POST``.
-Source document: ``ftshare-doc/api-doc/股票K线.md``.
 Documented endpoint: ``stock_candlesticks``.
 
 Args:
@@ -1892,7 +1850,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/stock-candlesticks/batch``.
 Method: ``POST``.
-Source document: ``ftshare-doc/api-doc/批量股票K线.md``.
 Documented endpoint: ``stock_candlesticks_batch``.
 
 Args:
@@ -1934,7 +1891,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/stock-capital-flows``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/股票资金流向.md``.
 Documented endpoint: ``stock_capital_flows_paginated``.
 
 Args:
@@ -1975,7 +1931,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/stock-capital-flows``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/股票资金流向.md``.
 Documented endpoint: ``stock_capital_flows_paginated``.
 
 Args:
@@ -2016,7 +1971,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/stock-comment/desire``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/千股千评意愿度.md``.
 Documented endpoint: ``stock_comment_desire_em``.
 
 Args:
@@ -2052,7 +2006,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/stock-comment/index``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/千股千评.md``.
 Documented endpoint: ``stock_comment_em``.
 
 Args:
@@ -2092,7 +2045,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/stock-comment/focus``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/千股千评关注度.md``.
 Documented endpoint: ``stock_comment_focus_em``.
 
 Args:
@@ -2128,7 +2080,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/stock-comment/org-participate``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/机构参与度.md``.
 Documented endpoint: ``stock_comment_org_participate_em``.
 
 Args:
@@ -2164,7 +2115,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/stock-comment/score``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/千股千评评分.md``.
 Documented endpoint: ``stock_comment_score_em``.
 
 Args:
@@ -2200,7 +2150,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/dividends``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/股票分红记录分页.md``.
 Documented endpoint: ``stock_dividends_paginated``.
 
 Args:
@@ -2240,7 +2189,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/stock-list/filter``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/股票筛选.md``.
 Documented endpoint: ``stock_filter``.
 
 Args:
@@ -2282,7 +2230,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/share/stock-institution-holdings``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/机构持股.md``.
 Documented endpoint: ``get_stock_institution_holdings``.
 
 Args:
@@ -2325,7 +2272,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/share/stock-institution-holdings-detail``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/机构持股明细.md``.
 Documented endpoint: ``get_stock_institution_holdings_detail``.
 
 Args:
@@ -2369,7 +2315,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/institution/institution-share-holdings``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/机构股本持股.md``.
 Documented endpoint: ``get_stock_institution_share_holdings``.
 
 Args:
@@ -2408,7 +2353,6 @@ Returns:
 
 Endpoint: ``api/v1/market/security/{symbol}/intraday``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/股票日内分时.md``.
 Documented endpoint: ``stock_intraday``.
 
 Args:
@@ -2444,7 +2388,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/intraday-auction-volume``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/集合竞价成交量.md``.
 Documented endpoint: ``stock_intraday_auction_volume``.
 
 Args:
@@ -2485,7 +2428,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/intraday-auction-volume/symbol``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/单标的集合竞价成交量.md``.
 Documented endpoint: ``stock_intraday_auction_volume_symbol``.
 
 Args:
@@ -2527,7 +2469,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/stock-ipos``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/股票IPO.md``.
 Documented endpoint: ``stock_ipos``.
 
 Args:
@@ -2567,7 +2508,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/stock-ipos``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/股票IPO分页.md``.
 Documented endpoint: ``stock_ipos_paginated``.
 
 Args:
@@ -2607,7 +2547,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/stock-list``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/股票列表.md``.
 Documented endpoint: ``get_stock_list``.
 
 Args:
@@ -2642,7 +2581,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/daec/market/snapshot``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/股票市场行情.md``.
 Documented endpoint: ``stock_market``.
 
 Args:
@@ -2678,7 +2616,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/daec/market/distribution-history``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/市场涨跌分布分时.md``.
 Documented endpoint: ``stock_market_distribution_intraday``.
 
 Args:
@@ -2714,7 +2651,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/daec/history/prev-closes``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/股票前收盘价.md``.
 Documented endpoint: ``stock_prev_close``.
 
 Args:
@@ -2752,7 +2688,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/feitu/stock-rating-top5``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/飞兔股票评级Top5.md``.
 Documented endpoint: ``stock_rating_top5``.
 
 Args:
@@ -2790,7 +2725,6 @@ Returns:
 
 Endpoint: ``api/v1/market/security/{symbol}/related``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/相关股票.md``.
 Documented endpoint: ``stock_related``.
 
 Args:
@@ -2827,7 +2761,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/report/stock-reports``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/研报列表.md``.
 Documented endpoint: ``stock_reports``.
 
 Args:
@@ -2871,7 +2804,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/share/get-stock-share``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/股本.md``.
 Documented endpoint: ``get_stock_share_handler``.
 
 Args:
@@ -2908,7 +2840,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/stock-signal-latest-snapshot``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/信号最新快照.md``.
 Documented endpoint: ``stock_signal_latest_snapshot``.
 
 Args:
@@ -2949,7 +2880,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/daec/history/trades``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/股票分时成交.md``.
 Documented endpoint: ``stock_trade``.
 
 Args:
@@ -2985,7 +2915,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/unlock/stock-unlock``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/限售解禁.md``.
 Documented endpoint: ``stock_unlock_handler``.
 
 Args:
@@ -3026,7 +2955,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/unlock/stock-unlock-by-date``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/限售解禁按日期.md``.
 Documented endpoint: ``stock_unlock_by_date_handler``.
 
 Args:
@@ -3068,7 +2996,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/suspension-list``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/停牌列表.md``.
 Documented endpoint: ``suspension_list``.
 
 Args:
@@ -3111,7 +3038,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/bse-mapping``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/北交所映射.md``.
 Documented endpoint: ``get_bse_mapping``.
 
 Args:
@@ -3148,7 +3074,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/bullion/price``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/贵金属价格.md``.
 Documented endpoint: ``get_bullion_price``.
 
 Args:
@@ -3191,7 +3116,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/bullion/support-symbol``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/贵金属支持标的.md``.
 Documented endpoint: ``get_bullion_support_symbol``.
 
 Args:
@@ -3226,7 +3150,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/cb/cb-base-data``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/可转债基础数据.md``.
 Documented endpoint: ``get_cb_base_data_handler``.
 
 Args:
@@ -3262,7 +3185,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/cb/cb-lists``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/可转债列表.md``.
 Documented endpoint: ``get_cb_lists_handler``.
 
 Args:
@@ -3297,7 +3219,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/company-list``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/公司列表.md``.
 Documented endpoint: ``get_company_list``.
 
 Args:
@@ -3339,7 +3260,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/eastmoney-board-constituents``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/东方财富板块成份股.md``.
 Documented endpoint: ``eastmoney_board_constituents``.
 
 Args:
@@ -3375,7 +3295,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/eastmoney-board-daily-ohlc``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/东方财富板块日线OHLC.md``.
 Documented endpoint: ``eastmoney_board_daily_kline``.
 
 Args:
@@ -3418,7 +3337,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/eastmoney-board-latest-ohlc``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/东方财富板块最新OHLC.md``.
 Documented endpoint: ``eastmoney_board_latest_kline``.
 
 Args:
@@ -3459,7 +3377,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/eastmoney-concept-boards``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/东方财富概念板块.md``.
 Documented endpoint: ``eastmoney_concept_boards``.
 
 Args:
@@ -3494,7 +3411,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/eastmoney-dapan-flow``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/东方财富大盘资金流.md``.
 Documented endpoint: ``get_eastmoney_dapan_flow``.
 
 Args:
@@ -3537,7 +3453,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/eastmoney-hk-index-daily-kline``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/东方财富港股指数日K.md``.
 Documented endpoint: ``get_eastmoney_hk_index_daily_kline``.
 
 Args:
@@ -3581,7 +3496,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/eastmoney-market-valuation``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/东方财富市场估值.md``.
 Documented endpoint: ``get_eastmoney_market_valuation``.
 
 Args:
@@ -3625,7 +3539,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/eastmoney-rank``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/东方财富股票排名.md``.
 Documented endpoint: ``eastmoney_rank``.
 
 Args:
@@ -3663,7 +3576,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/eastmoney-sector-flow``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/东方财富板块资金流.md``.
 Documented endpoint: ``get_eastmoney_sector_flow``.
 
 Args:
@@ -3708,7 +3620,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/eastmoney-stock-flow``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/东方财富个股资金流.md``.
 Documented endpoint: ``get_eastmoney_stock_flow``.
 
 Args:
@@ -3752,7 +3663,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/eastmoney-stock-valuation``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/东方财富个股估值.md``.
 Documented endpoint: ``get_eastmoney_stock_valuation``.
 
 Args:
@@ -3796,7 +3706,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/eastmoney-us-stock-daily-ohlc``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/东方财富美股日OHLC.md``.
 Documented endpoint: ``eastmoney_us_stock_daily_kline``.
 
 Args:
@@ -3839,7 +3748,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/eastmoney-us-stock-daily-ohlc``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/东方财富美股日OHLC.md``.
 Documented endpoint: ``eastmoney_us_stock_daily_kline``.
 
 Args:
@@ -3882,7 +3790,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/eastmoney-us-stock-latest-ohlc``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/东方财富美股最新OHLC.md``.
 Documented endpoint: ``eastmoney_us_stock_latest_kline``.
 
 Args:
@@ -3923,7 +3830,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/eastmoney-us-stock-latest-ohlc``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/东方财富美股最新OHLC.md``.
 Documented endpoint: ``eastmoney_us_stock_latest_kline``.
 
 Args:
@@ -3964,7 +3870,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/eastmoney-us-stock-list``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/东方财富美股列表.md``.
 Documented endpoint: ``eastmoney_us_stock_list``.
 
 Args:
@@ -4005,7 +3910,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/hk-sh-stock-connect-members``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/沪港通成份.md``.
 Documented endpoint: ``hk_sh_stock_connect_members``.
 
 Args:
@@ -4040,7 +3944,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/hk-sz-stock-connect-members``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/深港通成份.md``.
 Documented endpoint: ``hk_sz_stock_connect_members``.
 
 Args:
@@ -4075,7 +3978,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/index-description-all``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/指数基础信息.md``.
 Documented endpoint: ``index_description_all``.
 
 Args:
@@ -4110,7 +4012,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/northbound``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/北向资金交易.md``.
 Documented endpoint: ``northbound``.
 
 Args:
@@ -4146,7 +4047,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/time/get-nth-trade-date``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/第N个交易日.md``.
 Documented endpoint: ``get_nth_trade_date``.
 
 Args:
@@ -4182,7 +4082,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/price/get-price-change``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/价格变动.md``.
 Documented endpoint: ``get_price_change``.
 
 Args:
@@ -4221,7 +4120,6 @@ Returns:
 
 Endpoint: ``api/v1/market/security/search``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/标的搜索.md``.
 Documented endpoint: ``search``.
 
 Args:
@@ -4258,7 +4156,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/semantic-search-news``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/新闻语义搜索.md``.
 Documented endpoint: ``semantic_search_news_handler``.
 
 Args:
@@ -4298,7 +4195,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/sh-hk-stock-connect-members``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/沪股通成份.md``.
 Documented endpoint: ``sh_hk_stock_connect_members``.
 
 Args:
@@ -4333,7 +4229,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/southbound``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/南向资金交易.md``.
 Documented endpoint: ``southbound``.
 
 Args:
@@ -4369,7 +4264,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/sw-industry/constituent-history``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/申万行业成份股历史.md``.
 Documented endpoint: ``sw_industry_constituent_history``.
 
 Args:
@@ -4405,7 +4299,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/sw-industry/daily-metrics``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/申万行业日度指标.md``.
 Documented endpoint: ``sw_industry_daily_metrics``.
 
 Args:
@@ -4449,7 +4342,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/sw-industry/overview``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/申万行业总览.md``.
 Documented endpoint: ``sw_industry_overview``.
 
 Args:
@@ -4491,7 +4383,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/sz-hk-stock-connect-members``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/深股通成份.md``.
 Documented endpoint: ``sz_hk_stock_connect_members``.
 
 Args:
@@ -4526,7 +4417,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/ths-all-board-kline``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/同花顺全板块K线.md``.
 Documented endpoint: ``ths_all_board_kline``.
 
 Args:
@@ -4568,7 +4458,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/ths-board-kline``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/同花顺板块K线.md``.
 Documented endpoint: ``ths_board_kline``.
 
 Args:
@@ -4609,7 +4498,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/ths-board-list``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/同花顺板块列表.md``.
 Documented endpoint: ``ths_board_list``.
 
 Args:
@@ -4644,7 +4532,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/report/type-reports``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/研报分类.md``.
 Documented endpoint: ``type_reports``.
 
 Args:
@@ -4687,7 +4574,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/us/us-balance``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/美股资产负债表.md``.
 Documented endpoint: ``us_balance``.
 
 Args:
@@ -4732,7 +4618,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/us/us-basic``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/美股基础信息.md``.
 Documented endpoint: ``us_basic``.
 
 Args:
@@ -4773,7 +4658,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/us/us-cashflow``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/美股现金流.md``.
 Documented endpoint: ``us_cashflow``.
 
 Args:
@@ -4818,7 +4702,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/us/us-income``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/美股利润表.md``.
 Documented endpoint: ``us_income``.
 
 Args:
@@ -4863,7 +4746,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/xueqiu-rank``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/雪球股票排名.md``.
 Documented endpoint: ``xueqiu_rank``.
 
 Args:
@@ -4906,7 +4788,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/yzxdr-detail``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/除权除息明细.md``.
 Documented endpoint: ``get_yzxdr_detail``.
 
 Args:
@@ -4951,7 +4832,6 @@ ETF复权因子.
 
 Endpoint: ``api/v1/market/data/etf-adjust-factor``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/ETF复权因子.md``.
 Documented endpoint: ``etf_adjust_factor``.
 
 Args:
@@ -4992,7 +4872,6 @@ ETF成份股.
 
 Endpoint: ``api/v1/market/data/etf-component``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/ETF成份股.md``.
 Documented endpoint: ``get_etf_components_handler``.
 
 Args:
@@ -5028,7 +4907,6 @@ ETF成份列表.
 
 Endpoint: ``api/v1/market/data/etf-components-all``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/ETF成份列表.md``.
 Documented endpoint: ``etf_components_all``.
 
 Args:
@@ -5063,7 +4941,6 @@ ETF基础信息.
 
 Endpoint: ``api/v1/market/data/etf-description-all``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/ETF基础信息.md``.
 Documented endpoint: ``etf_description_all``.
 
 Args:
@@ -5098,7 +4975,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/etf/zhitou-etf``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/指数ETF基金导出.md``.
 Documented endpoint: ``etf_fund_export``.
 
 Args:
@@ -5139,7 +5015,6 @@ ETF-PCF清单列表.
 
 Endpoint: ``api/v1/market/data/etf-pcf/etf-pcfs``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/ETF-PCF清单列表.md``.
 Documented endpoint: ``etf_pcf_list_handler``.
 
 Args:
@@ -5180,7 +5055,6 @@ ETF盘前数据.
 
 Endpoint: ``api/v1/market/data/etf-pre-data``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/ETF盘前数据.md``.
 Documented endpoint: ``get_etf_pre``.
 
 Args:
@@ -5216,7 +5090,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/etf-pre-single``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/单只ETF盘前数据.md``.
 Documented endpoint: ``get_etf_pre_single_handler``.
 
 Args:
@@ -5255,7 +5128,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/index/index_description``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/中证指数描述列表.md``.
 Documented endpoint: ``index_description_list_handler``.
 
 Args:
@@ -5295,7 +5167,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/index/index_weight``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/指数权重列表.md``.
 Documented endpoint: ``index_weight_list_handler``.
 
 Args:
@@ -5337,7 +5208,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/index/index_weight_summary``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/指数权重汇总.md``.
 Documented endpoint: ``index_weight_summary_handler``.
 
 Args:
@@ -5379,7 +5249,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/hk/company-hk``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/港股公司信息.md``.
 Documented endpoint: ``get_company_hk``.
 
 Args:
@@ -5415,7 +5284,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/hk/hk-balance-bank``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/港股资产负债表.md``.
 Documented endpoint: ``hk_balance_bank``.
 
 Args:
@@ -5460,7 +5328,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/hk/hk-balance-gene``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/港股资产负债表.md``.
 Documented endpoint: ``hk_balance_gene``.
 
 Args:
@@ -5505,7 +5372,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/hk/hk-balance-insur``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/港股资产负债表.md``.
 Documented endpoint: ``hk_balance_insur``.
 
 Args:
@@ -5550,7 +5416,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/hk/hk-view``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/港股个股信息.md``.
 Documented endpoint: ``get_hk_basinfo_get``.
 
 Args:
@@ -5586,7 +5451,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/hk/hk-view``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/港股个股信息.md``.
 Documented endpoint: ``get_hk_basinfo_post``.
 
 Args:
@@ -5622,7 +5486,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/hk/hk-candlesticks``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/港股K线.md``.
 Documented endpoint: ``get_hk_candlesticks``.
 
 Args:
@@ -5664,7 +5527,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/hk/hk-cashflow``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/港股现金流量表.md``.
 Documented endpoint: ``hk_cashflow``.
 
 Args:
@@ -5709,7 +5571,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/hk/hk-income-bank``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/港股利润表.md``.
 Documented endpoint: ``hk_income_bank``.
 
 Args:
@@ -5754,7 +5615,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/hk/hk-income-gene``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/港股利润表.md``.
 Documented endpoint: ``hk_income_gene``.
 
 Args:
@@ -5799,7 +5659,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/hk/hk-income-insur``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/港股利润表.md``.
 Documented endpoint: ``hk_income_insur``.
 
 Args:
@@ -5844,7 +5703,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/hk/hk-valuatnanalyd``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/港股估值分析.md``.
 Documented endpoint: ``get_hk_valuatnanalyd``.
 
 Args:
@@ -5885,7 +5743,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/hk/market-cap-hk``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/港股市值.md``.
 Documented endpoint: ``get_market_cap_hk``.
 
 Args:
@@ -5921,7 +5778,6 @@ AH股对比.
 
 Endpoint: ``api/v1/market/data/hk/stk-ah-comparison``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/AH股对比.md``.
 Documented endpoint: ``get_stk_ah_comparison``.
 
 Args:
@@ -5968,7 +5824,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/fund/fund-basicinfo``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/基金基础信息.md``.
 Documented endpoint: ``get_fund_basicinfo``.
 
 Args:
@@ -6009,7 +5864,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/fund/fund-cal-return``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/基金收益.md``.
 Documented endpoint: ``get_fund_cal_return``.
 
 Args:
@@ -6046,7 +5900,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/fund/fund-nav``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/基金净值.md``.
 Documented endpoint: ``get_fund_nav``.
 
 Args:
@@ -6087,7 +5940,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/fund/fund-overview``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/基金总览.md``.
 Documented endpoint: ``get_fund_overview``.
 
 Args:
@@ -6127,7 +5979,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/fund/fund-support-symbols``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/基金支持标的.md``.
 Documented endpoint: ``get_fund_support_symbols``.
 
 Args:
@@ -6169,7 +6020,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/futures/futures-base-data``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/中国期货基础数据.md``.
 Documented endpoint: ``get_china_futures_base_data_handler``.
 
 Args:
@@ -6206,7 +6056,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/futures/futures-lists``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/中国期货列表.md``.
 Documented endpoint: ``get_china_futures_lists_handler``.
 
 Args:
@@ -6242,7 +6091,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/eastmoney-futures-position``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/东方财富期货持仓.md``.
 Documented endpoint: ``get_eastmoney_futures_position``.
 
 Args:
@@ -6289,7 +6137,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/eastmoney-futures-position``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/东方财富期货持仓.md``.
 Documented endpoint: ``get_eastmoney_futures_position``.
 
 Args:
@@ -6336,7 +6183,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/futures/kline``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/期货合约K线.md``.
 Documented endpoint: ``futures_contract_kline``.
 
 Args:
@@ -6376,7 +6222,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/futures/kline``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/期货合约K线.md``.
 Documented endpoint: ``futures_contract_kline``.
 
 Args:
@@ -6418,7 +6263,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/holder/stock-holder-ften``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/十大流通股东.md``.
 Documented endpoint: ``stock_float_holders``.
 
 Args:
@@ -6460,7 +6304,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/holder/stock-ggcg-em``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/东方财富股东增减持.md``.
 Documented endpoint: ``stock_ggcg_em_handler``.
 
 Args:
@@ -6501,7 +6344,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/holder/stock-ggmx``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/董监高持股变动.md``.
 Documented endpoint: ``stock_ggmx_handler``.
 
 Args:
@@ -6545,7 +6387,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/holder/stock-ggmx-buy-ranking``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/董监高增持排名.md``.
 Documented endpoint: ``stock_ggmx_buy_ranking_handler``.
 
 Args:
@@ -6586,7 +6427,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/holder/stock-ggmx-sell-ranking``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/董监高减持排名.md``.
 Documented endpoint: ``stock_ggmx_sell_ranking_handler``.
 
 Args:
@@ -6627,7 +6467,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/holder/stock-holder-ten``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/十大股东.md``.
 Documented endpoint: ``stock_holders``.
 
 Args:
@@ -6669,7 +6508,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/holder/stock-holder-nums``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/股东人数.md``.
 Documented endpoint: ``stock_holders_number``.
 
 Args:
@@ -6711,7 +6549,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/holder/stock-share-chg``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/股东增减持.md``.
 Documented endpoint: ``stock_share_chg``.
 
 Args:
@@ -6755,7 +6592,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/pledge/pledge-summary``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/股权质押汇总.md``.
 Documented endpoint: ``stock_pledge_summary``.
 
 Args:
@@ -6795,7 +6631,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/pledge/pledge-detail``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/股权质押明细.md``.
 Documented endpoint: ``stock_pledge_detail``.
 
 Args:
@@ -6837,7 +6672,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/pledge/pledge-summary``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/股权质押汇总.md``.
 Documented endpoint: ``stock_pledge_summary``.
 
 Args:
@@ -6879,7 +6713,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/corporate/contract``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/重大合同.md``.
 Documented endpoint: ``major_contract``.
 
 Args:
@@ -6916,7 +6749,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/corporate/contract/by-symbol``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/重大合同按标的.md``.
 Documented endpoint: ``major_contract_by_symbol``.
 
 Args:
@@ -6957,7 +6789,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/corporate/contract/summary``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/重大合同汇总.md``.
 Documented endpoint: ``major_contract_summary``.
 
 Args:
@@ -6997,7 +6828,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/corporate/meeting``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/股东大会.md``.
 Documented endpoint: ``shareholders_meeting``.
 
 Args:
@@ -7039,7 +6869,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/goodwill/industry``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/商誉行业.md``.
 Documented endpoint: ``goodwill_industry``.
 
 Args:
@@ -7080,7 +6909,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/goodwill/market-overview``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/商誉市场总览.md``.
 Documented endpoint: ``goodwill_market_overview``.
 
 Args:
@@ -7115,7 +6943,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/goodwill/predict``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/商誉预测.md``.
 Documented endpoint: ``goodwill_predict``.
 
 Args:
@@ -7156,7 +6983,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/goodwill/stock-detail``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/商誉个股明细.md``.
 Documented endpoint: ``goodwill_stock_detail``.
 
 Args:
@@ -7197,7 +7023,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/goodwill/stock-impairment``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/商誉减值.md``.
 Documented endpoint: ``goodwill_stock_impairment``.
 
 Args:
@@ -7240,7 +7065,6 @@ Returns:
 
 Endpoint: ``api/v1/market/data/global-index/daily-kline``.
 Method: ``GET``.
-Source document: ``ftshare-doc/api-doc/全球指数日K线.md``.
 Documented endpoint: ``global_index_daily_kline``.
 
 Args:

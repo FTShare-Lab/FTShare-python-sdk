@@ -1,4 +1,4 @@
-"""FTShare goodwill endpoint methods generated from ``ftshare-doc/api-doc``."""
+"""FTShare goodwill endpoint methods for FTShare market data."""
 
 from __future__ import annotations
 
@@ -29,7 +29,6 @@ class GoodwillApiMixin:
 
         Endpoint: ``api/v1/market/data/goodwill/industry``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/商誉行业.md``.
         Documented endpoint: ``goodwill_industry``.
 
         Args:
@@ -77,7 +76,6 @@ class GoodwillApiMixin:
 
         Endpoint: ``api/v1/market/data/goodwill/market-overview``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/商誉市场总览.md``.
         Documented endpoint: ``goodwill_market_overview``.
 
         Args:
@@ -119,7 +117,6 @@ class GoodwillApiMixin:
 
         Endpoint: ``api/v1/market/data/goodwill/predict``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/商誉预测.md``.
         Documented endpoint: ``goodwill_predict``.
 
         Args:
@@ -173,7 +170,6 @@ class GoodwillApiMixin:
 
         Endpoint: ``api/v1/market/data/goodwill/stock-detail``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/商誉个股明细.md``.
         Documented endpoint: ``goodwill_stock_detail``.
 
         Args:
@@ -227,7 +223,6 @@ class GoodwillApiMixin:
 
         Endpoint: ``api/v1/market/data/goodwill/stock-impairment``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/商誉减值.md``.
         Documented endpoint: ``goodwill_stock_impairment``.
 
         Args:

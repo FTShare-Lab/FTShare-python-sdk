@@ -1,4 +1,4 @@
-"""FTShare economic endpoint methods generated from ``ftshare-doc/api-doc``."""
+"""FTShare economic endpoint methods for FTShare market data."""
 
 from __future__ import annotations
 
@@ -23,7 +23,6 @@ class EconomicApiMixin:
 
         Endpoint: ``api/v1/market/data/economic/china-credit-loans``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/社融信贷.md``.
         Documented endpoint: ``consumer_credit_monthly``.
 
         Args:
@@ -59,7 +58,6 @@ class EconomicApiMixin:
 
         Endpoint: ``api/v1/market/data/economic/china-customs-trade``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/进出口.md``.
         Documented endpoint: ``consumer_customs_trade_monthly``.
 
         Args:
@@ -95,7 +93,6 @@ class EconomicApiMixin:
 
         Endpoint: ``api/v1/market/data/economic/china-fiscal-revenue``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/财政收入.md``.
         Documented endpoint: ``consumer_fiscal_revenue_monthly``.
 
         Args:
@@ -131,7 +128,6 @@ class EconomicApiMixin:
 
         Endpoint: ``api/v1/market/data/economic/china-fixed-asset-investment``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/固定资产投资.md``.
         Documented endpoint: ``consumer_fixed_asset_monthly``.
 
         Args:
@@ -167,7 +163,6 @@ class EconomicApiMixin:
 
         Endpoint: ``api/v1/market/data/economic/china-forex-gold``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/外汇黄金.md``.
         Documented endpoint: ``consumer_forex_gold_monthly``.
 
         Args:
@@ -203,7 +198,6 @@ class EconomicApiMixin:
 
         Endpoint: ``api/v1/market/data/economic/china-gdp``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/GDP.md``.
         Documented endpoint: ``consumer_gdp_quarterly``.
 
         Args:
@@ -239,7 +233,6 @@ class EconomicApiMixin:
 
         Endpoint: ``api/v1/market/data/economic/china-industrial-added-value``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/工业增加值.md``.
         Documented endpoint: ``consumer_industrial_added_value_monthly``.
 
         Args:
@@ -275,7 +268,6 @@ class EconomicApiMixin:
 
         Endpoint: ``api/v1/market/data/economic/china-money-supply``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/货币供应.md``.
         Documented endpoint: ``consumer_money_supply_monthly``.
 
         Args:
@@ -311,7 +303,6 @@ class EconomicApiMixin:
 
         Endpoint: ``api/v1/market/data/economic/china-pmi``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/PMI.md``.
         Documented endpoint: ``consumer_pmi_monthly``.
 
         Args:
@@ -347,7 +338,6 @@ class EconomicApiMixin:
 
         Endpoint: ``api/v1/market/data/economic/china-ppi``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/PPI.md``.
         Documented endpoint: ``consumer_ppi_monthly``.
 
         Args:
@@ -383,7 +373,6 @@ class EconomicApiMixin:
 
         Endpoint: ``api/v1/market/data/economic/china-cpi``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/CPI.md``.
         Documented endpoint: ``consumer_price_index_monthly``.
 
         Args:
@@ -419,7 +408,6 @@ class EconomicApiMixin:
 
         Endpoint: ``api/v1/market/data/economic/china-retail-sales``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/社零.md``.
         Documented endpoint: ``consumer_retail_sales_monthly``.
 
         Args:
@@ -455,7 +443,6 @@ class EconomicApiMixin:
 
         Endpoint: ``api/v1/market/data/economic/china-lpr``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/LPR.md``.
         Documented endpoint: ``lpr_monthly``.
 
         Args:
@@ -491,7 +478,6 @@ class EconomicApiMixin:
 
         Endpoint: ``api/v1/market/data/economic/china-reserve-ratio``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/存款准备金率.md``.
         Documented endpoint: ``reserve_ratio_monthly``.
 
         Args:
@@ -527,7 +513,6 @@ class EconomicApiMixin:
 
         Endpoint: ``api/v1/market/data/economic/china-tax-revenue``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/税收.md``.
         Documented endpoint: ``tax_revenue_monthly``.
 
         Args:
@@ -564,7 +549,6 @@ class EconomicApiMixin:
 
         Endpoint: ``api/v1/market/data/economic/us-economic``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/美国经济指标.md``.
         Documented endpoint: ``us_economic``.
 
         Args:

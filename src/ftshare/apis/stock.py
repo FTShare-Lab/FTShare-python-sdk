@@ -1,4 +1,4 @@
-"""FTShare stock endpoint methods generated from ``ftshare-doc/api-doc``."""
+"""FTShare stock endpoint methods for FTShare market data."""
 
 from __future__ import annotations
 
@@ -24,7 +24,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/abnormal-trading-details``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/龙虎榜明细.md``.
         Documented endpoint: ``abnormal_trading_details``.
 
         Args:
@@ -62,7 +61,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/abnormal-trading-overview``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/龙虎榜总览.md``.
         Documented endpoint: ``abnormal_trading_overview``.
 
         Args:
@@ -100,7 +98,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/block-trades``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/大宗交易.md``.
         Documented endpoint: ``block_trades``.
 
         Args:
@@ -137,7 +134,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/limit-down-pool``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/跌停池.md``.
         Documented endpoint: ``limit_down_pool``.
 
         Args:
@@ -174,7 +170,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/limit-event-timeline-3s``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/涨跌停事件时间线.md``.
         Documented endpoint: ``limit_event_timeline_3s``.
 
         Args:
@@ -211,7 +206,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/limit-up-break-pool``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/炸板池.md``.
         Documented endpoint: ``limit_up_break_pool``.
 
         Args:
@@ -247,7 +241,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/limit-up-pool``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/涨停池.md``.
         Documented endpoint: ``limit_up_pool``.
 
         Args:
@@ -283,7 +276,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/limit-up-pool-yesterday``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/昨日涨停池.md``.
         Documented endpoint: ``limit_up_pool_yesterday``.
 
         Args:
@@ -325,7 +317,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/margin-trading-details``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/融资融券明细.md``.
         Documented endpoint: ``margin_trading_details``.
 
         Args:
@@ -379,7 +370,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/margin-trading-details``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/融资融券明细分页.md``.
         Documented endpoint: ``margin_trading_details_paginated``.
 
         Args:
@@ -428,7 +418,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/risk-warning-stocks/quotes``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/风险警示股行情.md``.
         Documented endpoint: ``risk_warning_stock_quotes``.
 
         Args:
@@ -466,7 +455,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/risk-warning-stocks``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/风险警示股.md``.
         Documented endpoint: ``risk_warning_stocks``.
 
         Args:
@@ -515,7 +503,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/stk-limit``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/涨跌停价.md``.
         Documented endpoint: ``stk_limit``.
 
         Args:
@@ -579,7 +566,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/stk-premarket``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/盘前数据.md``.
         Documented endpoint: ``stk_premarket``.
 
         Args:
@@ -637,7 +623,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/stock-adjust-factor``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/股票复权因子.md``.
         Documented endpoint: ``stock_adjust_factor``.
 
         Args:
@@ -688,7 +673,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/announcements/stock-announcements``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/公告列表.md``.
         Documented endpoint: ``stock_announcements``.
 
         Args:
@@ -746,7 +730,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/stock-candlesticks``.
         Method: ``POST``.
-        Source document: ``ftshare-doc/api-doc/股票K线.md``.
         Documented endpoint: ``stock_candlesticks``.
 
         Args:
@@ -796,7 +779,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/stock-candlesticks/batch``.
         Method: ``POST``.
-        Source document: ``ftshare-doc/api-doc/批量股票K线.md``.
         Documented endpoint: ``stock_candlesticks_batch``.
 
         Args:
@@ -845,7 +827,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/stock-capital-flows``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/股票资金流向.md``.
         Documented endpoint: ``stock_capital_flows_paginated``.
 
         Args:
@@ -899,7 +880,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/stock-capital-flows``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/股票资金流向.md``.
         Documented endpoint: ``stock_capital_flows_paginated``.
 
         Args:
@@ -948,7 +928,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/stock-comment/desire``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/千股千评意愿度.md``.
         Documented endpoint: ``stock_comment_desire_em``.
 
         Args:
@@ -990,7 +969,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/stock-comment/index``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/千股千评.md``.
         Documented endpoint: ``stock_comment_em``.
 
         Args:
@@ -1038,7 +1016,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/stock-comment/focus``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/千股千评关注度.md``.
         Documented endpoint: ``stock_comment_focus_em``.
 
         Args:
@@ -1076,7 +1053,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/stock-comment/org-participate``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/机构参与度.md``.
         Documented endpoint: ``stock_comment_org_participate_em``.
 
         Args:
@@ -1114,7 +1090,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/stock-comment/score``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/千股千评评分.md``.
         Documented endpoint: ``stock_comment_score_em``.
 
         Args:
@@ -1156,7 +1131,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/dividends``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/股票分红记录分页.md``.
         Documented endpoint: ``stock_dividends_paginated``.
 
         Args:
@@ -1210,7 +1184,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/stock-list/filter``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/股票筛选.md``.
         Documented endpoint: ``stock_filter``.
 
         Args:
@@ -1267,7 +1240,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/share/stock-institution-holdings``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/机构持股.md``.
         Documented endpoint: ``get_stock_institution_holdings``.
 
         Args:
@@ -1326,7 +1298,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/share/stock-institution-holdings-detail``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/机构持股明细.md``.
         Documented endpoint: ``get_stock_institution_holdings_detail``.
 
         Args:
@@ -1381,7 +1352,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/institution/institution-share-holdings``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/机构股本持股.md``.
         Documented endpoint: ``get_stock_institution_share_holdings``.
 
         Args:
@@ -1422,7 +1392,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/security/{symbol}/intraday``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/股票日内分时.md``.
         Documented endpoint: ``stock_intraday``.
 
         Args:
@@ -1466,7 +1435,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/intraday-auction-volume``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/集合竞价成交量.md``.
         Documented endpoint: ``stock_intraday_auction_volume``.
 
         Args:
@@ -1521,7 +1489,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/intraday-auction-volume/symbol``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/单标的集合竞价成交量.md``.
         Documented endpoint: ``stock_intraday_auction_volume_symbol``.
 
         Args:
@@ -1575,7 +1542,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/stock-ipos``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/股票IPO.md``.
         Documented endpoint: ``stock_ipos``.
 
         Args:
@@ -1627,7 +1593,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/stock-ipos``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/股票IPO分页.md``.
         Documented endpoint: ``stock_ipos_paginated``.
 
         Args:
@@ -1674,7 +1639,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/stock-list``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/股票列表.md``.
         Documented endpoint: ``get_stock_list``.
 
         Args:
@@ -1711,7 +1675,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/daec/market/snapshot``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/股票市场行情.md``.
         Documented endpoint: ``stock_market``.
 
         Args:
@@ -1749,7 +1712,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/daec/market/distribution-history``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/市场涨跌分布分时.md``.
         Documented endpoint: ``stock_market_distribution_intraday``.
 
         Args:
@@ -1789,7 +1751,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/daec/history/prev-closes``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/股票前收盘价.md``.
         Documented endpoint: ``stock_prev_close``.
 
         Args:
@@ -1831,7 +1792,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/feitu/stock-rating-top5``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/飞兔股票评级Top5.md``.
         Documented endpoint: ``stock_rating_top5``.
 
         Args:
@@ -1872,7 +1832,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/security/{symbol}/related``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/相关股票.md``.
         Documented endpoint: ``stock_related``.
 
         Args:
@@ -1920,7 +1879,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/report/stock-reports``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/研报列表.md``.
         Documented endpoint: ``stock_reports``.
 
         Args:
@@ -1973,7 +1931,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/share/get-stock-share``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/股本.md``.
         Documented endpoint: ``get_stock_share_handler``.
 
         Args:
@@ -2017,7 +1974,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/stock-signal-latest-snapshot``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/信号最新快照.md``.
         Documented endpoint: ``stock_signal_latest_snapshot``.
 
         Args:
@@ -2066,7 +2022,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/daec/history/trades``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/股票分时成交.md``.
         Documented endpoint: ``stock_trade``.
 
         Args:
@@ -2109,7 +2064,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/unlock/stock-unlock``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/限售解禁.md``.
         Documented endpoint: ``stock_unlock_handler``.
 
         Args:
@@ -2164,7 +2118,6 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/unlock/stock-unlock-by-date``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/限售解禁按日期.md``.
         Documented endpoint: ``stock_unlock_by_date_handler``.
 
         Args:

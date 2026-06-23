@@ -1,4 +1,4 @@
-"""FTShare hk endpoint methods generated from ``ftshare-doc/api-doc``."""
+"""FTShare hk endpoint methods for FTShare market data."""
 
 from __future__ import annotations
 
@@ -24,7 +24,6 @@ class HkApiMixin:
 
         Endpoint: ``api/v1/market/data/hk/company-hk``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/港股公司信息.md``.
         Documented endpoint: ``get_company_hk``.
 
         Args:
@@ -71,7 +70,6 @@ class HkApiMixin:
 
         Endpoint: ``api/v1/market/data/hk/hk-balance-bank``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/港股资产负债表.md``.
         Documented endpoint: ``hk_balance_bank``.
 
         Args:
@@ -133,7 +131,6 @@ class HkApiMixin:
 
         Endpoint: ``api/v1/market/data/hk/hk-balance-gene``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/港股资产负债表.md``.
         Documented endpoint: ``hk_balance_gene``.
 
         Args:
@@ -195,7 +192,6 @@ class HkApiMixin:
 
         Endpoint: ``api/v1/market/data/hk/hk-balance-insur``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/港股资产负债表.md``.
         Documented endpoint: ``hk_balance_insur``.
 
         Args:
@@ -248,7 +244,6 @@ class HkApiMixin:
 
         Endpoint: ``api/v1/market/data/hk/hk-view``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/港股个股信息.md``.
         Documented endpoint: ``get_hk_basinfo_get``.
 
         Args:
@@ -286,7 +281,6 @@ class HkApiMixin:
 
         Endpoint: ``api/v1/market/data/hk/hk-view``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/港股个股信息.md``.
         Documented endpoint: ``get_hk_basinfo_post``.
 
         Args:
@@ -330,7 +324,6 @@ class HkApiMixin:
 
         Endpoint: ``api/v1/market/data/hk/hk-candlesticks``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/港股K线.md``.
         Documented endpoint: ``get_hk_candlesticks``.
 
         Args:
@@ -383,7 +376,6 @@ class HkApiMixin:
 
         Endpoint: ``api/v1/market/data/hk/hk-cashflow``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/港股现金流量表.md``.
         Documented endpoint: ``hk_cashflow``.
 
         Args:
@@ -445,7 +437,6 @@ class HkApiMixin:
 
         Endpoint: ``api/v1/market/data/hk/hk-income-bank``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/港股利润表.md``.
         Documented endpoint: ``hk_income_bank``.
 
         Args:
@@ -507,7 +498,6 @@ class HkApiMixin:
 
         Endpoint: ``api/v1/market/data/hk/hk-income-gene``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/港股利润表.md``.
         Documented endpoint: ``hk_income_gene``.
 
         Args:
@@ -569,7 +559,6 @@ class HkApiMixin:
 
         Endpoint: ``api/v1/market/data/hk/hk-income-insur``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/港股利润表.md``.
         Documented endpoint: ``hk_income_insur``.
 
         Args:
@@ -627,7 +616,6 @@ class HkApiMixin:
 
         Endpoint: ``api/v1/market/data/hk/hk-valuatnanalyd``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/港股估值分析.md``.
         Documented endpoint: ``get_hk_valuatnanalyd``.
 
         Args:
@@ -676,7 +664,6 @@ class HkApiMixin:
 
         Endpoint: ``api/v1/market/data/hk/market-cap-hk``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/港股市值.md``.
         Documented endpoint: ``get_market_cap_hk``.
 
         Args:
@@ -723,7 +710,6 @@ class HkApiMixin:
 
         Endpoint: ``api/v1/market/data/hk/stk-ah-comparison``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/AH股对比.md``.
         Documented endpoint: ``get_stk_ah_comparison``.
 
         Args:

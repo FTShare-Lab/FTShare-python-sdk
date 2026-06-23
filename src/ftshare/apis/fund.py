@@ -1,4 +1,4 @@
-"""FTShare fund endpoint methods generated from ``ftshare-doc/api-doc``."""
+"""FTShare fund endpoint methods for FTShare market data."""
 
 from __future__ import annotations
 
@@ -29,7 +29,6 @@ class FundApiMixin:
 
         Endpoint: ``api/v1/market/data/fund/fund-basicinfo``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/基金基础信息.md``.
         Documented endpoint: ``get_fund_basicinfo``.
 
         Args:
@@ -79,7 +78,6 @@ class FundApiMixin:
 
         Endpoint: ``api/v1/market/data/fund/fund-cal-return``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/基金收益.md``.
         Documented endpoint: ``get_fund_cal_return``.
 
         Args:
@@ -123,7 +121,6 @@ class FundApiMixin:
 
         Endpoint: ``api/v1/market/data/fund/fund-nav``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/基金净值.md``.
         Documented endpoint: ``get_fund_nav``.
 
         Args:
@@ -176,7 +173,6 @@ class FundApiMixin:
 
         Endpoint: ``api/v1/market/data/fund/fund-overview``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/基金总览.md``.
         Documented endpoint: ``get_fund_overview``.
 
         Args:
@@ -228,7 +224,6 @@ class FundApiMixin:
 
         Endpoint: ``api/v1/market/data/fund/fund-support-symbols``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/基金支持标的.md``.
         Documented endpoint: ``get_fund_support_symbols``.
 
         Args:

@@ -1,4 +1,4 @@
-"""FTShare corporate endpoint methods generated from ``ftshare-doc/api-doc``."""
+"""FTShare corporate endpoint methods for FTShare market data."""
 
 from __future__ import annotations
 
@@ -25,7 +25,6 @@ class CorporateApiMixin:
 
         Endpoint: ``api/v1/market/data/corporate/contract``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/重大合同.md``.
         Documented endpoint: ``major_contract``.
 
         Args:
@@ -69,7 +68,6 @@ class CorporateApiMixin:
 
         Endpoint: ``api/v1/market/data/corporate/contract/by-symbol``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/重大合同按标的.md``.
         Documented endpoint: ``major_contract_by_symbol``.
 
         Args:
@@ -122,7 +120,6 @@ class CorporateApiMixin:
 
         Endpoint: ``api/v1/market/data/corporate/contract/summary``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/重大合同汇总.md``.
         Documented endpoint: ``major_contract_summary``.
 
         Args:
@@ -174,7 +171,6 @@ class CorporateApiMixin:
 
         Endpoint: ``api/v1/market/data/corporate/meeting``.
         Method: ``GET``.
-        Source document: ``ftshare-doc/api-doc/股东大会.md``.
         Documented endpoint: ``shareholders_meeting``.
 
         Args:
