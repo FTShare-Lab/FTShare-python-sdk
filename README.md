@@ -4,13 +4,25 @@
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![Tests](https://github.com/ftshare-lab/ftshare-python-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/ftshare-lab/ftshare-python-sdk/actions/workflows/ci.yml)
 
-`ftshare` 是 FTShare 行情与金融数据接口的 Python SDK，默认访问：
+`ftshare-python-sdk` 是 FTShare 金融数据能力的 Python SDK，面向需要接入行情、财务、宏观、基金、期货等数据的开发者。
+
+它提供统一的 Python 调用方式，默认返回 pandas `DataFrame`，方便开发者在数据分析、量化研究、金融应用开发、MCP 工具封装、Skill 构建和 Agent 投研流程中使用 FTShare 数据。
+
+## 在 ftshare 生态中的位置
+
+`ftshare-python-sdk` 是 ftshare 生态的数据接入层。它向下连接 FTShare 数据服务，向上为 MCP、Skill 和 Agent 应用提供稳定的数据基础。
 
 ```text
-https://market.ft.tech/data/
+FTShare 数据服务
+    ↓
+ftshare-python-sdk        # Python 数据访问层
+    ↓
+ftshare-mcp              # Agent 可调用工具层
+    ↓
+ftshare-skills           # 投研任务与业务工作流层
+    ↓
+Agent 应用                # 面向最终用户的投研分析体验
 ```
-
-SDK 默认返回 pandas `DataFrame`，也支持返回 Python 行数据或服务端原始 JSON。
 
 ## 安装
 
