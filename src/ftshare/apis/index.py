@@ -162,6 +162,7 @@ class IndexApiMixin:
 
     def index_weight_summary(
         self,
+        index_code: Any | None = None,
         page: int | None = None,
         page_size: int | None = None,
         limit: int | None = None,
@@ -180,6 +181,7 @@ class IndexApiMixin:
         Documented endpoint: ``index_weight_summary_handler``.
 
         Args:
+            index_code: 指数代码，如 `000300` (type: string; required: Y).
             page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
             page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
             limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
@@ -195,7 +197,7 @@ class IndexApiMixin:
             ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
             payloads when multi-page fetching is used with ``raw=True``.
         """
-        request_params = {}
+        request_params = {'index_code': index_code}
         request_params.update(kwargs)
         path = ENDPOINTS['index_weight_summary'].path
         return self.get_paginated(

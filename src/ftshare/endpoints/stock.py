@@ -558,7 +558,14 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'title': '标的分时数据',
         'doc_file': '标得分时数据.md',
         'original_api': 'stock_intraday_prices',
-        'params': ('symbol', 'range', 'days', 'ts_ms'),
+        'params': ('symbol', 'range', 'days', 'ts_ms', 'compat', 'since', 'since_ts_ms'),
+    },
+    'stock_ohlcs': {
+        'path': 'api/v1/market/data/daec/history/ohlcs',
+        'title': '标的K线数据',
+        'doc_file': '标的K线数据.md',
+        'original_api': 'stock_ohlcs',
+        'params': ('symbol', 'since', 'until', 'interval', 'adjust', 'compat', 'span', 'limit', 'until_ts_ms'),
     },
     'stock_rating_top5': {
         'path': 'api/v1/market/data/feitu/stock-rating-top5',

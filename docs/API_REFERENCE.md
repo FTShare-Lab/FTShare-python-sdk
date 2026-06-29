@@ -6,7 +6,7 @@
 
 | 指标 | 数量 |
 |---|---:|
-| SDK 方法总数 | 179 |
+| SDK 方法总数 | 180 |
 
 ## 专题分布
 
@@ -14,7 +14,7 @@
 
 | ftshare-doc 专题 | SDK 方法数 | API mixin 模块 | Endpoint 模块 |
 |---|---:|---|---|
-| 股票数据 | 95 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
+| 股票数据 | 96 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
 | 港股数据 | 14 | `ftshare.apis.hk` | `ftshare.endpoints.hk` |
 | 美股数据 | 9 | `ftshare.apis.us` | `ftshare.endpoints.us` |
 | 指数专题 | 8 | `ftshare.apis.index` | `ftshare.endpoints.index` |
@@ -126,7 +126,8 @@ df = market.baidu_financial_calendar(
 | [`stock_pledge_detail`](#api-stock-pledge-detail) | 股权质押明细 | `GET` | `api/v1/market/data/pledge/pledge-detail` | `stock_code`, `is_last`, `page`, `page_size` | `股权质押明细.md` |
 | [`stock_pledge_summary`](#api-stock-pledge-summary) | 股权质押汇总 | `GET` | `api/v1/market/data/pledge/pledge-summary` | `page`, `page_size` | `股权质押汇总.md` |
 | [`stock_prev_close`](#api-stock-prev-close) | 标的昨收价 | `GET` | `api/v1/market/data/daec/history/prev-closes` | `symbol`, `since`, `until` | `标的昨收价.md` |
-| [`stock_intraday_prices`](#api-stock-intraday-prices) | 标的分时数据 | `GET` | `api/v1/market/data/daec/history/prices` | `symbol`, `range`, `days`, `ts_ms` | `标得分时数据.md` |
+| [`stock_intraday_prices`](#api-stock-intraday-prices) | 标的分时数据 | `GET` | `api/v1/market/data/daec/history/prices` | `symbol`, `range`, `days`, `ts_ms`, `compat`, `since`, `since_ts_ms` | `标得分时数据.md` |
+| [`stock_ohlcs`](#api-stock-ohlcs) | 标的K线数据 | `GET` | `api/v1/market/data/daec/history/ohlcs` | `symbol`, `since`, `until`, `interval`, `adjust`, `compat`, `span`, `limit`, `until_ts_ms` | `标的K线数据.md` |
 | [`stock_rating_top5`](#api-stock-rating-top5) | 飞兔股票评级Top5 | `GET` | `api/v1/market/data/feitu/stock-rating-top5` | `date`, `variant`, `type` | `飞兔股票评级Top5.md` |
 | [`stock_share`](#api-stock-share) | 股本 | `GET` | `api/v1/market/data/share/get-stock-share` | `stock_code`, `date` | `股本.md` |
 | [`stock_share_chg`](#api-stock-share-chg) | 股东增减持 | `GET` | `api/v1/market/data/holder/stock-share-chg` | `stock_code`, `is_last`, `page`, `page_size` | `股东增减持.md` |
@@ -185,7 +186,7 @@ df = market.baidu_financial_calendar(
 | [`index_description_all`](#api-index-description-all) | 指数基础信息 | `GET` | `api/v1/market/data/index-description-all` | - | `指数基础信息.md` |
 | [`index_description_list`](#api-index-description-list) | 中证指数描述列表 | `GET` | `api/v1/market/data/index/index_description` | `page`, `page_size` | `中证指数描述列表.md` |
 | [`index_weight_list`](#api-index-weight-list) | 指数权重列表 | `GET` | `api/v1/market/data/index/index_weight` | `index_code`, `date`, `page`, `page_size` | `指数权重列表.md` |
-| [`index_weight_summary`](#api-index-weight-summary) | 指数权重汇总 | `GET` | `api/v1/market/data/index/index_weight_summary` | `page`, `page_size` | `指数权重汇总.md` |
+| [`index_weight_summary`](#api-index-weight-summary) | 指数权重汇总 | `GET` | `api/v1/market/data/index/index_weight_summary` | `index_code`, `page`, `page_size` | `指数权重汇总.md` |
 | [`sw_industry_constituent_history`](#api-sw-industry-constituent-history) | 申万行业成份股历史 | `GET` | `api/v1/market/data/sw-industry/constituent-history` | `industry_code` | `申万行业成份股历史.md` |
 | [`sw_industry_daily_metrics`](#api-sw-industry-daily-metrics) | 申万行业日度指标 | `GET` | `api/v1/market/data/sw-industry/daily-metrics` | `level`, `start_date`, `end_date`, `industry_code`, `page`, `page_size` | `申万行业日度指标.md` |
 | [`sw_industry_overview`](#api-sw-industry-overview) | 申万行业总览 | `GET` | `api/v1/market/data/sw-industry/overview` | `date`, `level`, `page`, `page_size` | `申万行业总览.md` |
@@ -1983,7 +1984,7 @@ Returns:
 - 接口名称：千股千评
 - HTTP：`GET`
 - Path：`api/v1/market/data/stock-comment/index`
-- 参数：`page`, `page_size`
+- 参数：`index_code`, `page`, `page_size`
 - 来源文档：`千股千评.md`
 - 原始接口：`stock_comment_em`
 
@@ -1995,6 +1996,7 @@ Method: ``GET``.
 Documented endpoint: ``stock_comment_em``.
 
 Args:
+    index_code: 指数代码，如 `000300` (type: string; required: Y).
     page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
     page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
     limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
@@ -2844,7 +2846,7 @@ Returns:
 - 接口名称：标的分时数据
 - HTTP：`GET`
 - Path：`api/v1/market/data/daec/history/prices`
-- 参数：`symbol`, `range`, `days`, `ts_ms`
+- 参数：`symbol`, `range`, `days`, `ts_ms`, `compat`, `since`, `since_ts_ms`
 - 来源文档：`标得分时数据.md`
 - 原始接口：`stock_intraday_prices`
 
@@ -2860,6 +2862,9 @@ Args:
     range: 预置时间区间：Today / FiveDays (type: string; required: N).
     days: 近 N 个交易日至今 (type: uint32; required: N).
     ts_ms: 起始毫秒时间戳 (type: int64; required: N).
+    compat: 兼容模式。传 v2 时启用旧 v2 响应结构 (type: string; required: N).
+    since: v2 兼容模式参数。可选 TODAY / FIVE_DAYS_AGO / TRADE_DAYS_AGO(n) (type: string; required: N).
+    since_ts_ms: v2 兼容模式参数。按起始毫秒时间戳取数，优先级高于 since (type: int64; required: N).
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -2869,6 +2874,49 @@ Returns:
     A pandas ``DataFrame`` by default, Python rows when
     ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
     payloads when multi-page fetching is used with ``raw=True``.
+
+Raises:
+    ValueError: If original-mode and ``compat='v2'`` time controls are mixed.
+```
+
+<h4 id="api-stock-ohlcs"><code>stock_ohlcs</code></h4>
+
+- 接口名称：标的K线数据
+- HTTP：`GET`
+- Path：`api/v1/market/data/daec/history/ohlcs`
+- 参数：`symbol`, `since`, `until`, `interval`, `adjust`, `compat`, `span`, `limit`, `until_ts_ms`
+- 来源文档：`标的K线数据.md`
+- 原始接口：`stock_ohlcs`
+
+```text
+标的K线数据.
+
+Endpoint: ``api/v1/market/data/daec/history/ohlcs``.
+Method: ``GET``.
+Documented endpoint: ``stock_ohlcs``.
+
+Args:
+    symbol: 标的代码，如 600000.XSHG (type: string; required: Y).
+    since: 起始日期，格式 YYYYMMDD；v2 兼容模式不传时会根据 limit 估算回溯窗口 (type: string; required: 原始模式 Y / v2 兼容模式 N).
+    until: 结束日期，格式 YYYYMMDD；v2 兼容模式不传时默认当天 (type: string; required: 原始模式 Y / v2 兼容模式 N).
+    interval: 原始模式参数。周期：Minute / Day / Week / Month，默认 Day (type: string; required: N).
+    adjust: 复权方式：None / Forward / Backward；v2 兼容模式默认 Forward (type: string; required: N).
+    compat: 兼容模式。传 v2 时启用旧 v2 响应结构 (type: string; required: N).
+    span: v2 兼容模式参数。周期：DAY1 / WEEK1 / MONTH1；不支持 YEAR1 (type: string; required: N).
+    limit: v2 兼容模式参数。返回最近 N 根 K 线 (type: int; required: N).
+    until_ts_ms: v2 兼容模式参数。旧 v2 风格结束毫秒时间戳，会按北京时间转换为 until 日期 (type: int64; required: N).
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
+
+Raises:
+    ValueError: If original-mode and ``compat='v2'`` controls are mixed.
 ```
 
 <h4 id="api-stock-rating-top5"><code>stock_rating_top5</code></h4>

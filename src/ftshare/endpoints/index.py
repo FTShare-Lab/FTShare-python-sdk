@@ -40,7 +40,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'title': '指数权重汇总',
         'doc_file': '指数权重汇总.md',
         'original_api': 'index_weight_summary_handler',
-        'params': ('page', 'page_size'),
+        'params': ('index_code', 'page', 'page_size'),
         'max_page_size': 100,
     },
     'sw_industry_constituent_history': {

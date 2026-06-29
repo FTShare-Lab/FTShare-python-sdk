@@ -8,6 +8,10 @@ from typing import Any
 from ..endpoints import ENDPOINTS
 
 
+def _present_params(params: dict[str, Any]) -> list[str]:
+    return [name for name, value in params.items() if value is not None]
+
+
 class StockApiMixin:
     """Endpoint methods for the stock ftshare-doc topic."""
 
@@ -4238,6 +4242,9 @@ class StockApiMixin:
         range: Any | None = None,
         days: Any | None = None,
         ts_ms: Any | None = None,
+        compat: Any | None = None,
+        since: Any | None = None,
+        since_ts_ms: Any | None = None,
         *,
         raw: bool = False,
         fields: Sequence[str] | str | None = None,
@@ -4255,6 +4262,9 @@ class StockApiMixin:
             range: 预置时间区间：Today / FiveDays (type: string; required: N).
             days: 近 N 个交易日至今 (type: uint32; required: N).
             ts_ms: 起始毫秒时间戳 (type: int64; required: N).
+            compat: 兼容模式。传 v2 时启用旧 v2 响应结构 (type: string; required: N).
+            since: v2 兼容模式参数。可选 TODAY / FIVE_DAYS_AGO / TRADE_DAYS_AGO(n) (type: string; required: N).
+            since_ts_ms: v2 兼容模式参数。按起始毫秒时间戳取数，优先级高于 since (type: int64; required: N).
             raw: Return the decoded JSON payload without tabular extraction.
             fields: Optional field list or comma-separated field string applied after extraction.
             as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -4264,11 +4274,123 @@ class StockApiMixin:
             A pandas ``DataFrame`` by default, Python rows when
             ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
             payloads when multi-page fetching is used with ``raw=True``.
+
+        Raises:
+            ValueError: If original-mode and ``compat='v2'`` time controls are mixed.
         """
-        request_params = {'symbol': symbol, 'range': range, 'days': days, 'ts_ms': ts_ms}
+        if compat is not None and compat != 'v2':
+            raise ValueError("compat must be 'v2' when provided")
+        raw_time_params = _present_params({'range': range, 'days': days, 'ts_ms': ts_ms})
+        v2_time_params = _present_params({'since': since, 'since_ts_ms': since_ts_ms})
+        if compat == 'v2':
+            if raw_time_params:
+                raise ValueError(
+                    "stock_intraday_prices compat='v2' cannot be combined with raw time parameters: "
+                    + ', '.join(raw_time_params)
+                )
+            if len(v2_time_params) > 1:
+                raise ValueError(
+                    "stock_intraday_prices v2 time parameters are mutually exclusive: "
+                    + ', '.join(v2_time_params)
+                )
+        elif v2_time_params:
+            raise ValueError(
+                "stock_intraday_prices v2 time parameters require compat='v2': "
+                + ', '.join(v2_time_params)
+            )
+        elif len(raw_time_params) > 1:
+            raise ValueError(
+                "stock_intraday_prices raw time parameters are mutually exclusive: "
+                + ', '.join(raw_time_params)
+            )
+
+        request_params = {
+            'symbol': symbol,
+            'range': range,
+            'days': days,
+            'ts_ms': ts_ms,
+            'compat': compat,
+            'since': since,
+            'since_ts_ms': since_ts_ms,
+        }
         request_params.update(kwargs)
         return self._call_endpoint(
             'stock_intraday_prices',
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
+
+    def stock_ohlcs(
+        self,
+        symbol: Any | None = None,
+        since: Any | None = None,
+        until: Any | None = None,
+        interval: Any | None = None,
+        adjust: Any | None = None,
+        compat: Any | None = None,
+        span: Any | None = None,
+        limit: Any | None = None,
+        until_ts_ms: Any | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """标的K线数据.
+
+        Endpoint: ``api/v1/market/data/daec/history/ohlcs``.
+        Method: ``GET``.
+        Documented endpoint: ``stock_ohlcs``.
+
+        Args:
+            symbol: 标的代码，如 600000.XSHG (type: string; required: Y).
+            since: 起始日期，格式 YYYYMMDD；v2 兼容模式不传时会根据 limit 估算回溯窗口 (type: string; required: 原始模式 Y / v2 兼容模式 N).
+            until: 结束日期，格式 YYYYMMDD；v2 兼容模式不传时默认当天 (type: string; required: 原始模式 Y / v2 兼容模式 N).
+            interval: 原始模式参数。周期：Minute / Day / Week / Month，默认 Day (type: string; required: N).
+            adjust: 复权方式：None / Forward / Backward；v2 兼容模式默认 Forward (type: string; required: N).
+            compat: 兼容模式。传 v2 时启用旧 v2 响应结构 (type: string; required: N).
+            span: v2 兼容模式参数。周期：DAY1 / WEEK1 / MONTH1；不支持 YEAR1 (type: string; required: N).
+            limit: v2 兼容模式参数。返回最近 N 根 K 线 (type: int; required: N).
+            until_ts_ms: v2 兼容模式参数。旧 v2 风格结束毫秒时间戳，会按北京时间转换为 until 日期 (type: int64; required: N).
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``.
+
+        Raises:
+            ValueError: If original-mode and ``compat='v2'`` controls are mixed.
+        """
+        if compat is not None and compat != 'v2':
+            raise ValueError("compat must be 'v2' when provided")
+        v2_params = _present_params({'span': span, 'limit': limit, 'until_ts_ms': until_ts_ms})
+        if compat == 'v2':
+            if interval is not None:
+                raise ValueError("stock_ohlcs compat='v2' uses span instead of interval")
+        elif v2_params:
+            raise ValueError("stock_ohlcs v2 parameters require compat='v2': " + ', '.join(v2_params))
+
+        request_params = {
+            'symbol': symbol,
+            'since': since,
+            'until': until,
+            'interval': interval,
+            'adjust': adjust,
+            'compat': compat,
+            'span': span,
+            'limit': limit,
+            'until_ts_ms': until_ts_ms,
+        }
+        request_params.update(kwargs)
+        return self._call_endpoint(
+            'stock_ohlcs',
             raw=raw,
             fields=fields,
             as_dataframe=as_dataframe,
