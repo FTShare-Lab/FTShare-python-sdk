@@ -1,4 +1,4 @@
-"""FTShare hk endpoint methods for FTShare market data."""
+"""Hong Kong market API methods grouped by ftshare-doc."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from ..endpoints import ENDPOINTS
 
 
 class HkApiMixin:
-    """Endpoint methods for the hk API group."""
+    """Endpoint methods for the hk ftshare-doc topic."""
 
     def company_hk(
         self,
@@ -688,10 +688,9 @@ class HkApiMixin:
             **request_params,
         )
 
-    def stk_ah_comparison(
+    def eastmoney_hk_index_daily_kline(
         self,
-        hk_code: Any | None = None,
-        ts_code: Any | None = None,
+        index_code: Any | None = None,
         trade_date: Any | None = None,
         start_date: Any | None = None,
         end_date: Any | None = None,
@@ -706,18 +705,17 @@ class HkApiMixin:
         as_dataframe: bool = True,
         **kwargs: Any,
     ) -> Any:
-        """AH股对比.
+        """东方财富港股指数日K.
 
-        Endpoint: ``api/v1/market/data/hk/stk-ah-comparison``.
+        Endpoint: ``api/v1/market/data/eastmoney-hk-index-daily-kline``.
         Method: ``GET``.
-        Documented endpoint: ``get_stk_ah_comparison``.
+        Documented endpoint: ``get_eastmoney_hk_index_daily_kline``.
 
         Args:
-            hk_code: 港股股票代码，支持 `700` 或 `00700.HK` (type: string; required: N).
-            ts_code: A 股股票代码，格式 `xxxxxx.SH/SZ/BJ` (type: string; required: N).
-            trade_date: 交易日期 YYYYMMDD (type: int32; required: N).
-            start_date: 起始日期 YYYYMMDD (type: int32; required: N).
-            end_date: 结束日期 YYYYMMDD (type: int32; required: N).
+            index_code: 指数代码，如 HSI / HSCEI / HSTECH；不传返回全部指数 (type: string; required: N).
+            trade_date: 交易日 YYYY-MM-DD；与 start_date/end_date 互斥 (type: string; required: N).
+            start_date: 区间起始日 YYYY-MM-DD；需与 end_date 同时提供 (type: string; required: N).
+            end_date: 区间结束日 YYYY-MM-DD；需与 start_date 同时提供 (type: string; required: N).
             page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
             page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
             limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
@@ -733,9 +731,9 @@ class HkApiMixin:
             ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
             payloads when multi-page fetching is used with ``raw=True``.
         """
-        request_params = {'hk_code': hk_code, 'ts_code': ts_code, 'trade_date': trade_date, 'start_date': start_date, 'end_date': end_date}
+        request_params = {'index_code': index_code, 'trade_date': trade_date, 'start_date': start_date, 'end_date': end_date}
         request_params.update(kwargs)
-        path = ENDPOINTS['stk_ah_comparison'].path
+        path = ENDPOINTS['eastmoney_hk_index_daily_kline'].path
         return self.get_paginated(
             path,
             page=page,
@@ -743,10 +741,8 @@ class HkApiMixin:
             limit=limit,
             all_pages=all_pages,
             max_pages=max_pages,
-            max_page_size=1000,
             raw=raw,
             fields=fields,
             as_dataframe=as_dataframe,
             **request_params,
         )
-

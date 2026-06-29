@@ -1,4 +1,4 @@
-"""FTShare pledge endpoint methods for FTShare market data."""
+"""Unpublished API methods kept for compatibility."""
 
 from __future__ import annotations
 
@@ -8,10 +8,10 @@ from typing import Any
 from ..endpoints import ENDPOINTS
 
 
-class PledgeApiMixin:
-    """Endpoint methods for the pledge API group."""
+class UnpublishedApiMixin:
+    """Endpoint methods for the unpublished ftshare-doc topic."""
 
-    def pledge_summary(
+    def stock_dividends_paginated(
         self,
         page: int | None = None,
         page_size: int | None = None,
@@ -24,11 +24,11 @@ class PledgeApiMixin:
         as_dataframe: bool = True,
         **kwargs: Any,
     ) -> Any:
-        """股权质押汇总.
+        """股票分红记录分页.
 
-        Endpoint: ``api/v1/market/data/pledge/pledge-summary``.
+        Endpoint: ``api/v1/market/data/dividends``.
         Method: ``GET``.
-        Documented endpoint: ``stock_pledge_summary``.
+        Documented endpoint: ``stock_dividends_paginated``.
 
         Args:
             page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
@@ -48,7 +48,7 @@ class PledgeApiMixin:
         """
         request_params = {}
         request_params.update(kwargs)
-        path = ENDPOINTS['pledge_summary'].path
+        path = ENDPOINTS['stock_dividends_paginated'].path
         return self.get_paginated(
             path,
             page=page,
@@ -62,35 +62,23 @@ class PledgeApiMixin:
             **request_params,
         )
 
-    def stock_pledge_detail(
+    def stock_intraday(
         self,
-        stock_code: Any | None = None,
-        is_last: Any | None = None,
-        page: int | None = None,
-        page_size: int | None = None,
-        limit: int | None = None,
-        all_pages: bool = False,
-        max_pages: int | None = None,
+        symbol: Any | None = None,
         *,
         raw: bool = False,
         fields: Sequence[str] | str | None = None,
         as_dataframe: bool = True,
         **kwargs: Any,
     ) -> Any:
-        """股权质押明细.
+        """股票日内分时.
 
-        Endpoint: ``api/v1/market/data/pledge/pledge-detail``.
+        Endpoint: ``api/v1/market/security/{symbol}/intraday``.
         Method: ``GET``.
-        Documented endpoint: ``stock_pledge_detail``.
+        Documented endpoint: ``stock_intraday``.
 
         Args:
-            stock_code: 股票代码（symbol.suffix 格式或纯代码）；不传时需配合 `is_last=true` (type: string; required: N).
-            is_last: 是否仅获取最新一期（无 `stock_code` 时必填为 true） (type: bool; required: N).
-            page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
-            page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
-            limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
-            all_pages: Fetch and combine pages until the server reports the last page.
-            max_pages: Optional safety cap for ``all_pages``.
+            symbol: 标的代码 (type: SymbolKey; required: Y).
             raw: Return the decoded JSON payload without tabular extraction.
             fields: Optional field list or comma-separated field string applied after extraction.
             as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -101,23 +89,18 @@ class PledgeApiMixin:
             ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
             payloads when multi-page fetching is used with ``raw=True``.
         """
-        request_params = {'stock_code': stock_code, 'is_last': is_last}
+        request_params = {}
         request_params.update(kwargs)
-        path = ENDPOINTS['stock_pledge_detail'].path
-        return self.get_paginated(
-            path,
-            page=page,
-            page_size=page_size,
-            limit=limit,
-            all_pages=all_pages,
-            max_pages=max_pages,
+        return self._call_endpoint(
+            'stock_intraday',
+            path_params={'symbol': symbol},
             raw=raw,
             fields=fields,
             as_dataframe=as_dataframe,
             **request_params,
         )
 
-    def stock_pledge_summary(
+    def stock_ipos_paginated(
         self,
         page: int | None = None,
         page_size: int | None = None,
@@ -130,11 +113,11 @@ class PledgeApiMixin:
         as_dataframe: bool = True,
         **kwargs: Any,
     ) -> Any:
-        """股权质押汇总.
+        """股票IPO分页.
 
-        Endpoint: ``api/v1/market/data/pledge/pledge-summary``.
+        Endpoint: ``api/v1/market/data/stock-ipos``.
         Method: ``GET``.
-        Documented endpoint: ``stock_pledge_summary``.
+        Documented endpoint: ``stock_ipos_paginated``.
 
         Args:
             page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
@@ -154,7 +137,7 @@ class PledgeApiMixin:
         """
         request_params = {}
         request_params.update(kwargs)
-        path = ENDPOINTS['stock_pledge_summary'].path
+        path = ENDPOINTS['stock_ipos_paginated'].path
         return self.get_paginated(
             path,
             page=page,
@@ -168,3 +151,42 @@ class PledgeApiMixin:
             **request_params,
         )
 
+    def stock_related(
+        self,
+        symbol: Any | None = None,
+        limit: Any | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """相关股票.
+
+        Endpoint: ``api/v1/market/security/{symbol}/related``.
+        Method: ``GET``.
+        Documented endpoint: ``stock_related``.
+
+        Args:
+            symbol: 标的代码 (type: SymbolKey; required: Y).
+            limit: 返回数量上限，服务端默认 3 (type: int; required: N).
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``.
+        """
+        request_params = {'limit': limit}
+        request_params.update(kwargs)
+        return self._call_endpoint(
+            'stock_related',
+            path_params={'symbol': symbol},
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )

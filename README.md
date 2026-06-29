@@ -26,7 +26,13 @@ Agent 应用                # 面向最终用户的投研分析体验
 
 ## 安装
 
-克隆仓库并以可编辑模式安装（含测试依赖）：
+通过 PyPI 安装：
+
+```bash
+pip install ftshare
+```
+
+本地开发时，克隆仓库并以可编辑模式安装（含测试依赖）：
 
 ```bash
 git clone git@github.com:ftshare-lab/ftshare-python-sdk.git
@@ -110,23 +116,23 @@ with ft.market_api(timeout=20) as market:
 import ftshare as ft
 
 print(ft.BASE_URL)
-# https://market.ft.tech/data/
+# https://market.ft.tech/gateway/
 ```
 
 全局修改，影响之后创建的新客户端：
 
 ```python
-ft.set_base_url("https://market.ft.tech/data/")
+ft.set_base_url("https://market.ft.tech/gateway/")
 market = ft.market_api()
 ```
 
 只修改某个客户端：
 
 ```python
-market = ft.market_api(base_url="https://market.ft.tech/data/")
+market = ft.market_api(base_url="https://market.ft.tech/gateway/")
 ```
 
-SDK 会规范化 URL，`https://host/data` 和 `https://host/data/` 都可以。
+SDK 会规范化 URL，`https://host/gateway` 和 `https://host/gateway/` 都可以。
 
 ## 返回类型
 
@@ -367,10 +373,10 @@ src/ftshare/
   client.py            # FtshareClient 组合类和 market_api 工厂
   config.py            # BASE_URL、默认分页大小和全局配置
   dataframe.py         # pandas DataFrame 转换
-  endpoints.py         # 接口 path 注册表
+  endpoints/           # 按 ftshare-doc 专题拆分的接口注册表
   exceptions.py        # SDK 异常类型
   fields.py            # fields 参数解析和列筛选
   pagination.py        # page/page_size/limit/max_pages 校验
   response.py          # API 业务错误、records/items 提取、总页数解析
-  apis/                # 按业务域组织的接口 mixin
+  apis/                # 按 ftshare-doc 专题拆分的接口 mixin
 ```

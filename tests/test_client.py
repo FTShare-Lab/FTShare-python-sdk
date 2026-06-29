@@ -54,12 +54,12 @@ def paginated_records(records, page=1, pages=1):
 
 
 def test_default_base_url_and_set_base_url():
-    assert ft.BASE_URL == "https://market.ft.tech/data/"
-    assert ft.set_base_url("https://example.com/data") == "https://example.com/data/"
-    assert ft.BASE_URL == "https://example.com/data/"
+    assert ft.BASE_URL == "https://market.ft.tech/gateway/"
+    assert ft.set_base_url("https://example.com/gateway") == "https://example.com/gateway/"
+    assert ft.BASE_URL == "https://example.com/gateway/"
     client = ft.market_api()
-    assert client.base_url == "https://example.com/data/"
-    ft.set_base_url("https://market.ft.tech/data/")
+    assert client.base_url == "https://example.com/gateway/"
+    ft.set_base_url("https://market.ft.tech/gateway/")
 
 
 def test_package_base_url_assignment_is_used_by_market_api():
@@ -73,21 +73,30 @@ def test_package_base_url_assignment_is_used_by_market_api():
 
 def test_url_join_and_none_params_are_filtered():
     session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
-    client = FtshareClient(base_url="https://market.ft.tech/data/", session=session)
+    client = FtshareClient(base_url="https://market.ft.tech/gateway/", session=session)
 
     client.stk_limit(symbol="000001.SZ", trade_date=None, page=1)
 
-    assert session.calls[0]["url"] == "https://market.ft.tech/data/api/v1/market/data/stk-limit"
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/stk-limit"
     assert session.calls[0]["params"] == {"symbol": "000001.SZ", "page": 1}
 
 
 def test_data_prefix_is_not_duplicated():
     session = FakeSession([FakeResponse(payload={})])
-    client = FtshareClient(base_url="https://market.ft.tech/data/", session=session)
+    client = FtshareClient(base_url="https://market.ft.tech/gateway/", session=session)
 
     client.get("/data/api/v1/market/data/demo")
 
-    assert session.calls[0]["url"] == "https://market.ft.tech/data/api/v1/market/data/demo"
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/demo"
+
+
+def test_gateway_prefix_is_not_duplicated():
+    session = FakeSession([FakeResponse(payload={})])
+    client = FtshareClient(base_url="https://market.ft.tech/gateway/", session=session)
+
+    client.get("/gateway/api/v1/market/data/demo")
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/demo"
 
 
 def test_get_defaults_to_extracted_records():
@@ -149,12 +158,12 @@ def test_endpoint_methods_map_to_expected_paths(method_name, kwargs):
 
     getattr(client, method_name)(**kwargs)
 
-    assert session.calls[0]["url"] == "https://market.ft.tech/data/" + ENDPOINTS[method_name].path
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + ENDPOINTS[method_name].path
 
 
 def test_all_documented_endpoints_are_available_as_client_methods():
     client = FtshareClient(session=FakeSession([]))
-    assert len(ENDPOINTS) >= 176
+    assert len(ENDPOINTS) >= 179
 
     missing = [
         name
@@ -215,7 +224,7 @@ def test_search_uses_public_path_without_trailing_slash_and_q_param():
     rows = client.search(query="maotai", limit=1, as_dataframe=False)
 
     assert rows == [{"symbol": "600519.SH"}]
-    assert session.calls[0]["url"] == "https://market.ft.tech/data/api/v1/market/security/search"
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/security/search"
     assert session.calls[0]["params"] == {"q": "maotai", "limit": 1}
 
 
@@ -226,7 +235,7 @@ def test_path_parameter_is_substituted_into_endpoint_url():
     rows = client.stock_intraday(symbol="600000.XSHG", as_dataframe=False)
 
     assert rows == []
-    assert session.calls[0]["url"] == "https://market.ft.tech/data/api/v1/market/security/600000.XSHG/intraday"
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/security/600000.XSHG/intraday"
     assert session.calls[0]["params"] == {}
 
 
@@ -236,7 +245,7 @@ def test_path_parameter_and_query_parameters_are_separated():
 
     client.stock_related(symbol="000300.XSHG", limit=3)
 
-    assert session.calls[0]["url"] == "https://market.ft.tech/data/api/v1/market/security/000300.XSHG/related"
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/security/000300.XSHG/related"
     assert session.calls[0]["params"] == {"limit": 3}
 
 
@@ -268,6 +277,12 @@ def test_confirmed_todo_endpoints_map_to_public_server_paths():
             "api/v1/market/data/daec/market/distribution-history",
             {"scope": "ChinaStock"},
         ),
+        (
+            "stock_intraday_prices",
+            {"symbol": "600000.XSHG", "range": "Today"},
+            "api/v1/market/data/daec/history/prices",
+            {"symbol": "600000.XSHG", "range": "Today"},
+        ),
     ]
 
     for method_name, kwargs, path, expected_params in cases:
@@ -276,7 +291,33 @@ def test_confirmed_todo_endpoints_map_to_public_server_paths():
 
         getattr(client, method_name)(**kwargs)
 
-        assert session.calls[0]["url"] == "https://market.ft.tech/data/" + path
+        assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + path
+        assert session.calls[0]["params"] == expected_params
+
+
+def test_stock_market_list_families_format_board_path_parameters():
+    cases = [
+        (
+            "stock_daec_stocks",
+            {"board": "all", "page": 1, "page_size": 5, "filter": "close > 10", "order_by": "change_rate desc"},
+            "api/v1/market/data/daec/stocks/all",
+            {"filter": "close > 10", "order_by": "change_rate desc", "page": 1, "page_size": 5},
+        ),
+        (
+            "stock_realtime_list",
+            {"board": "chi-next", "page": 1, "page_size": 5},
+            "api/v1/market/data/stock-list/chi-next",
+            {"page": 1, "page_size": 5},
+        ),
+    ]
+
+    for method_name, kwargs, path, expected_params in cases:
+        session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+        client = FtshareClient(session=session)
+
+        getattr(client, method_name)(**kwargs)
+
+        assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + path
         assert session.calls[0]["params"] == expected_params
 
 
@@ -292,9 +333,9 @@ def test_paginated_aliases_resolved_from_server_routes():
     client.stock_ipos_paginated(page=1, page_size=50)
     client.stock_dividends_paginated(page=1, page_size=50)
 
-    assert session.calls[0]["url"] == "https://market.ft.tech/data/api/v1/market/data/stock-ipos"
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/stock-ipos"
     assert session.calls[0]["params"] == {"page": 1, "page_size": 50}
-    assert session.calls[1]["url"] == "https://market.ft.tech/data/api/v1/market/data/dividends"
+    assert session.calls[1]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/dividends"
     assert session.calls[1]["params"] == {"page": 1, "page_size": 50}
 
 

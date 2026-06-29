@@ -43,8 +43,8 @@ def set_base_url(url: str) -> str:
     """Set the package-level base URL used by new clients.
 
     Args:
-        url: API base URL. Both ``https://host/data`` and
-            ``https://host/data/`` are accepted.
+        url: API base URL. Both ``https://host/gateway`` and
+            ``https://host/gateway/`` are accepted.
 
     Returns:
         The normalized base URL.
