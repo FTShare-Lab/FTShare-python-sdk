@@ -1,4 +1,4 @@
-"""FTShare etf endpoint methods for FTShare market data."""
+"""ETF API methods grouped by ftshare-doc."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from ..endpoints import ENDPOINTS
 
 
 class EtfApiMixin:
-    """Endpoint methods for the etf API group."""
+    """Endpoint methods for the etf ftshare-doc topic."""
 
     def etf_adjust_factor(
         self,
@@ -347,4 +347,3 @@ class EtfApiMixin:
             as_dataframe=as_dataframe,
             **request_params,
         )
-

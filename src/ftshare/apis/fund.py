@@ -1,4 +1,4 @@
-"""FTShare fund endpoint methods for FTShare market data."""
+"""Public fund API methods grouped by ftshare-doc."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from ..endpoints import ENDPOINTS
 
 
 class FundApiMixin:
-    """Endpoint methods for the fund API group."""
+    """Endpoint methods for the fund ftshare-doc topic."""
 
     def fund_basicinfo(
         self,
@@ -257,4 +257,3 @@ class FundApiMixin:
             as_dataframe=as_dataframe,
             **request_params,
         )
-

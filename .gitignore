@@ -34,6 +34,12 @@ htmlcov/
 # Logs / runtime
 *.log
 
+# Local API documentation checkout used to regenerate SDK metadata
+ftshare-doc/
+
+# Local SDK verification workspace; not shipped with package releases
+sdk_smoke_test/
+
 # Secrets / env
 .env
 .env.local

@@ -1,33 +1,31 @@
-"""Business-domain API mixins used by ``FtshareClient``."""
+"""ftshare-doc topic API mixins used by ``FtshareClient``."""
 
-from .corporate import CorporateApiMixin
-from .economic import EconomicApiMixin
+from .stock import StockApiMixin
+from .hk import HkApiMixin
+from .us import UsApiMixin
+from .index import IndexApiMixin
 from .etf import EtfApiMixin
-from .finance import FinanceApiMixin
 from .fund import FundApiMixin
 from .futures import FuturesApiMixin
-from .global_index import GlobalIndexApiMixin
-from .goodwill import GoodwillApiMixin
-from .hk import HkApiMixin
-from .holder import HolderApiMixin
-from .index import IndexApiMixin
-from .market import MarketApiMixin
-from .pledge import PledgeApiMixin
-from .stock import StockApiMixin
+from .bond import BondApiMixin
+from .economic import EconomicApiMixin
+from .llm_corpus import LlmCorpusApiMixin
+from .spot import SpotApiMixin
+from .forex import ForexApiMixin
+from .unpublished import UnpublishedApiMixin
 
 __all__ = [
-    'CorporateApiMixin',
-    'EconomicApiMixin',
+    'StockApiMixin',
+    'HkApiMixin',
+    'UsApiMixin',
+    'IndexApiMixin',
     'EtfApiMixin',
-    'FinanceApiMixin',
     'FundApiMixin',
     'FuturesApiMixin',
-    'GlobalIndexApiMixin',
-    'GoodwillApiMixin',
-    'HkApiMixin',
-    'HolderApiMixin',
-    'IndexApiMixin',
-    'MarketApiMixin',
-    'PledgeApiMixin',
-    'StockApiMixin',
+    'BondApiMixin',
+    'EconomicApiMixin',
+    'LlmCorpusApiMixin',
+    'SpotApiMixin',
+    'ForexApiMixin',
+    'UnpublishedApiMixin',
 ]

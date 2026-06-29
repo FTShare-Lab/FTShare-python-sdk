@@ -1,48 +1,46 @@
-"""Public synchronous FTShare client assembled from domain API mixins."""
+"""Public synchronous FTShare client assembled from ftshare-doc topic mixins."""
 
 from __future__ import annotations
 
 from collections.abc import Mapping
 
 from .apis import (
-    CorporateApiMixin,
+    BondApiMixin,
     EconomicApiMixin,
     EtfApiMixin,
-    FinanceApiMixin,
+    ForexApiMixin,
     FundApiMixin,
     FuturesApiMixin,
-    GlobalIndexApiMixin,
-    GoodwillApiMixin,
     HkApiMixin,
-    HolderApiMixin,
     IndexApiMixin,
-    MarketApiMixin,
-    PledgeApiMixin,
+    LlmCorpusApiMixin,
+    SpotApiMixin,
     StockApiMixin,
+    UnpublishedApiMixin,
+    UsApiMixin,
 )
 from .base import DEFAULT_BASE_URL, BaseClient, get_base_url, set_base_url
 
 
 class FtshareClient(
-    CorporateApiMixin,
-    EconomicApiMixin,
+    StockApiMixin,
+    HkApiMixin,
+    UsApiMixin,
+    IndexApiMixin,
     EtfApiMixin,
-    FinanceApiMixin,
     FundApiMixin,
     FuturesApiMixin,
-    GlobalIndexApiMixin,
-    GoodwillApiMixin,
-    HkApiMixin,
-    HolderApiMixin,
-    IndexApiMixin,
-    MarketApiMixin,
-    PledgeApiMixin,
-    StockApiMixin,
+    BondApiMixin,
+    EconomicApiMixin,
+    LlmCorpusApiMixin,
+    SpotApiMixin,
+    ForexApiMixin,
+    UnpublishedApiMixin,
     BaseClient,
 ):
     """Synchronous client for all documented FTShare data endpoints.
 
-    The class combines small business-domain mixins while keeping one public
+    The class combines ftshare-doc topic mixins while keeping one public
     client surface. Users should continue to construct it via ``ftshare.market_api``.
     """
 

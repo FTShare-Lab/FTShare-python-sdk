@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-DEFAULT_BASE_URL = "https://market.ft.tech/data/"
+DEFAULT_BASE_URL = "https://market.ft.tech/gateway/"
 """Default FTShare API base URL."""
 
 DEFAULT_MAX_PAGE_SIZE = 200
@@ -15,8 +15,8 @@ def normalize_base_url(url: str) -> str:
     """Normalize a base URL to the canonical trailing-slash form.
 
     Args:
-        url: API base URL. Both ``https://host/data`` and
-            ``https://host/data/`` are accepted.
+        url: API base URL. Both ``https://host/gateway`` and
+            ``https://host/gateway/`` are accepted.
 
     Returns:
         The normalized base URL, always ending with ``/``.

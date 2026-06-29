@@ -362,13 +362,15 @@ class BaseClient:
         return result
 
     def _url_for(self, path: str) -> str:
-        """Build the final URL for an endpoint path without duplicating ``data/``."""
+        """Build the final URL for an endpoint path without duplicating gateway prefixes."""
         clean_path = path.strip()
         if clean_path.startswith("http://") or clean_path.startswith("https://"):
             return clean_path
         clean_path = clean_path.lstrip("/")
-        if clean_path.startswith("data/"):
-            clean_path = clean_path[len("data/") :]
+        for prefix in ("gateway/", "data/"):
+            if clean_path.startswith(prefix):
+                clean_path = clean_path[len(prefix) :]
+                break
         return self.base_url + clean_path
 
     @staticmethod

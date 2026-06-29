@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-06-29
+
+### Changed
+- Default `base_url` changed from `https://market.ft.tech/data/` to `https://market.ft.tech/gateway/`.
+- Endpoint and API mixin registries are now split by `ftshare-doc/api-doc` topic.
+- SDK coverage updated to 179 market-data endpoints.
+
 ## [0.1.0] - 2026-06-23
 
 ### Added
