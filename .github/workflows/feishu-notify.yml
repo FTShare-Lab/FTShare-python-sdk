@@ -1,0 +1,103 @@
+name: Feishu Notify
+
+on:
+  issues:
+    types: [opened, reopened, closed, assigned, unassigned, labeled, unlabeled]
+  issue_comment:
+    types: [created, edited]
+  pull_request_target:
+    types: [opened, reopened, closed, ready_for_review, converted_to_draft]
+  pull_request_review:
+    types: [submitted]
+  pull_request_review_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Feishu notification
+        env:
+          LARK_APP_ID: ${{ secrets.LARK_APP_ID }}
+          LARK_APP_SECRET: ${{ secrets.LARK_APP_SECRET }}
+          LARK_CHAT_ID: ${{ secrets.LARK_CHAT_ID }}
+          EVENT_NAME: ${{ github.event_name }}
+          ACTION: ${{ github.event.action }}
+          REPOSITORY: ${{ github.repository }}
+          ACTOR: ${{ github.actor }}
+          EVENT_PATH: ${{ github.event_path }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import sys
+          import urllib.request
+
+          app_id = os.environ["LARK_APP_ID"]
+          app_secret = os.environ["LARK_APP_SECRET"]
+          chat_id = os.environ["LARK_CHAT_ID"]
+
+          with open(os.environ["EVENT_PATH"], "r", encoding="utf-8") as f:
+              event = json.load(f)
+
+          item = (
+              event.get("issue")
+              or event.get("pull_request")
+              or event.get("review")
+              or event.get("comment")
+              or {}
+          )
+          title = item.get("title") or event.get("pull_request", {}).get("title") or "GitHub event"
+          url = item.get("html_url") or event.get("pull_request", {}).get("html_url") or ""
+          sender = event.get("sender", {}).get("login") or os.environ["ACTOR"]
+
+          lines = [
+              f"GitHub 通知：{os.environ['REPOSITORY']}",
+              f"事件：{os.environ['EVENT_NAME']} / {os.environ['ACTION']}",
+              f"标题：{title}",
+              f"发起人：{sender}",
+          ]
+          if url:
+              lines.append(f"链接：{url}")
+
+          token_body = json.dumps({
+              "app_id": app_id,
+              "app_secret": app_secret,
+          }).encode("utf-8")
+          token_req = urllib.request.Request(
+              "https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal",
+              data=token_body,
+              headers={"Content-Type": "application/json"},
+              method="POST",
+          )
+          with urllib.request.urlopen(token_req, timeout=10) as resp:
+              token_data = json.loads(resp.read().decode("utf-8"))
+          if token_data.get("code") != 0:
+              print(token_data, file=sys.stderr)
+              raise SystemExit("failed to get Feishu tenant_access_token")
+
+          message_body = json.dumps({
+              "receive_id": chat_id,
+              "msg_type": "text",
+              "content": json.dumps({"text": "\n".join(lines)}, ensure_ascii=False),
+          }).encode("utf-8")
+          message_req = urllib.request.Request(
+              "https://open.feishu.cn/open-apis/im/v1/messages?receive_id_type=chat_id",
+              data=message_body,
+              headers={
+                  "Authorization": f"Bearer {token_data['tenant_access_token']}",
+                  "Content-Type": "application/json",
+              },
+              method="POST",
+          )
+          with urllib.request.urlopen(message_req, timeout=10) as resp:
+              message_data = json.loads(resp.read().decode("utf-8"))
+          if message_data.get("code") != 0:
+              print(message_data, file=sys.stderr)
+              raise SystemExit("failed to send Feishu message")
+          PY
