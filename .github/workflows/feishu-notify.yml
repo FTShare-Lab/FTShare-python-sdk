@@ -31,7 +31,6 @@ jobs:
           ACTION: ${{ github.event.action }}
           REPOSITORY: ${{ github.repository }}
           ACTOR: ${{ github.actor }}
-          EVENT_PATH: ${{ github.event_path }}
         run: |
           python3 - <<'PY'
           import json
@@ -43,7 +42,7 @@ jobs:
           app_secret = os.environ["LARK_APP_SECRET"]
           chat_id = os.environ["LARK_CHAT_ID"]
 
-          with open(os.environ["EVENT_PATH"], "r", encoding="utf-8") as f:
+          with open(os.environ["GITHUB_EVENT_PATH"], "r", encoding="utf-8") as f:
               event = json.load(f)
 
           item = (
