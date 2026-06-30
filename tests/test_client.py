@@ -150,6 +150,7 @@ def test_get_raw_true_returns_full_payload():
         ("stock_ggmx_buy_ranking", {}),
         ("stock_ggmx", {}),
         ("pledge_summary", {}),
+        ("index_weight_summary", {"index_code": "000300"}),
     ],
 )
 def test_endpoint_methods_map_to_expected_paths(method_name, kwargs):
@@ -163,7 +164,7 @@ def test_endpoint_methods_map_to_expected_paths(method_name, kwargs):
 
 def test_all_documented_endpoints_are_available_as_client_methods():
     client = FtshareClient(session=FakeSession([]))
-    assert len(ENDPOINTS) >= 179
+    assert len(ENDPOINTS) >= 180
 
     missing = [
         name
@@ -279,9 +280,15 @@ def test_confirmed_todo_endpoints_map_to_public_server_paths():
         ),
         (
             "stock_intraday_prices",
-            {"symbol": "600000.XSHG", "range": "Today"},
+            {"symbol": "600000.XSHG", "compat": "v2", "since": "TODAY"},
             "api/v1/market/data/daec/history/prices",
-            {"symbol": "600000.XSHG", "range": "Today"},
+            {"symbol": "600000.XSHG", "compat": "v2", "since": "TODAY"},
+        ),
+        (
+            "stock_ohlcs",
+            {"symbol": "600000.XSHG", "compat": "v2", "span": "DAY1", "limit": 5},
+            "api/v1/market/data/daec/history/ohlcs",
+            {"symbol": "600000.XSHG", "compat": "v2", "span": "DAY1", "limit": 5},
         ),
     ]
 
@@ -293,6 +300,54 @@ def test_confirmed_todo_endpoints_map_to_public_server_paths():
 
         assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + path
         assert session.calls[0]["params"] == expected_params
+
+
+@pytest.mark.parametrize(
+    ("kwargs", "message"),
+    [
+        (
+            {"symbol": "600000.XSHG", "compat": "v2", "range": "Today", "since": "TODAY"},
+            "cannot be combined with raw time parameters",
+        ),
+        (
+            {"symbol": "600000.XSHG", "since": "TODAY"},
+            "require compat='v2'",
+        ),
+        (
+            {"symbol": "600000.XSHG", "range": "Today", "days": 5},
+            "raw time parameters are mutually exclusive",
+        ),
+        (
+            {"symbol": "600000.XSHG", "compat": "v2", "since": "TODAY", "since_ts_ms": 1782696600000},
+            "v2 time parameters are mutually exclusive",
+        ),
+    ],
+)
+def test_stock_intraday_prices_rejects_mixed_daec_time_modes(kwargs, message):
+    client = FtshareClient(session=FakeSession([]))
+
+    with pytest.raises(ValueError, match=message):
+        client.stock_intraday_prices(**kwargs)
+
+
+@pytest.mark.parametrize(
+    ("kwargs", "message"),
+    [
+        (
+            {"symbol": "600000.XSHG", "span": "DAY1", "limit": 5},
+            "require compat='v2'",
+        ),
+        (
+            {"symbol": "600000.XSHG", "compat": "v2", "span": "DAY1", "interval": "Day"},
+            "uses span instead of interval",
+        ),
+    ],
+)
+def test_stock_ohlcs_rejects_mixed_daec_modes(kwargs, message):
+    client = FtshareClient(session=FakeSession([]))
+
+    with pytest.raises(ValueError, match=message):
+        client.stock_ohlcs(**kwargs)
 
 
 def test_stock_market_list_families_format_board_path_parameters():
