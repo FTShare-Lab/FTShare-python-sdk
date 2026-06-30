@@ -1,6 +1,7 @@
 name: Feishu Notify
 
 on:
+  workflow_dispatch:
   issues:
     types: [opened, reopened, closed, assigned, unassigned, labeled, unlabeled]
   issue_comment:
