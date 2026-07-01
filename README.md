@@ -380,3 +380,16 @@ src/ftshare/
   response.py          # API 业务错误、records/items 提取、总页数解析
   apis/                # 按 ftshare-doc 专题拆分的接口 mixin
 ```
+
+## 社区交流
+
+欢迎加入 FTShare 社区交流群，一起讨论 Python SDK 使用、接口问题、数据接入、量化研究和 Agent / MCP / Skill 相关实践。
+
+![FTShare 微信交流群](docs/assets/wechat-group.png)
+
+> **群规说明**：
+> - 仅限 FTShare 项目、金融数据接口、Python SDK、MCP、Skill 和 Agent 使用相关讨论
+> - 禁止广告、推广、无关闲聊
+> - Bug、功能需求和接口问题，建议优先在 GitHub Issues 中提交，群内用于快速交流和补充说明
+
+**二维码有效期至 2026 年 7 月 8 日。** 如二维码失效，请在 Issues 中留言，维护者会更新入群方式。
