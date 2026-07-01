@@ -385,7 +385,7 @@ src/ftshare/
 
 欢迎加入 FTShare 社区交流群，一起讨论 Python SDK 使用、接口问题、数据接入、量化研究和 Agent / MCP / Skill 相关实践。
 
-![FTShare 微信交流群](docs/assets/wechat-group.png)
+<img src="docs/assets/wechat-group.png" alt="FTShare 微信交流群" width="320" />
 
 > **群规说明**：
 > - 仅限 FTShare 项目、金融数据接口、Python SDK、MCP、Skill 和 Agent 使用相关讨论
