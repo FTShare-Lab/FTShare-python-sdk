@@ -1,7 +1,5 @@
 # FTShare Python SDK
 
-[中文](README.md) | [English](README_EN.md)
-
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![Tests](https://github.com/ftshare-lab/FTShare-python-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/ftshare-lab/FTShare-python-sdk/actions/workflows/ci.yml)
@@ -27,12 +25,6 @@ Agent 应用                # 面向最终用户的投研分析体验
 ```
 
 ## 安装
-
-通过 PyPI 安装：
-
-```bash
-pip install ftshare
-```
 
 本地开发时，克隆仓库并以可编辑模式安装（含测试依赖）：
 
