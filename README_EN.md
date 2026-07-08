@@ -10,20 +10,19 @@
 
 The SDK provides a unified Python interface and returns pandas `DataFrame` objects by default, making it convenient for data analysis, quantitative research, financial application development, MCP tool wrapping, Skill building, and Agent-based investment research workflows.
 
+For international developers, this project can be understood as the **FTShare financial data Python SDK** for market data, quantitative research, MCP tools, Agent Skills, and AI finance workflows.
+
 ## Position in the FTShare Ecosystem
 
-`FTShare-python-sdk` is the data access layer in the FTShare ecosystem. It connects to FTShare data services and provides a stable data foundation for MCP tools, Skills, and Agent applications.
+`FTShare-python-sdk` is the data access layer in the FTShare ecosystem. It connects to FTShare data services and provides a stable data foundation for MCP tools, Skills, quantitative research scripts, and Agent applications.
 
 ```text
 FTShare Data Service
     ↓
 FTShare-python-sdk        # Python data access layer
-    ↓
-FTShare-mcp              # Agent-callable tool layer
-    ↓
-FTShare-skills           # Research task and business workflow layer
-    ↓
-Agent Applications       # End-user investment research experience
+    ├── FTShare-MCP        # MCP tool documentation and integration guide
+    ├── FTShare-skills     # Agent Skills and investment research workflows
+    └── Developer Apps      # Data analysis, quantitative research, financial apps
 ```
 
 ## Installation
@@ -376,6 +375,11 @@ src/ftshare/
   response.py          # API business errors, records/items extraction, total page parsing
   apis/                # API mixins grouped by FTShare doc topic
 ```
+
+## Related Projects
+
+- [FTShare-MCP](https://github.com/FTShare-Lab/FTShare-MCP): FTShare financial data MCP tool documentation and integration guide for Agent tool calls
+- [FTShare-skills](https://github.com/FTShare-Lab/FTShare-skills): FTShare Agent Skills repository for data-level Skills and investment research workflow Skills
 
 ## Community
 

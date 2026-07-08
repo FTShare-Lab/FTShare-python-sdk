@@ -8,20 +8,19 @@
 
 它提供统一的 Python 调用方式，默认返回 pandas `DataFrame`，方便开发者在数据分析、量化研究、金融应用开发、MCP 工具封装、Skill 构建和 Agent 投研流程中使用 FTShare 数据。
 
+面向国际开发者，本项目也可以被理解为 **FTShare financial data Python SDK**：用于 market data、quantitative research、MCP tools、Agent Skills 和 AI finance workflows 的底层数据接入组件。
+
 ## 在 FTShare 生态中的位置
 
-`FTShare-python-sdk` 是 FTShare 生态的数据接入层。它向下连接 FTShare 数据服务，向上为 MCP、Skill 和 Agent 应用提供稳定的数据基础。
+`FTShare-python-sdk` 是 FTShare 生态的数据接入层。它向下连接 FTShare 数据服务，向上为 MCP、Skill、量化研究脚本和 Agent 应用提供稳定的数据基础。
 
 ```text
 FTShare 数据服务
     ↓
 FTShare-python-sdk        # Python 数据访问层
-    ↓
-FTShare-mcp              # Agent 可调用工具层
-    ↓
-FTShare-skills           # 投研任务与业务工作流层
-    ↓
-Agent 应用                # 面向最终用户的投研分析体验
+    ├── FTShare-MCP        # MCP 工具文档与接入说明
+    ├── FTShare-skills     # Agent Skill 与投研业务工作流
+    └── 开发者应用          # 数据分析、量化研究、金融应用开发
 ```
 
 ## 安装
@@ -374,6 +373,11 @@ src/ftshare/
   response.py          # API 业务错误、records/items 提取、总页数解析
   apis/                # 按 ftshare-doc 专题拆分的接口 mixin
 ```
+
+## 相关项目
+
+- [FTShare-MCP](https://github.com/FTShare-Lab/FTShare-MCP)：FTShare 金融数据 MCP 工具文档与接入说明，面向 Agent 工具调用
+- [FTShare-skills](https://github.com/FTShare-Lab/FTShare-skills)：FTShare Agent Skill 仓库，面向数据级 Skill 和投研业务 Skill
 
 ## 社区交流
 
