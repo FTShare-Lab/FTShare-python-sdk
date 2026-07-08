@@ -381,7 +381,7 @@ src/ftshare/
 
 Chinese users are welcome to join the FTShare WeChat community group to discuss SDK usage, interface issues, data access, quantitative research, and Agent / MCP / Skill practices.
 
-<img src="docs/assets/wechat-group.png" alt="FTShare WeChat community group" width="320" />
+<img src="docs/assets/wechat-group-20260715.png" alt="FTShare WeChat community group" width="320" />
 
 > **Community rules**:
 > - Discussions should be related to FTShare, financial data interfaces, the Python SDK, MCP, Skills, or Agent usage
