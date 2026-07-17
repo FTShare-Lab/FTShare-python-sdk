@@ -38,6 +38,17 @@ class FakeSession:
         )
         return self.responses.pop(0)
 
+    def post(self, url, json=None, timeout=None, headers=None):
+        self.calls.append(
+            {
+                "url": url,
+                "json": json,
+                "timeout": timeout,
+                "headers": headers,
+            }
+        )
+        return self.responses.pop(0)
+
 
 def paginated_records(records, page=1, pages=1):
     return {
@@ -646,3 +657,143 @@ def test_as_dataframe_true_returns_dataframe():
 
     assert list(df.columns) == ["ts_code"]
     assert df.iloc[0]["ts_code"] == "000001.SZ"
+
+
+def test_etf_candlesticks_posts_json_body_to_candlesticks_path():
+    session = FakeSession([FakeResponse(payload=[{"close": "4.5"}])])
+    client = FtshareClient(session=session)
+
+    client.etf_candlesticks(
+        symbol="510300.XSHG",
+        interval_unit="Day",
+        until_ts_millis=1756791000000,
+        limit=5,
+        as_dataframe=False,
+    )
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/etf-candlesticks"
+    assert session.calls[0]["json"] == {
+        "symbol": "510300.XSHG",
+        "interval_unit": "Day",
+        "until_ts_millis": 1756791000000,
+        "limit": 5,
+    }
+
+
+def test_etf_candlesticks_batch_posts_symbols_array():
+    session = FakeSession([FakeResponse(payload=[["510300.XSHG", []]])])
+    client = FtshareClient(session=session)
+
+    client.etf_candlesticks_batch(
+        symbols=["510300.XSHG", "159915.XSHE"],
+        interval_unit="Day",
+        until_ts_millis=1756791000000,
+        as_dataframe=False,
+    )
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/etf-candlesticks/batch"
+    assert session.calls[0]["json"] == {
+        "symbols": ["510300.XSHG", "159915.XSHE"],
+        "interval_unit": "Day",
+        "until_ts_millis": 1756791000000,
+    }
+
+
+def test_convertible_bond_candlesticks_posts_json_body():
+    session = FakeSession([FakeResponse(payload=[{"close": "200"}])])
+    client = FtshareClient(session=session)
+
+    client.convertible_bond_candlesticks(
+        symbol="113027.XSHG",
+        interval_unit="Day",
+        until_ts_millis=1756791000000,
+        as_dataframe=False,
+    )
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/convertible-bond-candlesticks"
+    assert session.calls[0]["json"]["symbol"] == "113027.XSHG"
+
+
+def test_convertible_bond_candlesticks_batch_posts_json_body():
+    session = FakeSession([FakeResponse(payload=[[]])])
+    client = FtshareClient(session=session)
+
+    client.convertible_bond_candlesticks_batch(
+        symbols=["113027.XSHG", "128048.XSHE"],
+        interval_unit="Day",
+        until_ts_millis=1756791000000,
+        as_dataframe=False,
+    )
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/convertible-bond-candlesticks/batch"
+    assert session.calls[0]["json"]["symbols"] == ["113027.XSHG", "128048.XSHE"]
+
+
+def test_index_candlesticks_posts_json_body():
+    session = FakeSession([FakeResponse(payload=[{"close": "4500"}])])
+    client = FtshareClient(session=session)
+
+    client.index_candlesticks(
+        symbol="000300.XSHG",
+        interval_unit="Day",
+        until_ts_millis=1756791000000,
+        as_dataframe=False,
+    )
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/index-candlesticks"
+    assert session.calls[0]["json"]["symbol"] == "000300.XSHG"
+
+
+def test_index_candlesticks_batch_posts_json_body():
+    session = FakeSession([FakeResponse(payload=[[]])])
+    client = FtshareClient(session=session)
+
+    client.index_candlesticks_batch(
+        symbols=["000300.XSHG", "399001.XSHE"],
+        interval_unit="Day",
+        until_ts_millis=1756791000000,
+        as_dataframe=False,
+    )
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/index-candlesticks/batch"
+    assert session.calls[0]["json"]["symbols"] == ["000300.XSHG", "399001.XSHE"]
+
+
+def test_limit_up_pool_forwards_trade_date_query_parameter():
+    session = FakeSession([FakeResponse(payload=[])])
+    client = FtshareClient(session=session)
+
+    client.limit_up_pool(trade_date="20260713", as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/limit-up-pool"
+    assert session.calls[0]["params"] == {"trade_date": "20260713"}
+
+
+def test_limit_up_break_pool_forwards_trade_date_query_parameter():
+    session = FakeSession([FakeResponse(payload=[])])
+    client = FtshareClient(session=session)
+
+    client.limit_up_break_pool(trade_date="20260713", as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/limit-up-break-pool"
+    assert session.calls[0]["params"] == {"trade_date": "20260713"}
+
+
+def test_limit_down_pool_forwards_trade_date_query_parameter():
+    session = FakeSession([FakeResponse(payload=[])])
+    client = FtshareClient(session=session)
+
+    client.limit_down_pool(trade_date="20260713", as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/limit-down-pool"
+    assert session.calls[0]["params"] == {"trade_date": "20260713"}
+
+
+def test_limit_event_timeline_3s_forwards_symbol_and_trade_date():
+    session = FakeSession([FakeResponse(payload=[])])
+    client = FtshareClient(session=session)
+
+    client.limit_event_timeline_3s(symbol="000504.XSHE", trade_date="20260713", as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/limit-event-timeline-3s"
+    assert session.calls[0]["params"] == {"symbol": "000504.XSHE", "trade_date": "20260713"}

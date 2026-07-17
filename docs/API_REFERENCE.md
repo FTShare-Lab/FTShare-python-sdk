@@ -6,7 +6,7 @@
 
 | 指标 | 数量 |
 |---|---:|
-| SDK 方法总数 | 180 |
+| SDK 方法总数 | 186 |
 
 ## 专题分布
 
@@ -17,11 +17,11 @@
 | 股票数据 | 96 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
 | 港股数据 | 14 | `ftshare.apis.hk` | `ftshare.endpoints.hk` |
 | 美股数据 | 9 | `ftshare.apis.us` | `ftshare.endpoints.us` |
-| 指数专题 | 8 | `ftshare.apis.index` | `ftshare.endpoints.index` |
-| ETF专题 | 8 | `ftshare.apis.etf` | `ftshare.endpoints.etf` |
+| 指数专题 | 10 | `ftshare.apis.index` | `ftshare.endpoints.index` |
+| ETF专题 | 10 | `ftshare.apis.etf` | `ftshare.endpoints.etf` |
 | 公募基金 | 5 | `ftshare.apis.fund` | `ftshare.endpoints.fund` |
 | 期货数据 | 9 | `ftshare.apis.futures` | `ftshare.endpoints.futures` |
-| 债券专题 | 2 | `ftshare.apis.bond` | `ftshare.endpoints.bond` |
+| 债券专题 | 4 | `ftshare.apis.bond` | `ftshare.endpoints.bond` |
 | 宏观经济 | 17 | `ftshare.apis.economic` | `ftshare.endpoints.economic` |
 | 大模型语料 | 5 | `ftshare.apis.llm_corpus` | `ftshare.endpoints.llm_corpus` |
 | 现货数据 | 2 | `ftshare.apis.spot` | `ftshare.endpoints.spot` |
@@ -76,10 +76,10 @@ df = market.baidu_financial_calendar(
 | [`hk_sh_stock_connect_members`](#api-hk-sh-stock-connect-members) | 沪港通成份 | `GET` | `api/v1/market/data/hk-sh-stock-connect-members` | - | `沪港通成份.md` |
 | [`hk_sz_stock_connect_members`](#api-hk-sz-stock-connect-members) | 深港通成份 | `GET` | `api/v1/market/data/hk-sz-stock-connect-members` | - | `深港通成份.md` |
 | [`income`](#api-income) | A股利润表 | `GET` | `api/v1/market/data/finance/income` | `stock_code`, `year`, `report_type`, `page`, `page_size` | `A股利润表.md` |
-| [`limit_down_pool`](#api-limit-down-pool) | 跌停池 | `GET` | `api/v1/market/data/limit-down-pool` | - | `跌停池.md` |
-| [`limit_event_timeline_3s`](#api-limit-event-timeline-3s) | 涨跌停事件时间线 | `GET` | `api/v1/market/data/limit-event-timeline-3s` | `symbol` | `涨跌停事件时间线.md` |
-| [`limit_up_break_pool`](#api-limit-up-break-pool) | 炸板池 | `GET` | `api/v1/market/data/limit-up-break-pool` | - | `炸板池.md` |
-| [`limit_up_pool`](#api-limit-up-pool) | 涨停池 | `GET` | `api/v1/market/data/limit-up-pool` | - | `涨停池.md` |
+| [`limit_down_pool`](#api-limit-down-pool) | 跌停池 | `GET` | `api/v1/market/data/limit-down-pool` | `trade_date` | `跌停池.md` |
+| [`limit_event_timeline_3s`](#api-limit-event-timeline-3s) | 涨跌停事件时间线 | `GET` | `api/v1/market/data/limit-event-timeline-3s` | `symbol`, `trade_date` | `涨跌停事件时间线.md` |
+| [`limit_up_break_pool`](#api-limit-up-break-pool) | 炸板池 | `GET` | `api/v1/market/data/limit-up-break-pool` | `trade_date` | `炸板池.md` |
+| [`limit_up_pool`](#api-limit-up-pool) | 涨停池 | `GET` | `api/v1/market/data/limit-up-pool` | `trade_date` | `涨停池.md` |
 | [`limit_up_pool_yesterday`](#api-limit-up-pool-yesterday) | 昨日涨停池 | `GET` | `api/v1/market/data/limit-up-pool-yesterday` | - | `昨日涨停池.md` |
 | [`margin_trading_details`](#api-margin-trading-details) | 融资融券明细 | `GET` | `api/v1/market/data/margin-trading-details` | `date`, `page`, `page_size` | `融资融券明细.md` |
 | [`margin_trading_details_paginated`](#api-margin-trading-details-paginated) | 融资融券明细分页 | `GET` | `api/v1/market/data/margin-trading-details` | `date`, `page`, `page_size` | `融资融券明细分页.md` |
@@ -183,6 +183,8 @@ df = market.baidu_financial_calendar(
 | SDK 方法 | 接口名称 | HTTP | Path | 参数 | 来源文档 |
 |---|---|---|---|---|---|
 | [`global_index_daily_kline`](#api-global-index-daily-kline) | 全球指数日K线 | `GET` | `api/v1/market/data/global-index/daily-kline` | `secid`, `start_date`, `end_date` | `全球指数日K线.md` |
+| [`index_candlesticks`](#api-index-candlesticks) | 指数K线 | `POST` | `api/v1/market/data/index-candlesticks` | `symbol`, `interval_unit`, `interval_value`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit` | `指数K线.md` |
+| [`index_candlesticks_batch`](#api-index-candlesticks-batch) | 批量指数K线 | `POST` | `api/v1/market/data/index-candlesticks/batch` | `symbols`, `interval_unit`, `interval_value`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit` | `批量指数K线.md` |
 | [`index_description_all`](#api-index-description-all) | 指数基础信息 | `GET` | `api/v1/market/data/index-description-all` | - | `指数基础信息.md` |
 | [`index_description_list`](#api-index-description-list) | 中证指数描述列表 | `GET` | `api/v1/market/data/index/index_description` | `page`, `page_size` | `中证指数描述列表.md` |
 | [`index_weight_list`](#api-index-weight-list) | 指数权重列表 | `GET` | `api/v1/market/data/index/index_weight` | `index_code`, `date`, `page`, `page_size` | `指数权重列表.md` |
@@ -196,6 +198,8 @@ df = market.baidu_financial_calendar(
 | SDK 方法 | 接口名称 | HTTP | Path | 参数 | 来源文档 |
 |---|---|---|---|---|---|
 | [`etf_adjust_factor`](#api-etf-adjust-factor) | ETF复权因子 | `GET` | `api/v1/market/data/etf-adjust-factor` | `symbol`, `trade_date`, `start_date`, `end_date`, `offset`, `limit` | `ETF复权因子.md` |
+| [`etf_candlesticks`](#api-etf-candlesticks) | ETFK线 | `POST` | `api/v1/market/data/etf-candlesticks` | `symbol`, `interval_unit`, `interval_value`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit` | `ETFK线.md` |
+| [`etf_candlesticks_batch`](#api-etf-candlesticks-batch) | 批量ETFK线 | `POST` | `api/v1/market/data/etf-candlesticks/batch` | `symbols`, `interval_unit`, `interval_value`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit` | `批量ETFK线.md` |
 | [`etf_components`](#api-etf-components) | ETF成份股 | `GET` | `api/v1/market/data/etf-component` | `symbol` | `ETF成份股.md` |
 | [`etf_components_all`](#api-etf-components-all) | ETF成份列表 | `GET` | `api/v1/market/data/etf-components-all` | - | `ETF成份列表.md` |
 | [`etf_description_all`](#api-etf-description-all) | ETF基础信息 | `GET` | `api/v1/market/data/etf-description-all` | - | `ETF基础信息.md` |
@@ -234,6 +238,8 @@ df = market.baidu_financial_calendar(
 |---|---|---|---|---|---|
 | [`cb_base_data`](#api-cb-base-data) | 可转债基础数据 | `GET` | `api/v1/market/data/cb/cb-base-data` | `symbol_code` | `可转债基础数据.md` |
 | [`cb_lists`](#api-cb-lists) | 可转债列表 | `GET` | `api/v1/market/data/cb/cb-lists` | - | `可转债列表.md` |
+| [`convertible_bond_candlesticks`](#api-convertible-bond-candlesticks) | 可转债K线 | `POST` | `api/v1/market/data/convertible-bond-candlesticks` | `symbol`, `interval_unit`, `interval_value`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit` | `可转债K线.md` |
+| [`convertible_bond_candlesticks_batch`](#api-convertible-bond-candlesticks-batch) | 批量可转债K线 | `POST` | `api/v1/market/data/convertible-bond-candlesticks/batch` | `symbols`, `interval_unit`, `interval_value`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit` | `批量可转债K线.md` |
 
 ### 宏观经济
 
@@ -1222,7 +1228,7 @@ Returns:
 - 接口名称：跌停池
 - HTTP：`GET`
 - Path：`api/v1/market/data/limit-down-pool`
-- 参数：-
+- 参数：`trade_date`
 - 来源文档：`跌停池.md`
 - 原始接口：`limit_down_pool`
 
@@ -1234,6 +1240,7 @@ Method: ``GET``.
 Documented endpoint: ``limit_down_pool``.
 
 Args:
+    trade_date: 交易日期，格式 YYYYMMDD；不传或传当日时查询实时数据 (type: string; required: N).
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -1250,7 +1257,7 @@ Returns:
 - 接口名称：涨跌停事件时间线
 - HTTP：`GET`
 - Path：`api/v1/market/data/limit-event-timeline-3s`
-- 参数：`symbol`
+- 参数：`symbol`, `trade_date`
 - 来源文档：`涨跌停事件时间线.md`
 - 原始接口：`limit_event_timeline_3s`
 
@@ -1263,6 +1270,7 @@ Documented endpoint: ``limit_event_timeline_3s``.
 
 Args:
     symbol: 标的代码，如 000001.XSHE；不传返回全市场 (type: string; required: N).
+    trade_date: 交易日期，格式 YYYYMMDD；不传或传当日时查询实时数据 (type: string; required: N).
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -1279,7 +1287,7 @@ Returns:
 - 接口名称：炸板池
 - HTTP：`GET`
 - Path：`api/v1/market/data/limit-up-break-pool`
-- 参数：-
+- 参数：`trade_date`
 - 来源文档：`炸板池.md`
 - 原始接口：`limit_up_break_pool`
 
@@ -1291,6 +1299,7 @@ Method: ``GET``.
 Documented endpoint: ``limit_up_break_pool``.
 
 Args:
+    trade_date: 交易日期，格式 YYYYMMDD；不传或传当日时查询实时数据 (type: string; required: N).
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -1307,7 +1316,7 @@ Returns:
 - 接口名称：涨停池
 - HTTP：`GET`
 - Path：`api/v1/market/data/limit-up-pool`
-- 参数：-
+- 参数：`trade_date`
 - 来源文档：`涨停池.md`
 - 原始接口：`limit_up_pool`
 
@@ -1319,6 +1328,7 @@ Method: ``GET``.
 Documented endpoint: ``limit_up_pool``.
 
 Args:
+    trade_date: 交易日期，格式 YYYYMMDD；不传或传当日时查询实时数据 (type: string; required: N).
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -1863,13 +1873,13 @@ Method: ``POST``.
 Documented endpoint: ``stock_candlesticks``.
 
 Args:
-    symbol: 标的代码，如 000001.SZ (type: SymbolKey; required: Y).
+    symbol: 标的代码，如 000001.SZ、600519.XSHG；长短市场后缀均支持 (type: SymbolKey; required: Y).
     interval_unit: 周期单位：Minute/Day/Week/Month/Year (type: enum; required: Y).
-    interval_value: 间隔数值（默认1，如 Day+1=日K，Minute+5=5分钟） (type: int; required: N).
-    adjust_kind: 复权：None(默认,除权)/Forward(前复权)/Backward(后复权) (type: enum; required: N).
-    since_ts_millis: 开始时间戳（毫秒）；与 until 跨度 ≤3 天 (type: DateTime(ms); required: N).
-    until_ts_millis: 结束时间戳（毫秒） (type: DateTime(ms); required: Y).
-    limit: 返回条数上限 (type: int; required: N).
+    interval_value: 间隔数值（默认 1，如 Day+1=日 K，Minute+5=5 分钟） (type: int; required: N).
+    adjust_kind: 复权：None（默认，除权）/Forward（前复权）/Backward（后复权） (type: enum; required: N).
+    since_ts_millis: 开始时间戳，单位毫秒；分钟 K 线与 until 跨度 ≤3 天 (type: DateTime(ms); required: N).
+    until_ts_millis: 结束时间戳，单位毫秒 (type: DateTime(ms); required: Y).
+    limit: 返回条数上限；未传 since 和 limit 时默认 50 (type: int; required: N).
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -1898,13 +1908,13 @@ Method: ``POST``.
 Documented endpoint: ``stock_candlesticks_batch``.
 
 Args:
-    symbols: 标的代码列表，如 ["000001.SZ","600000.SH"] (type: array[SymbolKey]; required: Y).
+    symbols: 标的代码列表，允许股票、ETF、可转债和指数混合，例如 ["600519.SH","510300.SH","113027.SH","000300.SH"] (type: string[]; required: Y).
     interval_unit: 周期单位：Minute/Day/Week/Month/Year (type: enum; required: Y).
-    interval_value: 间隔数值（默认1） (type: int; required: N).
-    adjust_kind: 复权：None(默认)/Forward(前复权)/Backward(后复权) (type: enum; required: N).
-    since_ts_millis: 开始时间戳（毫秒）；与 until 跨度 ≤3 天 (type: DateTime(ms); required: N).
-    until_ts_millis: 结束时间戳（毫秒） (type: DateTime(ms); required: Y).
-    limit: 每标的返回条数上限 (type: int; required: N).
+    interval_value: 间隔数值，默认 1；例如 Minute+5 表示 5 分钟 K 线 (type: int; required: N).
+    adjust_kind: 复权类型：None（默认）/Forward（前复权）/Backward（后复权） (type: enum; required: N).
+    since_ts_millis: 开始时间戳；分钟 K 线与 until 的跨度不超过 3 天 (type: int(ms); required: N).
+    until_ts_millis: 结束时间戳，单位毫秒 (type: int(ms); required: Y).
+    limit: 每个标的的返回条数上限；未传 since 和 limit 时默认 50 (type: int; required: N).
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -4292,6 +4302,76 @@ Returns:
     payloads when multi-page fetching is used with ``raw=True``.
 ```
 
+<h4 id="api-index-candlesticks"><code>index_candlesticks</code></h4>
+
+- 接口名称：指数K线
+- HTTP：`POST`
+- Path：`api/v1/market/data/index-candlesticks`
+- 参数：`symbol`, `interval_unit`, `interval_value`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit`
+- 来源文档：`指数K线.md`
+- 原始接口：`index_candlesticks`
+
+```text
+指数K线.
+
+Endpoint: ``api/v1/market/data/index-candlesticks``.
+Method: ``POST``.
+Documented endpoint: ``index_candlesticks``.
+
+Args:
+    symbol: 指数代码，如 000300.XSHG、399001.XSHE；也接受 .SH、.SZ 短后缀 (type: string; required: Y).
+    interval_unit: 周期单位：Minute/Day/Week/Month/Year (type: enum; required: Y).
+    interval_value: 间隔数值，默认 1；例如 Minute+5 表示 5 分钟 K 线 (type: int; required: N).
+    adjust_kind: 复权：None（默认，不复权）/Forward（前复权）/Backward（后复权） (type: enum; required: N).
+    since_ts_millis: 开始时间戳，单位毫秒；分钟 K 线与 until 的跨度 ≤3 天 (type: int(ms); required: N).
+    until_ts_millis: 结束时间戳，单位毫秒 (type: int(ms); required: Y).
+    limit: 返回条数上限；未传 since 和 limit 时默认最多返回 50 根 K 线 (type: int; required: N).
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
+```
+
+<h4 id="api-index-candlesticks-batch"><code>index_candlesticks_batch</code></h4>
+
+- 接口名称：批量指数K线
+- HTTP：`POST`
+- Path：`api/v1/market/data/index-candlesticks/batch`
+- 参数：`symbols`, `interval_unit`, `interval_value`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit`
+- 来源文档：`批量指数K线.md`
+- 原始接口：`index_candlesticks_batch`
+
+```text
+批量指数K线.
+
+Endpoint: ``api/v1/market/data/index-candlesticks/batch``.
+Method: ``POST``.
+Documented endpoint: ``index_candlesticks_batch``.
+
+Args:
+    symbols: 指数代码列表，如 ["000300.XSHG","399001.XSHE"]；也接受 .SH、.SZ 短后缀 (type: string[]; required: Y).
+    interval_unit: 周期单位：Minute/Day/Week/Month/Year (type: enum; required: Y).
+    interval_value: 间隔数值，默认 1；例如 Minute+5 表示 5 分钟 K 线 (type: int; required: N).
+    adjust_kind: 复权：None（默认，不复权）/Forward（前复权）/Backward（后复权） (type: enum; required: N).
+    since_ts_millis: 开始时间戳，单位毫秒；分钟 K 线与 until 的跨度 ≤3 天 (type: int(ms); required: N).
+    until_ts_millis: 结束时间戳，单位毫秒 (type: int(ms); required: Y).
+    limit: 每个标的的返回条数上限；未传 since 和 limit 时默认最多返回 50 根 K 线 (type: int; required: N).
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
+```
+
 <h4 id="api-index-description-all"><code>index_description_all</code></h4>
 
 - 接口名称：指数基础信息
@@ -4547,6 +4627,76 @@ Args:
     end_date: 区间结束日期 YYYYMMDD；区间扫描必填且需配 symbol (type: string; required: N).
     offset: 返回结果起始偏移 (type: int; required: N).
     limit: 返回结果最大条数 (type: int; required: N).
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
+```
+
+<h4 id="api-etf-candlesticks"><code>etf_candlesticks</code></h4>
+
+- 接口名称：ETFK线
+- HTTP：`POST`
+- Path：`api/v1/market/data/etf-candlesticks`
+- 参数：`symbol`, `interval_unit`, `interval_value`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit`
+- 来源文档：`ETFK线.md`
+- 原始接口：`etf_candlesticks`
+
+```text
+ETFK线.
+
+Endpoint: ``api/v1/market/data/etf-candlesticks``.
+Method: ``POST``.
+Documented endpoint: ``etf_candlesticks``.
+
+Args:
+    symbol: ETF 代码，如 510300.XSHG、159915.XSHE；也接受 .SH、.SZ 短后缀 (type: string; required: Y).
+    interval_unit: 周期单位：Minute/Day/Week/Month/Year (type: enum; required: Y).
+    interval_value: 间隔数值，默认 1；例如 Minute+5 表示 5 分钟 K 线 (type: int; required: N).
+    adjust_kind: 复权：None（默认，不复权）/Forward（前复权）/Backward（后复权） (type: enum; required: N).
+    since_ts_millis: 开始时间戳，单位毫秒；分钟 K 线与 until 的跨度 ≤3 天 (type: int(ms); required: N).
+    until_ts_millis: 结束时间戳，单位毫秒 (type: int(ms); required: Y).
+    limit: 返回条数上限；未传 since 和 limit 时默认最多返回 50 根 K 线 (type: int; required: N).
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
+```
+
+<h4 id="api-etf-candlesticks-batch"><code>etf_candlesticks_batch</code></h4>
+
+- 接口名称：批量ETFK线
+- HTTP：`POST`
+- Path：`api/v1/market/data/etf-candlesticks/batch`
+- 参数：`symbols`, `interval_unit`, `interval_value`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit`
+- 来源文档：`批量ETFK线.md`
+- 原始接口：`etf_candlesticks_batch`
+
+```text
+批量ETFK线.
+
+Endpoint: ``api/v1/market/data/etf-candlesticks/batch``.
+Method: ``POST``.
+Documented endpoint: ``etf_candlesticks_batch``.
+
+Args:
+    symbols: ETF 代码列表，如 ["510300.XSHG","159915.XSHE"]；也接受 .SH、.SZ 短后缀 (type: string[]; required: Y).
+    interval_unit: 周期单位：Minute/Day/Week/Month/Year (type: enum; required: Y).
+    interval_value: 间隔数值，默认 1；例如 Minute+5 表示 5 分钟 K 线 (type: int; required: N).
+    adjust_kind: 复权：None（默认，不复权）/Forward（前复权）/Backward（后复权） (type: enum; required: N).
+    since_ts_millis: 开始时间戳，单位毫秒；分钟 K 线与 until 的跨度 ≤3 天 (type: int(ms); required: N).
+    until_ts_millis: 结束时间戳，单位毫秒 (type: int(ms); required: Y).
+    limit: 每个标的的返回条数上限；未传 since 和 limit 时默认最多返回 50 根 K 线 (type: int; required: N).
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -5288,6 +5438,76 @@ Method: ``GET``.
 Documented endpoint: ``get_cb_lists_handler``.
 
 Args:
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
+```
+
+<h4 id="api-convertible-bond-candlesticks"><code>convertible_bond_candlesticks</code></h4>
+
+- 接口名称：可转债K线
+- HTTP：`POST`
+- Path：`api/v1/market/data/convertible-bond-candlesticks`
+- 参数：`symbol`, `interval_unit`, `interval_value`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit`
+- 来源文档：`可转债K线.md`
+- 原始接口：`convertible_bond_candlesticks`
+
+```text
+可转债K线.
+
+Endpoint: ``api/v1/market/data/convertible-bond-candlesticks``.
+Method: ``POST``.
+Documented endpoint: ``convertible_bond_candlesticks``.
+
+Args:
+    symbol: 可转债代码，如 113027.XSHG、128048.XSHE；也接受 .SH、.SZ 短后缀 (type: string; required: Y).
+    interval_unit: 周期单位：Minute/Day/Week/Month/Year (type: enum; required: Y).
+    interval_value: 间隔数值，默认 1；例如 Minute+5 表示 5 分钟 K 线 (type: int; required: N).
+    adjust_kind: 复权：None（默认，不复权）/Forward（前复权）/Backward（后复权） (type: enum; required: N).
+    since_ts_millis: 开始时间戳，单位毫秒；分钟 K 线与 until 的跨度 ≤3 天 (type: int(ms); required: N).
+    until_ts_millis: 结束时间戳，单位毫秒 (type: int(ms); required: Y).
+    limit: 返回条数上限；未传 since 和 limit 时默认最多返回 50 根 K 线 (type: int; required: N).
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
+```
+
+<h4 id="api-convertible-bond-candlesticks-batch"><code>convertible_bond_candlesticks_batch</code></h4>
+
+- 接口名称：批量可转债K线
+- HTTP：`POST`
+- Path：`api/v1/market/data/convertible-bond-candlesticks/batch`
+- 参数：`symbols`, `interval_unit`, `interval_value`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit`
+- 来源文档：`批量可转债K线.md`
+- 原始接口：`convertible_bond_candlesticks_batch`
+
+```text
+批量可转债K线.
+
+Endpoint: ``api/v1/market/data/convertible-bond-candlesticks/batch``.
+Method: ``POST``.
+Documented endpoint: ``convertible_bond_candlesticks_batch``.
+
+Args:
+    symbols: 可转债代码列表，如 ["113027.XSHG","128048.XSHE"]；也接受 .SH、.SZ 短后缀 (type: string[]; required: Y).
+    interval_unit: 周期单位：Minute/Day/Week/Month/Year (type: enum; required: Y).
+    interval_value: 间隔数值，默认 1；例如 Minute+5 表示 5 分钟 K 线 (type: int; required: N).
+    adjust_kind: 复权：None（默认，不复权）/Forward（前复权）/Backward（后复权） (type: enum; required: N).
+    since_ts_millis: 开始时间戳，单位毫秒；分钟 K 线与 until 的跨度 ≤3 天 (type: int(ms); required: N).
+    until_ts_millis: 结束时间戳，单位毫秒 (type: int(ms); required: Y).
+    limit: 每个标的的返回条数上限；未传 since 和 limit 时默认最多返回 50 根 K 线 (type: int; required: N).
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.

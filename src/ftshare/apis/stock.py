@@ -2672,6 +2672,7 @@ class StockApiMixin:
 
     def limit_down_pool(
         self,
+        trade_date: Any | None = None,
         *,
         raw: bool = False,
         fields: Sequence[str] | str | None = None,
@@ -2685,6 +2686,7 @@ class StockApiMixin:
         Documented endpoint: ``limit_down_pool``.
 
         Args:
+            trade_date: 交易日期，格式 YYYYMMDD；不传或传当日时查询实时数据 (type: string; required: N).
             raw: Return the decoded JSON payload without tabular extraction.
             fields: Optional field list or comma-separated field string applied after extraction.
             as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -2695,7 +2697,7 @@ class StockApiMixin:
             ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
             payloads when multi-page fetching is used with ``raw=True``.
         """
-        request_params = {}
+        request_params = {'trade_date': trade_date}
         request_params.update(kwargs)
         return self._call_endpoint(
             'limit_down_pool',
@@ -2708,6 +2710,7 @@ class StockApiMixin:
     def limit_event_timeline_3s(
         self,
         symbol: Any | None = None,
+        trade_date: Any | None = None,
         *,
         raw: bool = False,
         fields: Sequence[str] | str | None = None,
@@ -2722,6 +2725,7 @@ class StockApiMixin:
 
         Args:
             symbol: 标的代码，如 000001.XSHE；不传返回全市场 (type: string; required: N).
+            trade_date: 交易日期，格式 YYYYMMDD；不传或传当日时查询实时数据 (type: string; required: N).
             raw: Return the decoded JSON payload without tabular extraction.
             fields: Optional field list or comma-separated field string applied after extraction.
             as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -2732,7 +2736,7 @@ class StockApiMixin:
             ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
             payloads when multi-page fetching is used with ``raw=True``.
         """
-        request_params = {'symbol': symbol}
+        request_params = {'symbol': symbol, 'trade_date': trade_date}
         request_params.update(kwargs)
         return self._call_endpoint(
             'limit_event_timeline_3s',
@@ -2744,6 +2748,7 @@ class StockApiMixin:
 
     def limit_up_break_pool(
         self,
+        trade_date: Any | None = None,
         *,
         raw: bool = False,
         fields: Sequence[str] | str | None = None,
@@ -2757,6 +2762,7 @@ class StockApiMixin:
         Documented endpoint: ``limit_up_break_pool``.
 
         Args:
+            trade_date: 交易日期，格式 YYYYMMDD；不传或传当日时查询实时数据 (type: string; required: N).
             raw: Return the decoded JSON payload without tabular extraction.
             fields: Optional field list or comma-separated field string applied after extraction.
             as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -2767,7 +2773,7 @@ class StockApiMixin:
             ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
             payloads when multi-page fetching is used with ``raw=True``.
         """
-        request_params = {}
+        request_params = {'trade_date': trade_date}
         request_params.update(kwargs)
         return self._call_endpoint(
             'limit_up_break_pool',
@@ -2779,6 +2785,7 @@ class StockApiMixin:
 
     def limit_up_pool(
         self,
+        trade_date: Any | None = None,
         *,
         raw: bool = False,
         fields: Sequence[str] | str | None = None,
@@ -2792,6 +2799,7 @@ class StockApiMixin:
         Documented endpoint: ``limit_up_pool``.
 
         Args:
+            trade_date: 交易日期，格式 YYYYMMDD；不传或传当日时查询实时数据 (type: string; required: N).
             raw: Return the decoded JSON payload without tabular extraction.
             fields: Optional field list or comma-separated field string applied after extraction.
             as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -2802,7 +2810,7 @@ class StockApiMixin:
             ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
             payloads when multi-page fetching is used with ``raw=True``.
         """
-        request_params = {}
+        request_params = {'trade_date': trade_date}
         request_params.update(kwargs)
         return self._call_endpoint(
             'limit_up_pool',
@@ -3222,13 +3230,13 @@ class StockApiMixin:
         Documented endpoint: ``stock_candlesticks``.
 
         Args:
-            symbol: 标的代码，如 000001.SZ (type: SymbolKey; required: Y).
+            symbol: 标的代码，如 000001.SZ、600519.XSHG；长短市场后缀均支持 (type: SymbolKey; required: Y).
             interval_unit: 周期单位：Minute/Day/Week/Month/Year (type: enum; required: Y).
-            interval_value: 间隔数值（默认1，如 Day+1=日K，Minute+5=5分钟） (type: int; required: N).
-            adjust_kind: 复权：None(默认,除权)/Forward(前复权)/Backward(后复权) (type: enum; required: N).
-            since_ts_millis: 开始时间戳（毫秒）；与 until 跨度 ≤3 天 (type: DateTime(ms); required: N).
-            until_ts_millis: 结束时间戳（毫秒） (type: DateTime(ms); required: Y).
-            limit: 返回条数上限 (type: int; required: N).
+            interval_value: 间隔数值（默认 1，如 Day+1=日 K，Minute+5=5 分钟） (type: int; required: N).
+            adjust_kind: 复权：None（默认，除权）/Forward（前复权）/Backward（后复权） (type: enum; required: N).
+            since_ts_millis: 开始时间戳，单位毫秒；分钟 K 线与 until 跨度 ≤3 天 (type: DateTime(ms); required: N).
+            until_ts_millis: 结束时间戳，单位毫秒 (type: DateTime(ms); required: Y).
+            limit: 返回条数上限；未传 since 和 limit 时默认 50 (type: int; required: N).
             raw: Return the decoded JSON payload without tabular extraction.
             fields: Optional field list or comma-separated field string applied after extraction.
             as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -3271,13 +3279,13 @@ class StockApiMixin:
         Documented endpoint: ``stock_candlesticks_batch``.
 
         Args:
-            symbols: 标的代码列表，如 ["000001.SZ","600000.SH"] (type: array[SymbolKey]; required: Y).
+            symbols: 标的代码列表，允许股票、ETF、可转债和指数混合，例如 ["600519.SH","510300.SH","113027.SH","000300.SH"] (type: string[]; required: Y).
             interval_unit: 周期单位：Minute/Day/Week/Month/Year (type: enum; required: Y).
-            interval_value: 间隔数值（默认1） (type: int; required: N).
-            adjust_kind: 复权：None(默认)/Forward(前复权)/Backward(后复权) (type: enum; required: N).
-            since_ts_millis: 开始时间戳（毫秒）；与 until 跨度 ≤3 天 (type: DateTime(ms); required: N).
-            until_ts_millis: 结束时间戳（毫秒） (type: DateTime(ms); required: Y).
-            limit: 每标的返回条数上限 (type: int; required: N).
+            interval_value: 间隔数值，默认 1；例如 Minute+5 表示 5 分钟 K 线 (type: int; required: N).
+            adjust_kind: 复权类型：None（默认）/Forward（前复权）/Backward（后复权） (type: enum; required: N).
+            since_ts_millis: 开始时间戳；分钟 K 线与 until 的跨度不超过 3 天 (type: int(ms); required: N).
+            until_ts_millis: 结束时间戳，单位毫秒 (type: int(ms); required: Y).
+            limit: 每个标的的返回条数上限；未传 since 和 limit 时默认 50 (type: int; required: N).
             raw: Return the decoded JSON payload without tabular extraction.
             fields: Optional field list or comma-separated field string applied after extraction.
             as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
