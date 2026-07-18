@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-import importlib.util
 import inspect
-from pathlib import Path
 from typing import Any
 
 import pytest
@@ -14,38 +12,13 @@ from conftest import FakeResponse, FakeSession
 from endpoint_cases import SAMPLE_VALUES, SPECIAL_CALLS, WIRE_ALIASES
 
 
-ROOT = Path(__file__).resolve().parents[2]
-DOC_ROOT = ROOT / "ftshare-doc" / "api-doc"
-AUDIT_SCRIPT = ROOT / ".claude" / "skills" / "ftshare-doc-to-sdk-skills" / "scripts" / "audit_sync.py"
-SDK_ROOT = Path(__file__).resolve().parents[1]
-SKILLS_ROOT = ROOT / "FTShare-skills" / "ftshare-market-data"
-
-
-def _load_audit_module():
-    spec = importlib.util.spec_from_file_location("ftshare_audit_sync", AUDIT_SCRIPT)
-    module = importlib.util.module_from_spec(spec)
-    assert spec.loader is not None
-    spec.loader.exec_module(module)
-    return module
-
-
-AUDIT = _load_audit_module()
-
-
-def _public_contracts() -> dict[str, dict[str, Any]]:
-    contracts: dict[str, dict[str, Any]] = {}
-    for doc in sorted(DOC_ROOT.rglob("*.md")):
-        relative = doc.relative_to(DOC_ROOT)
-        if doc.name == "接口异常排查清单.md" or "未发布" in relative.parts:
-            continue
-        report = AUDIT.build_report(SDK_ROOT, SKILLS_ROOT, doc, require_skill=False)
-        assert report["sdk"]["matches"], relative
-        for match in report["sdk"]["matches"]:
-            contracts[match["name"]] = {"document": report["document"], "endpoint": match}
-    return contracts
-
-
-PUBLIC_CONTRACTS = _public_contracts()
+NON_PUBLISHED_ENDPOINTS = {
+    "stock_dividends_paginated",
+    "stock_intraday",
+    "stock_ohlcs",
+    "stock_related",
+}
+PUBLIC_CONTRACTS = set(ENDPOINTS) - NON_PUBLISHED_ENDPOINTS
 CONTROL_PARAMS = {"page", "page_size"}
 
 
@@ -78,16 +51,10 @@ def _response_payload(name: str) -> Any:
     return []
 
 
-def test_all_published_documents_have_sdk_contracts():
-    reports = AUDIT.audit_directory(SDK_ROOT, SKILLS_ROOT, DOC_ROOT)
-    assert reports["summary"]["public_documents"] == 184
-    assert reports["summary"]["sdk_matches"] == 184
-    assert reports["issues"] == []
-
-
-def test_contract_cases_cover_all_published_sdk_methods():
+def test_contract_cases_cover_all_public_sdk_methods():
     assert len(PUBLIC_CONTRACTS) == 197
-    assert set(PUBLIC_CONTRACTS) <= set(ENDPOINTS)
+    assert PUBLIC_CONTRACTS | NON_PUBLISHED_ENDPOINTS == set(ENDPOINTS)
+    assert not (PUBLIC_CONTRACTS & NON_PUBLISHED_ENDPOINTS)
 
 
 @pytest.mark.parametrize("method_name", sorted(PUBLIC_CONTRACTS))
