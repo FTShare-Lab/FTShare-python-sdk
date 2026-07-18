@@ -659,6 +659,24 @@ def test_as_dataframe_true_returns_dataframe():
     assert df.iloc[0]["ts_code"] == "000001.SZ"
 
 
+def test_get_query_booleans_are_lowercase_strings():
+    session = FakeSession([FakeResponse(payload=[])])
+    client = FtshareClient(session=session)
+
+    client.get("api/v1/market/data/demo", enabled=True, disabled=False, as_dataframe=False)
+
+    assert session.calls[0]["params"] == {"enabled": "true", "disabled": "false"}
+
+
+def test_post_json_booleans_remain_booleans():
+    session = FakeSession([FakeResponse(payload=[])])
+    client = FtshareClient(session=session)
+
+    client.post("api/v1/market/data/demo", enabled=True, disabled=False, as_dataframe=False)
+
+    assert session.calls[0]["json"] == {"enabled": True, "disabled": False}
+
+
 def test_etf_candlesticks_posts_json_body_to_candlesticks_path():
     session = FakeSession([FakeResponse(payload=[{"close": "4.5"}])])
     client = FtshareClient(session=session)
@@ -818,7 +836,7 @@ def test_stock_float_holders_forwards_is_last_paging():
     client.stock_float_holders(is_last=True, page=1, page_size=5, as_dataframe=False)
 
     assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/holder/stock-holder-ften"
-    assert session.calls[0]["params"]["is_last"] is True
+    assert session.calls[0]["params"]["is_last"] == "true"
 
 
 def test_stock_share_chg_forwards_is_last_paging():
@@ -828,7 +846,7 @@ def test_stock_share_chg_forwards_is_last_paging():
     client.stock_share_chg(is_last=True, page=1, page_size=5, as_dataframe=False)
 
     assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/holder/stock-share-chg"
-    assert session.calls[0]["params"]["is_last"] is True
+    assert session.calls[0]["params"]["is_last"] == "true"
 
 
 def test_fund_share_forwards_paginated_params():
@@ -981,7 +999,7 @@ def test_fund_risk_level_array_response():
     client.fund_risk_level(fund_code="000001", history=True, as_dataframe=False)
 
     assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-risk-level"
-    assert session.calls[0]["params"]["history"] is True
+    assert session.calls[0]["params"]["history"] == "true"
 
 
 def test_fund_index_fund_array_response():

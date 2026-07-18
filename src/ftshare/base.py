@@ -147,9 +147,13 @@ class BaseClient:
                 headers=self.headers or None,
             )
         else:
+            query_params = {
+                key: str(value).lower() if isinstance(value, bool) else value
+                for key, value in clean_params.items()
+            }
             response = self.session.get(
                 url,
-                params=clean_params,
+                params=query_params,
                 timeout=self.timeout,
                 headers=self.headers or None,
             )
