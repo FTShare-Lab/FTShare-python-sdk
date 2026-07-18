@@ -797,3 +797,198 @@ def test_limit_event_timeline_3s_forwards_symbol_and_trade_date():
 
     assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/limit-event-timeline-3s"
     assert session.calls[0]["params"] == {"symbol": "000504.XSHE", "trade_date": "20260713"}
+
+
+def test_stock_filter_forwards_symbol_param():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.stock_filter(symbol="600519.SH", page=1, page_size=5, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/stock-list/filter"
+    assert session.calls[0]["params"]["symbol"] == "600519.SH"
+    assert "board" not in session.calls[0]["params"]
+    assert "listing_date_since" not in session.calls[0]["params"]
+
+
+def test_stock_float_holders_forwards_is_last_paging():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.stock_float_holders(is_last=True, page=1, page_size=5, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/holder/stock-holder-ften"
+    assert session.calls[0]["params"]["is_last"] is True
+
+
+def test_stock_share_chg_forwards_is_last_paging():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.stock_share_chg(is_last=True, page=1, page_size=5, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/holder/stock-share-chg"
+    assert session.calls[0]["params"]["is_last"] is True
+
+
+def test_fund_share_forwards_paginated_params():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.fund_share(fund_code="000001", stati_perd="日", start_date=20260101, end_date=20260717,
+                     page=1, page_size=50, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-share"
+    assert session.calls[0]["params"] == {
+        "fund_code": "000001",
+        "stati_perd": "日",
+        "start_date": 20260101,
+        "end_date": 20260717,
+        "page": 1,
+        "page_size": 50,
+    }
+
+
+def test_fund_company_paginated_filter():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.fund_company(fund_company="华夏基金", page=1, page_size=50, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-company"
+    assert session.calls[0]["params"]["fund_company"] == "华夏基金"
+
+
+def test_fund_net_value_performance_interval_params():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.fund_net_value_performance(fund_code="000001", start_date=20260101, end_date=20260717,
+                                       page=1, page_size=50, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-net-value-performance"
+    assert session.calls[0]["params"]["start_date"] == 20260101
+
+
+def test_fund_net_value_paginated():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.fund_net_value(fund_code="000001", nav_date=20260717, page=1, page_size=50, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-net-value"
+    assert session.calls[0]["params"]["nav_date"] == 20260717
+
+
+def test_fund_classification_single_object():
+    session = FakeSession([FakeResponse(payload={"fund_code": "000001", "fund_name": "华夏成长",
+                                                  "classifications": {}})])
+    client = FtshareClient(session=session)
+
+    client.fund_classification(fund_code="000001", as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-classification"
+    assert session.calls[0]["params"]["fund_code"] == "000001"
+
+
+def test_fund_list_paginated_filter():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.fund_list(fund_type="股票型", page=1, page_size=50, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-list"
+    assert session.calls[0]["params"]["fund_type"] == "股票型"
+
+
+def test_fund_portfolio_paginated():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.fund_portfolio(fund_code="000001", report_date=20260331, page=1, page_size=50, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-portfolio"
+    assert session.calls[0]["params"]["report_date"] == 20260331
+
+
+def test_fund_holder_structure_array_response():
+    session = FakeSession([FakeResponse(payload=[])])
+    client = FtshareClient(session=session)
+
+    client.fund_holder_structure(fund_code="000001", as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-holder-structure"
+    assert session.calls[0]["params"]["fund_code"] == "000001"
+
+
+def test_fund_new_found_paginated():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.fund_new_found(start_date=20260101, end_date=20260717, fund_type="混合型",
+                          page=1, page_size=50, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-new-found"
+    assert session.calls[0]["params"]["fund_type"] == "混合型"
+
+
+def test_fund_manager_paginated():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.fund_manager(fund_code="000001", is_inoffice="1", page=1, page_size=50, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-manager"
+    assert session.calls[0]["params"]["is_inoffice"] == "1"
+
+
+def test_fund_daily_paginated():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.fund_daily(fund_code="510300", trade_date="20260717", page=1, page_size=50, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-daily"
+    assert session.calls[0]["params"]["trade_date"] == "20260717"
+
+
+def test_fund_fee_paginated_filter():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.fund_fee(fund_code="000001", charge_type="日常申购费", client_type="一般",
+                    page=1, page_size=50, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-fee"
+    assert session.calls[0]["params"]["charge_type"] == "日常申购费"
+
+
+def test_fund_asset_allocation_paginated():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.fund_asset_allocation(fund_code="000001", report_date=20260331,
+                                 page=1, page_size=50, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-asset-allocation"
+    assert session.calls[0]["params"]["report_date"] == 20260331
+
+
+def test_fund_risk_level_array_response():
+    session = FakeSession([FakeResponse(payload=[])])
+    client = FtshareClient(session=session)
+
+    client.fund_risk_level(fund_code="000001", history=True, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-risk-level"
+    assert session.calls[0]["params"]["history"] is True
+
+
+def test_fund_index_fund_array_response():
+    session = FakeSession([FakeResponse(payload=[])])
+    client = FtshareClient(session=session)
+
+    client.fund_index_fund(index_code="000300", scope="etf", as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/index-fund"
+    assert session.calls[0]["params"] == {"index_code": "000300", "scope": "etf"}

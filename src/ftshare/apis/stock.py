@@ -668,7 +668,7 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/holder/stock-holder-ften``.
         Method: ``GET``.
-        Documented endpoint: ``stock_float_holders``.
+        Documented endpoint: ``get_stock_holder_float_top10``.
 
         Args:
             stock_code: 标的代码，指定时返回该标的全部历史数据 (type: string; required: N).
@@ -941,7 +941,7 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/holder/stock-holder-ten``.
         Method: ``GET``.
-        Documented endpoint: ``stock_holders``.
+        Documented endpoint: ``get_stock_holder_top10``.
 
         Args:
             stock_code: 标的代码，指定时返回该标的全部历史数据 (type: string; required: N).
@@ -996,7 +996,7 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/holder/stock-holder-nums``.
         Method: ``GET``.
-        Documented endpoint: ``stock_holders_number``.
+        Documented endpoint: ``get_stock_holder_nums``.
 
         Args:
             stock_code: 标的代码，指定时返回该标的全部历史数据 (type: string; required: N).
@@ -1051,7 +1051,7 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/holder/stock-share-chg``.
         Method: ``GET``.
-        Documented endpoint: ``stock_share_chg``.
+        Documented endpoint: ``get_stock_share_chg``.
 
         Args:
             stock_code: 标的代码，指定时返回该标的分页历史数据 (type: string; required: N).
@@ -3613,6 +3613,7 @@ class StockApiMixin:
 
     def stock_filter(
         self,
+        symbol: Any | None = None,
         board: Any | None = None,
         listing_date_since: Any | None = None,
         page: int | None = None,
@@ -3630,9 +3631,10 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/stock-list/filter``.
         Method: ``GET``.
-        Documented endpoint: ``stock_filter``.
+        Documented endpoint: ``get_stock_filter``.
 
         Args:
+            symbol: 单标的代码（如 `600519`、`600519.SH`、`600519.XSHG`）；传入后忽略 board 与 listing_date_since (type: string; required: N).
             board: 板块/交易所筛选：`star` / `chi_next` / `bjse` / `xshg` / `xshe` / `main` (type: string; required: N).
             listing_date_since: 上市日期起点 YYYYMMDD，筛选此后上市的股票 (type: string; required: N).
             page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
@@ -3650,7 +3652,7 @@ class StockApiMixin:
             ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
             payloads when multi-page fetching is used with ``raw=True``.
         """
-        request_params = {'board': board, 'listing_date_since': listing_date_since}
+        request_params = {'symbol': symbol, 'board': board, 'listing_date_since': listing_date_since}
         request_params.update(kwargs)
         path = ENDPOINTS['stock_filter'].path
         return self.get_paginated(
@@ -4460,7 +4462,7 @@ class StockApiMixin:
 
         Endpoint: ``api/v1/market/data/share/get-stock-share``.
         Method: ``GET``.
-        Documented endpoint: ``get_stock_share_handler``.
+        Documented endpoint: ``get_stock_share``.
 
         Args:
             stock_code: 股票代码 (type: string; required: Y).

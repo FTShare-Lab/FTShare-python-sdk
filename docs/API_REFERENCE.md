@@ -6,7 +6,7 @@
 
 | 指标 | 数量 |
 |---|---:|
-| SDK 方法总数 | 186 |
+| SDK 方法总数 | 201 |
 
 ## 专题分布
 
@@ -19,7 +19,7 @@
 | 美股数据 | 9 | `ftshare.apis.us` | `ftshare.endpoints.us` |
 | 指数专题 | 10 | `ftshare.apis.index` | `ftshare.endpoints.index` |
 | ETF专题 | 10 | `ftshare.apis.etf` | `ftshare.endpoints.etf` |
-| 公募基金 | 5 | `ftshare.apis.fund` | `ftshare.endpoints.fund` |
+| 公募基金 | 20 | `ftshare.apis.fund` | `ftshare.endpoints.fund` |
 | 期货数据 | 9 | `ftshare.apis.futures` | `ftshare.endpoints.futures` |
 | 债券专题 | 4 | `ftshare.apis.bond` | `ftshare.endpoints.bond` |
 | 宏观经济 | 17 | `ftshare.apis.economic` | `ftshare.endpoints.economic` |
@@ -104,7 +104,7 @@ df = market.baidu_financial_calendar(
 | [`stock_comment_focus_em`](#api-stock-comment-focus-em) | 千股千评关注度 | `GET` | `api/v1/market/data/stock-comment/focus` | `symbol` | `千股千评关注度.md` |
 | [`stock_comment_org_participate_em`](#api-stock-comment-org-participate-em) | 机构参与度 | `GET` | `api/v1/market/data/stock-comment/org-participate` | `symbol` | `机构参与度.md` |
 | [`stock_comment_score_em`](#api-stock-comment-score-em) | 千股千评评分 | `GET` | `api/v1/market/data/stock-comment/score` | `symbol` | `千股千评评分.md` |
-| [`stock_filter`](#api-stock-filter) | 股票筛选 | `GET` | `api/v1/market/data/stock-list/filter` | `board`, `listing_date_since`, `page`, `page_size` | `股票筛选.md` |
+| [`stock_filter`](#api-stock-filter) | 股票筛选 | `GET` | `api/v1/market/data/stock-list/filter` | `symbol`, `board`, `listing_date_since`, `page`, `page_size` | `股票筛选.md` |
 | [`stock_float_holders`](#api-stock-float-holders) | 十大流通股东 | `GET` | `api/v1/market/data/holder/stock-holder-ften` | `stock_code`, `is_last`, `page`, `page_size` | `十大流通股东.md` |
 | [`stock_ggcg_em`](#api-stock-ggcg-em) | 东方财富股东增减持 | `GET` | `api/v1/market/data/holder/stock-ggcg-em` | `symbol`, `page`, `page_size` | `东方财富股东增减持.md` |
 | [`stock_ggmx`](#api-stock-ggmx) | 董监高持股变动 | `GET` | `api/v1/market/data/holder/stock-ggmx` | `stock_code`, `change_direction`, `start_date`, `end_date`, `page`, `page_size` | `董监高持股变动.md` |
@@ -217,6 +217,21 @@ df = market.baidu_financial_calendar(
 | [`fund_nav`](#api-fund-nav) | 基金净值 | `GET` | `api/v1/market/data/fund/fund-nav` | `institution_code`, `page`, `page_size` | `基金净值.md` |
 | [`fund_overview`](#api-fund-overview) | 基金总览 | `GET` | `api/v1/market/data/fund/fund-overview` | `page`, `page_size` | `基金总览.md` |
 | [`fund_support_symbols`](#api-fund-support-symbols) | 基金支持标的 | `GET` | `api/v1/market/data/fund/fund-support-symbols` | `page`, `page_size` | `基金支持标的.md` |
+| [`fund_share`](#api-fund-share) | 基金份额 | `GET` | `api/v1/market/data/fund/fund-share` | `fund_code`, `stati_perd`, `start_date`, `end_date`, `page`, `page_size` | `基金份额.md` |
+| [`fund_company`](#api-fund-company) | 基金公司 | `GET` | `api/v1/market/data/fund/fund-company` | `fund_company`, `page`, `page_size` | `基金公司.md` |
+| [`fund_net_value_performance`](#api-fund-net-value-performance) | 基金净值收益表现 | `GET` | `api/v1/market/data/fund/fund-net-value-performance` | `fund_code`, `stat_date`, `start_date`, `end_date`, `page`, `page_size` | `基金净值收益表现.md` |
+| [`fund_net_value`](#api-fund-net-value) | 基金净值明细 | `GET` | `api/v1/market/data/fund/fund-net-value` | `fund_code`, `nav_date`, `start_date`, `end_date`, `page`, `page_size` | `基金净值明细.md` |
+| [`fund_classification`](#api-fund-classification) | 基金分类 | `GET` | `api/v1/market/data/fund/fund-classification` | `fund_code`, `classify_std` | `基金分类.md` |
+| [`fund_list`](#api-fund-list) | 基金列表 | `GET` | `api/v1/market/data/fund/fund-list` | `fund_code`, `fund_type`, `page`, `page_size` | `基金列表.md` |
+| [`fund_portfolio`](#api-fund-portfolio) | 基金持仓明细 | `GET` | `api/v1/market/data/fund/fund-portfolio` | `fund_code`, `report_date`, `publish_date`, `start_date`, `end_date`, `page`, `page_size` | `基金持仓明细.md` |
+| [`fund_holder_structure`](#api-fund-holder-structure) | 基金持有人结构 | `GET` | `api/v1/market/data/fund/fund-holder-structure` | `fund_code`, `report_type`, `start_date`, `end_date` | `基金持有人结构.md` |
+| [`fund_new_found`](#api-fund-new-found) | 基金新发 | `GET` | `api/v1/market/data/fund/fund-new-found` | `start_date`, `end_date`, `fund_type`, `page`, `page_size` | `基金新发.md` |
+| [`fund_manager`](#api-fund-manager) | 基金经理任职关系 | `GET` | `api/v1/market/data/fund/fund-manager` | `fund_code`, `fund_manager`, `is_inoffice`, `page`, `page_size` | `基金经理任职关系.md` |
+| [`fund_daily`](#api-fund-daily) | 基金行情日线 | `GET` | `api/v1/market/data/fund/fund-daily` | `fund_code`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `基金行情日线.md` |
+| [`fund_fee`](#api-fund-fee) | 基金费率 | `GET` | `api/v1/market/data/fund/fund-fee` | `fund_code`, `charge_type`, `client_type`, `page`, `page_size` | `基金费率.md` |
+| [`fund_asset_allocation`](#api-fund-asset-allocation) | 基金资产配置 | `GET` | `api/v1/market/data/fund/fund-asset-allocation` | `fund_code`, `report_date`, `publish_date`, `start_date`, `end_date`, `page`, `page_size` | `基金资产配置.md` |
+| [`fund_risk_level`](#api-fund-risk-level) | 基金风险等级 | `GET` | `api/v1/market/data/fund/fund-risk-level` | `fund_code`, `history` | `基金风险等级.md` |
+| [`fund_index_fund`](#api-fund-index-fund) | 指数跟踪基金 | `GET` | `api/v1/market/data/fund/index-fund` | `index_code`, `scope` | `指数跟踪基金.md` |
 
 ### 期货数据
 
@@ -2117,14 +2132,14 @@ Returns:
 - Path：`api/v1/market/data/stock-list/filter`
 - 参数：`board`, `listing_date_since`, `page`, `page_size`
 - 来源文档：`股票筛选.md`
-- 原始接口：`stock_filter`
+- 原始接口：`get_stock_filter`
 
 ```text
 股票筛选.
 
 Endpoint: ``api/v1/market/data/stock-list/filter``.
 Method: ``GET``.
-Documented endpoint: ``stock_filter``.
+Documented endpoint: ``get_stock_filter``.
 
 Args:
     board: 板块/交易所筛选：`star` / `chi_next` / `bjse` / `xshg` / `xshe` / `main` (type: string; required: N).
@@ -2152,14 +2167,14 @@ Returns:
 - Path：`api/v1/market/data/holder/stock-holder-ften`
 - 参数：`stock_code`, `is_last`, `page`, `page_size`
 - 来源文档：`十大流通股东.md`
-- 原始接口：`stock_float_holders`
+- 原始接口：`get_stock_holder_float_top10`
 
 ```text
 十大流通股东.
 
 Endpoint: ``api/v1/market/data/holder/stock-holder-ften``.
 Method: ``GET``.
-Documented endpoint: ``stock_float_holders``.
+Documented endpoint: ``get_stock_holder_float_top10``.
 
 Args:
     stock_code: 标的代码，指定时返回该标的全部历史数据 (type: string; required: N).
@@ -2326,14 +2341,14 @@ Returns:
 - Path：`api/v1/market/data/holder/stock-holder-ten`
 - 参数：`stock_code`, `is_last`, `page`, `page_size`
 - 来源文档：`十大股东.md`
-- 原始接口：`stock_holders`
+- 原始接口：`get_stock_holder_top10`
 
 ```text
 十大股东.
 
 Endpoint: ``api/v1/market/data/holder/stock-holder-ten``.
 Method: ``GET``.
-Documented endpoint: ``stock_holders``.
+Documented endpoint: ``get_stock_holder_top10``.
 
 Args:
     stock_code: 标的代码，指定时返回该标的全部历史数据 (type: string; required: N).
@@ -2361,14 +2376,14 @@ Returns:
 - Path：`api/v1/market/data/holder/stock-holder-nums`
 - 参数：`stock_code`, `is_last`, `page`, `page_size`
 - 来源文档：`股东人数.md`
-- 原始接口：`stock_holders_number`
+- 原始接口：`get_stock_holder_nums`
 
 ```text
 股东人数.
 
 Endpoint: ``api/v1/market/data/holder/stock-holder-nums``.
 Method: ``GET``.
-Documented endpoint: ``stock_holders_number``.
+Documented endpoint: ``get_stock_holder_nums``.
 
 Args:
     stock_code: 标的代码，指定时返回该标的全部历史数据 (type: string; required: N).
@@ -2967,14 +2982,14 @@ Returns:
 - Path：`api/v1/market/data/share/get-stock-share`
 - 参数：`stock_code`, `date`
 - 来源文档：`股本.md`
-- 原始接口：`get_stock_share_handler`
+- 原始接口：`get_stock_share`
 
 ```text
 股本.
 
 Endpoint: ``api/v1/market/data/share/get-stock-share``.
 Method: ``GET``.
-Documented endpoint: ``get_stock_share_handler``.
+Documented endpoint: ``get_stock_share``.
 
 Args:
     stock_code: 股票代码 (type: string; required: Y).
@@ -2997,14 +3012,14 @@ Returns:
 - Path：`api/v1/market/data/holder/stock-share-chg`
 - 参数：`stock_code`, `is_last`, `page`, `page_size`
 - 来源文档：`股东增减持.md`
-- 原始接口：`stock_share_chg`
+- 原始接口：`get_stock_share_chg`
 
 ```text
 股东增减持.
 
 Endpoint: ``api/v1/market/data/holder/stock-share-chg``.
 Method: ``GET``.
-Documented endpoint: ``stock_share_chg``.
+Documented endpoint: ``get_stock_share_chg``.
 
 Args:
     stock_code: 标的代码，指定时返回该标的分页历史数据 (type: string; required: N).
@@ -5084,6 +5099,231 @@ Returns:
     A pandas ``DataFrame`` by default, Python rows when
     ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
     payloads when multi-page fetching is used with ``raw=True``.
+```
+
+<h4 id="api-fund-share"><code>fund_share</code></h4>
+
+- 接口名称：基金份额
+- HTTP：`GET`
+- Path：`api/v1/market/data/fund/fund-share`
+- 参数：`fund_code`, `stati_perd`, `start_date`, `end_date`, `page`, `page_size`
+- 来源文档：`基金份额.md`
+- 原始接口：`get_fund_share`
+
+```text
+Endpoint: ``api/v1/market/data/fund/fund-share``.
+Method: ``GET``.
+Documented endpoint: ``get_fund_share``.
+```
+
+<h4 id="api-fund-company"><code>fund_company</code></h4>
+
+- 接口名称：基金公司
+- HTTP：`GET`
+- Path：`api/v1/market/data/fund/fund-company`
+- 参数：`fund_company`, `page`, `page_size`
+- 来源文档：`基金公司.md`
+- 原始接口：`get_fund_company`
+
+```text
+Endpoint: ``api/v1/market/data/fund/fund-company``.
+Method: ``GET``.
+Documented endpoint: ``get_fund_company``.
+```
+
+<h4 id="api-fund-net-value-performance"><code>fund_net_value_performance</code></h4>
+
+- 接口名称：基金净值收益表现
+- HTTP：`GET`
+- Path：`api/v1/market/data/fund/fund-net-value-performance`
+- 参数：`fund_code`, `stat_date`, `start_date`, `end_date`, `page`, `page_size`
+- 来源文档：`基金净值收益表现.md`
+- 原始接口：`get_fund_net_value_performance`
+
+```text
+Endpoint: ``api/v1/market/data/fund/fund-net-value-performance``.
+Method: ``GET``.
+Documented endpoint: ``get_fund_net_value_performance``.
+```
+
+<h4 id="api-fund-net-value"><code>fund_net_value</code></h4>
+
+- 接口名称：基金净值明细
+- HTTP：`GET`
+- Path：`api/v1/market/data/fund/fund-net-value`
+- 参数：`fund_code`, `nav_date`, `start_date`, `end_date`, `page`, `page_size`
+- 来源文档：`基金净值明细.md`
+- 原始接口：`get_fund_net_value`
+
+```text
+Endpoint: ``api/v1/market/data/fund/fund-net-value``.
+Method: ``GET``.
+Documented endpoint: ``get_fund_net_value``.
+```
+
+<h4 id="api-fund-classification"><code>fund_classification</code></h4>
+
+- 接口名称：基金分类
+- HTTP：`GET`
+- Path：`api/v1/market/data/fund/fund-classification`
+- 参数：`fund_code`, `classify_std`
+- 来源文档：`基金分类.md`
+- 原始接口：`get_fund_classification`
+
+```text
+Endpoint: ``api/v1/market/data/fund/fund-classification``.
+Method: ``GET``.
+Documented endpoint: ``get_fund_classification``.
+```
+
+<h4 id="api-fund-list"><code>fund_list</code></h4>
+
+- 接口名称：基金列表
+- HTTP：`GET`
+- Path：`api/v1/market/data/fund/fund-list`
+- 参数：`fund_code`, `fund_type`, `page`, `page_size`
+- 来源文档：`基金列表.md`
+- 原始接口：`get_fund_list`
+
+```text
+Endpoint: ``api/v1/market/data/fund/fund-list``.
+Method: ``GET``.
+Documented endpoint: ``get_fund_list``.
+```
+
+<h4 id="api-fund-portfolio"><code>fund_portfolio</code></h4>
+
+- 接口名称：基金持仓明细
+- HTTP：`GET`
+- Path：`api/v1/market/data/fund/fund-portfolio`
+- 参数：`fund_code`, `report_date`, `publish_date`, `start_date`, `end_date`, `page`, `page_size`
+- 来源文档：`基金持仓明细.md`
+- 原始接口：`get_fund_portfolio`
+
+```text
+Endpoint: ``api/v1/market/data/fund/fund-portfolio``.
+Method: ``GET``.
+Documented endpoint: ``get_fund_portfolio``.
+```
+
+<h4 id="api-fund-holder-structure"><code>fund_holder_structure</code></h4>
+
+- 接口名称：基金持有人结构
+- HTTP：`GET`
+- Path：`api/v1/market/data/fund/fund-holder-structure`
+- 参数：`fund_code`, `report_type`, `start_date`, `end_date`
+- 来源文档：`基金持有人结构.md`
+- 原始接口：`get_fund_holder_structure`
+
+```text
+Endpoint: ``api/v1/market/data/fund/fund-holder-structure``.
+Method: ``GET``.
+Documented endpoint: ``get_fund_holder_structure``.
+```
+
+<h4 id="api-fund-new-found"><code>fund_new_found</code></h4>
+
+- 接口名称：基金新发
+- HTTP：`GET`
+- Path：`api/v1/market/data/fund/fund-new-found`
+- 参数：`start_date`, `end_date`, `fund_type`, `page`, `page_size`
+- 来源文档：`基金新发.md`
+- 原始接口：`get_fund_new_found`
+
+```text
+Endpoint: ``api/v1/market/data/fund/fund-new-found``.
+Method: ``GET``.
+Documented endpoint: ``get_fund_new_found``.
+```
+
+<h4 id="api-fund-manager"><code>fund_manager</code></h4>
+
+- 接口名称：基金经理任职关系
+- HTTP：`GET`
+- Path：`api/v1/market/data/fund/fund-manager`
+- 参数：`fund_code`, `fund_manager`, `is_inoffice`, `page`, `page_size`
+- 来源文档：`基金经理任职关系.md`
+- 原始接口：`get_fund_manager`
+
+```text
+Endpoint: ``api/v1/market/data/fund/fund-manager``.
+Method: ``GET``.
+Documented endpoint: ``get_fund_manager``.
+```
+
+<h4 id="api-fund-daily"><code>fund_daily</code></h4>
+
+- 接口名称：基金行情日线
+- HTTP：`GET`
+- Path：`api/v1/market/data/fund/fund-daily`
+- 参数：`fund_code`, `trade_date`, `start_date`, `end_date`, `page`, `page_size`
+- 来源文档：`基金行情日线.md`
+- 原始接口：`get_fund_daily`
+
+```text
+Endpoint: ``api/v1/market/data/fund/fund-daily``.
+Method: ``GET``.
+Documented endpoint: ``get_fund_daily``.
+```
+
+<h4 id="api-fund-fee"><code>fund_fee</code></h4>
+
+- 接口名称：基金费率
+- HTTP：`GET`
+- Path：`api/v1/market/data/fund/fund-fee`
+- 参数：`fund_code`, `charge_type`, `client_type`, `page`, `page_size`
+- 来源文档：`基金费率.md`
+- 原始接口：`get_fund_fee`
+
+```text
+Endpoint: ``api/v1/market/data/fund/fund-fee``.
+Method: ``GET``.
+Documented endpoint: ``get_fund_fee``.
+```
+
+<h4 id="api-fund-asset-allocation"><code>fund_asset_allocation</code></h4>
+
+- 接口名称：基金资产配置
+- HTTP：`GET`
+- Path：`api/v1/market/data/fund/fund-asset-allocation`
+- 参数：`fund_code`, `report_date`, `publish_date`, `start_date`, `end_date`, `page`, `page_size`
+- 来源文档：`基金资产配置.md`
+- 原始接口：`get_fund_asset_allocation`
+
+```text
+Endpoint: ``api/v1/market/data/fund/fund-asset-allocation``.
+Method: ``GET``.
+Documented endpoint: ``get_fund_asset_allocation``.
+```
+
+<h4 id="api-fund-risk-level"><code>fund_risk_level</code></h4>
+
+- 接口名称：基金风险等级
+- HTTP：`GET`
+- Path：`api/v1/market/data/fund/fund-risk-level`
+- 参数：`fund_code`, `history`
+- 来源文档：`基金风险等级.md`
+- 原始接口：`get_fund_risk_level`
+
+```text
+Endpoint: ``api/v1/market/data/fund/fund-risk-level``.
+Method: ``GET``.
+Documented endpoint: ``get_fund_risk_level``.
+```
+
+<h4 id="api-fund-index-fund"><code>fund_index_fund</code></h4>
+
+- 接口名称：指数跟踪基金
+- HTTP：`GET`
+- Path：`api/v1/market/data/fund/index-fund`
+- 参数：`index_code`, `scope`
+- 来源文档：`指数跟踪基金.md`
+- 原始接口：`get_fund_index_fund`
+
+```text
+Endpoint: ``api/v1/market/data/fund/index-fund``.
+Method: ``GET``.
+Documented endpoint: ``get_fund_index_fund``.
 ```
 
 ### 期货数据
