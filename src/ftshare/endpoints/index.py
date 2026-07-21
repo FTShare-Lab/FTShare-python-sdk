@@ -13,6 +13,22 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'original_api': 'global_index_daily_kline',
         'params': ('secid', 'start_date', 'end_date'),
     },
+    'index_candlesticks': {
+        'path': 'api/v1/market/data/index-candlesticks',
+        'title': '指数K线',
+        'doc_file': '指数K线.md',
+        'original_api': 'index_candlesticks',
+        'method': 'POST',
+        'params': ('symbol', 'interval_unit', 'interval_value', 'adjust_kind', 'since_ts_millis', 'until_ts_millis', 'limit'),
+    },
+    'index_candlesticks_batch': {
+        'path': 'api/v1/market/data/index-candlesticks/batch',
+        'title': '批量指数K线',
+        'doc_file': '批量指数K线.md',
+        'original_api': 'index_candlesticks_batch',
+        'method': 'POST',
+        'params': ('symbols', 'interval_unit', 'interval_value', 'adjust_kind', 'since_ts_millis', 'until_ts_millis', 'limit'),
+    },
     'index_description_all': {
         'path': 'api/v1/market/data/index-description-all',
         'title': '指数基础信息',

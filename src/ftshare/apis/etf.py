@@ -58,6 +58,104 @@ class EtfApiMixin:
             **request_params,
         )
 
+    def etf_candlesticks(
+        self,
+        symbol: Any | None = None,
+        interval_unit: Any | None = None,
+        interval_value: Any | None = None,
+        adjust_kind: Any | None = None,
+        since_ts_millis: Any | None = None,
+        until_ts_millis: Any | None = None,
+        limit: Any | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """ETFK线.
+
+        Endpoint: ``api/v1/market/data/etf-candlesticks``.
+        Method: ``POST``.
+        Documented endpoint: ``etf_candlesticks``.
+
+        Args:
+            symbol: ETF 代码，如 510300.XSHG、159915.XSHE；也接受 .SH、.SZ 短后缀 (type: string; required: Y).
+            interval_unit: 周期单位：Minute/Day/Week/Month/Year (type: enum; required: Y).
+            interval_value: 间隔数值，默认 1；例如 Minute+5 表示 5 分钟 K 线 (type: int; required: N).
+            adjust_kind: 复权：None（默认，不复权）/Forward（前复权）/Backward（后复权） (type: enum; required: N).
+            since_ts_millis: 开始时间戳，单位毫秒；分钟 K 线与 until 的跨度 ≤3 天 (type: int(ms); required: N).
+            until_ts_millis: 结束时间戳，单位毫秒 (type: int(ms); required: Y).
+            limit: 返回条数上限；未传 since 和 limit 时默认最多返回 50 根 K 线 (type: int; required: N).
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``.
+        """
+        request_params = {'symbol': symbol, 'interval_unit': interval_unit, 'interval_value': interval_value, 'adjust_kind': adjust_kind, 'since_ts_millis': since_ts_millis, 'until_ts_millis': until_ts_millis, 'limit': limit}
+        request_params.update(kwargs)
+        return self._call_endpoint(
+            'etf_candlesticks',
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
+
+    def etf_candlesticks_batch(
+        self,
+        symbols: Any | None = None,
+        interval_unit: Any | None = None,
+        interval_value: Any | None = None,
+        adjust_kind: Any | None = None,
+        since_ts_millis: Any | None = None,
+        until_ts_millis: Any | None = None,
+        limit: Any | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """批量ETFK线.
+
+        Endpoint: ``api/v1/market/data/etf-candlesticks/batch``.
+        Method: ``POST``.
+        Documented endpoint: ``etf_candlesticks_batch``.
+
+        Args:
+            symbols: ETF 代码列表，如 ["510300.XSHG","159915.XSHE"]；也接受 .SH、.SZ 短后缀 (type: string[]; required: Y).
+            interval_unit: 周期单位：Minute/Day/Week/Month/Year (type: enum; required: Y).
+            interval_value: 间隔数值，默认 1；例如 Minute+5 表示 5 分钟 K 线 (type: int; required: N).
+            adjust_kind: 复权：None（默认，不复权）/Forward（前复权）/Backward（后复权） (type: enum; required: N).
+            since_ts_millis: 开始时间戳，单位毫秒；分钟 K 线与 until 的跨度 ≤3 天 (type: int(ms); required: N).
+            until_ts_millis: 结束时间戳，单位毫秒 (type: int(ms); required: Y).
+            limit: 每个标的的返回条数上限；未传 since 和 limit 时默认最多返回 50 根 K 线 (type: int; required: N).
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``.
+        """
+        request_params = {'symbols': symbols, 'interval_unit': interval_unit, 'interval_value': interval_value, 'adjust_kind': adjust_kind, 'since_ts_millis': since_ts_millis, 'until_ts_millis': until_ts_millis, 'limit': limit}
+        request_params.update(kwargs)
+        return self._call_endpoint(
+            'etf_candlesticks_batch',
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
+
     def etf_components(
         self,
         symbol: Any | None = None,

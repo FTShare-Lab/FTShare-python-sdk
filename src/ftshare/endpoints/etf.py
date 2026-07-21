@@ -13,6 +13,22 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'original_api': 'etf_adjust_factor',
         'params': ('symbol', 'trade_date', 'start_date', 'end_date', 'offset', 'limit'),
     },
+    'etf_candlesticks': {
+        'path': 'api/v1/market/data/etf-candlesticks',
+        'title': 'ETFK线',
+        'doc_file': 'ETFK线.md',
+        'original_api': 'etf_candlesticks',
+        'method': 'POST',
+        'params': ('symbol', 'interval_unit', 'interval_value', 'adjust_kind', 'since_ts_millis', 'until_ts_millis', 'limit'),
+    },
+    'etf_candlesticks_batch': {
+        'path': 'api/v1/market/data/etf-candlesticks/batch',
+        'title': '批量ETFK线',
+        'doc_file': '批量ETFK线.md',
+        'original_api': 'etf_candlesticks_batch',
+        'method': 'POST',
+        'params': ('symbols', 'interval_unit', 'interval_value', 'adjust_kind', 'since_ts_millis', 'until_ts_millis', 'limit'),
+    },
     'etf_components': {
         'path': 'api/v1/market/data/etf-component',
         'title': 'ETF成份股',
