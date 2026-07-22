@@ -1010,3 +1010,76 @@ def test_fund_index_fund_array_response():
 
     assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/index-fund"
     assert session.calls[0]["params"] == {"index_code": "000300", "scope": "etf"}
+
+
+@pytest.mark.parametrize(
+    ("method_name", "kwargs", "expected_path", "expected_params"),
+    [
+        (
+            "namechange",
+            {"trade_code": "600848.SH", "start_date": "20200101", "end_date": "20241231"},
+            "api/v1/market/data/namechange",
+            {"trade_code": "600848.SH", "start_date": "20200101", "end_date": "20241231"},
+        ),
+        (
+            "stk_code_change",
+            {"trade_code": "001872.SZ,601360.SH", "start_date": "20180101"},
+            "api/v1/market/data/stk-code-change",
+            {"trade_code": "001872.SZ,601360.SH", "start_date": "20180101"},
+        ),
+        (
+            "stk_status_change",
+            {"trade_code": "600848.SH", "change_type": "上市"},
+            "api/v1/market/data/stk-status-change",
+            {"trade_code": "600848.SH", "change_type": "上市"},
+        ),
+        (
+            "stk_managers",
+            {"trade_code": "600848.SH,000001.SZ", "begin_date": "20200101", "end_date": "20241231"},
+            "api/v1/market/data/stk-managers",
+            {"trade_code": "600848.SH,000001.SZ", "begin_date": "20200101", "end_date": "20241231"},
+        ),
+        (
+            "stk_manager_hold",
+            {"trade_code": "600848.SH", "end_date": "20241231"},
+            "api/v1/market/data/stk-manager-hold",
+            {"trade_code": "600848.SH", "end_date": "20241231"},
+        ),
+        (
+            "stk_manager_pay",
+            {"trade_code": "600848.SH", "end_date": "20241231"},
+            "api/v1/market/data/stk-manager-pay",
+            {"trade_code": "600848.SH", "end_date": "20241231"},
+        ),
+    ],
+)
+def test_a_share_reference_endpoints_map_to_expected_paths(
+    method_name, kwargs, expected_path, expected_params
+):
+    session = FakeSession([FakeResponse(payload={"items": []})])
+    client = FtshareClient(session=session)
+
+    getattr(client, method_name)(**kwargs)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + expected_path
+    assert session.calls[0]["params"] == expected_params
+
+
+def test_a_share_reference_endpoints_raw_returns_full_payload():
+    payload = [
+        {"trade_code": "001872.SZ", "code": "1872", "name": "招商港口", "start_date": "20181226", "end_date": None},
+    ]
+    session = FakeSession([FakeResponse(payload=payload)])
+    client = FtshareClient(session=session)
+
+    assert client.stk_code_change(trade_code="001872.SZ", raw=True) == payload
+
+
+def test_a_share_status_change_omits_none_params():
+    session = FakeSession([FakeResponse(payload={"items": []})])
+    client = FtshareClient(session=session)
+
+    client.stk_status_change()
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/stk-status-change"
+    assert session.calls[0]["params"] == {}

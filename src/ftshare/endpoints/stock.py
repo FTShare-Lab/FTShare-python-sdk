@@ -256,6 +256,13 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'original_api': 'northbound',
         'params': ('date',),
     },
+    'namechange': {
+        'path': 'api/v1/market/data/namechange',
+        'title': '股票曾用名',
+        'doc_file': '股票曾用名.md',
+        'original_api': 'get_namechange',
+        'params': ('trade_code', 'start_date', 'end_date'),
+    },
     'nth_trade_date': {
         'path': 'api/v1/market/data/time/get-nth-trade-date',
         'title': '第N个交易日',
@@ -320,6 +327,13 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'params': ('hk_code', 'ts_code', 'trade_date', 'start_date', 'end_date', 'page', 'page_size'),
         'max_page_size': 1000,
     },
+    'stk_code_change': {
+        'path': 'api/v1/market/data/stk-code-change',
+        'title': 'A股代码变更',
+        'doc_file': 'A股代码变更.md',
+        'original_api': 'get_stk_code_change',
+        'params': ('trade_code', 'start_date', 'end_date'),
+    },
     'stk_limit': {
         'path': 'api/v1/market/data/stk-limit',
         'title': '涨跌停价',
@@ -328,6 +342,27 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'params': ('instrument_type', 'symbol', 'symbol_id', 'market_id', 'trade_date', 'start_date', 'end_date', 'page', 'page_size'),
         'max_page_size': 500,
     },
+    'stk_manager_hold': {
+        'path': 'api/v1/market/data/stk-manager-hold',
+        'title': '上市公司管理层持股',
+        'doc_file': '上市公司管理层持股.md',
+        'original_api': 'get_stk_manager_hold',
+        'params': ('trade_code', 'end_date'),
+    },
+    'stk_manager_pay': {
+        'path': 'api/v1/market/data/stk-manager-pay',
+        'title': '上市公司管理层薪酬',
+        'doc_file': '上市公司管理层薪酬.md',
+        'original_api': 'get_stk_manager_pay',
+        'params': ('trade_code', 'end_date'),
+    },
+    'stk_managers': {
+        'path': 'api/v1/market/data/stk-managers',
+        'title': '上市公司管理层',
+        'doc_file': '上市公司管理层.md',
+        'original_api': 'get_stk_managers',
+        'params': ('trade_code', 'candi_date', 'begin_date', 'end_date'),
+    },
     'stk_premarket': {
         'path': 'api/v1/market/data/stk-premarket',
         'title': '盘前数据',
@@ -335,6 +370,13 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'original_api': 'stk_premarket',
         'params': ('ts_code', 'trade_date', 'start_date', 'end_date', 'page', 'page_size'),
         'max_page_size': 500,
+    },
+    'stk_status_change': {
+        'path': 'api/v1/market/data/stk-status-change',
+        'title': 'A股状态变更',
+        'doc_file': 'A股状态变更.md',
+        'original_api': 'get_stk_status_change',
+        'params': ('trade_code', 'change_date', 'change_type'),
     },
     'stock_adjust_factor': {
         'path': 'api/v1/market/data/stock-adjust-factor',

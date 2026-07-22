@@ -1865,6 +1865,47 @@ class StockApiMixin:
             **request_params,
         )
 
+    def namechange(
+        self,
+        trade_code: Any | None = None,
+        start_date: Any | None = None,
+        end_date: Any | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """股票曾用名.
+
+        Endpoint: ``api/v1/market/data/namechange``.
+        Method: ``GET``.
+        Documented endpoint: ``get_namechange``.
+
+        Args:
+            trade_code: 股票代码（带 .SZ/.SH 后缀），支持逗号分隔多个 (type: string; required: Y).
+            start_date: 过滤区间起始日期，``YYYYMMDD`` 格式 (type: string; required: N).
+            end_date: 过滤区间结束日期，``YYYYMMDD`` 格式；与 ``start_date`` 同时提供时须 ``start_date`` ≤ ``end_date`` (type: string; required: N).
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``.
+        """
+        request_params = {'trade_code': trade_code, 'start_date': start_date, 'end_date': end_date}
+        request_params.update(kwargs)
+        return self._call_endpoint(
+            'namechange',
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
+
     def nth_trade_date(
         self,
         n: Any | None = None,
@@ -3035,6 +3076,47 @@ class StockApiMixin:
             **request_params,
         )
 
+    def stk_code_change(
+        self,
+        trade_code: Any | None = None,
+        start_date: Any | None = None,
+        end_date: Any | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """A股代码变更.
+
+        Endpoint: ``api/v1/market/data/stk-code-change``.
+        Method: ``GET``.
+        Documented endpoint: ``get_stk_code_change``.
+
+        Args:
+            trade_code: 股票代码（带 .SZ/.SH 后缀），支持逗号分隔多个 (type: string; required: Y).
+            start_date: 过滤区间起始日期，``YYYYMMDD`` 格式 (type: string; required: N).
+            end_date: 过滤区间结束日期，``YYYYMMDD`` 格式；与 ``start_date`` 同时提供时须 ``start_date`` ≤ ``end_date`` (type: string; required: N).
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``.
+        """
+        request_params = {'trade_code': trade_code, 'start_date': start_date, 'end_date': end_date}
+        request_params.update(kwargs)
+        return self._call_endpoint(
+            'stk_code_change',
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
+
     def stk_limit(
         self,
         instrument_type: Any | None = None,
@@ -3101,6 +3183,127 @@ class StockApiMixin:
             **request_params,
         )
 
+    def stk_manager_hold(
+        self,
+        trade_code: Any | None = None,
+        end_date: Any | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """上市公司管理层持股.
+
+        Endpoint: ``api/v1/market/data/stk-manager-hold``.
+        Method: ``GET``.
+        Documented endpoint: ``get_stk_manager_hold``.
+
+        Args:
+            trade_code: 股票代码（带 .SZ/.SH 后缀），支持逗号分隔多个 (type: string; required: Y).
+            end_date: 截止日期，精确匹配，``YYYYMMDD`` 格式 (type: string; required: N).
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``.
+        """
+        request_params = {'trade_code': trade_code, 'end_date': end_date}
+        request_params.update(kwargs)
+        return self._call_endpoint(
+            'stk_manager_hold',
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
+
+    def stk_manager_pay(
+        self,
+        trade_code: Any | None = None,
+        end_date: Any | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """上市公司管理层薪酬.
+
+        Endpoint: ``api/v1/market/data/stk-manager-pay``.
+        Method: ``GET``.
+        Documented endpoint: ``get_stk_manager_pay``.
+
+        Args:
+            trade_code: 股票代码（带 .SZ/.SH 后缀），支持逗号分隔多个 (type: string; required: Y).
+            end_date: 截止日期，精确匹配，``YYYYMMDD`` 格式 (type: string; required: N).
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``.
+        """
+        request_params = {'trade_code': trade_code, 'end_date': end_date}
+        request_params.update(kwargs)
+        return self._call_endpoint(
+            'stk_manager_pay',
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
+
+    def stk_managers(
+        self,
+        trade_code: Any | None = None,
+        candi_date: Any | None = None,
+        begin_date: Any | None = None,
+        end_date: Any | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """上市公司管理层.
+
+        Endpoint: ``api/v1/market/data/stk-managers``.
+        Method: ``GET``.
+        Documented endpoint: ``get_stk_managers``.
+
+        Args:
+            trade_code: 股票代码（带 .SZ/.SH 后缀），支持逗号分隔多个 (type: string; required: Y).
+            candi_date: 候选日期，精确匹配，``YYYYMMDD`` 格式 (type: string; required: N).
+            begin_date: 任职起始日过滤，``YYYYMMDD`` 格式 (type: string; required: N).
+            end_date: 任职截止日过滤，``YYYYMMDD`` 格式；与 ``begin_date`` 同时提供时须 ``begin_date`` ≤ ``end_date`` (type: string; required: N).
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``.
+        """
+        request_params = {'trade_code': trade_code, 'candi_date': candi_date, 'begin_date': begin_date, 'end_date': end_date}
+        request_params.update(kwargs)
+        return self._call_endpoint(
+            'stk_managers',
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
+
     def stk_premarket(
         self,
         ts_code: Any | None = None,
@@ -3155,6 +3358,47 @@ class StockApiMixin:
             all_pages=all_pages,
             max_pages=max_pages,
             max_page_size=500,
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
+
+    def stk_status_change(
+        self,
+        trade_code: Any | None = None,
+        change_date: Any | None = None,
+        change_type: Any | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """A股状态变更.
+
+        Endpoint: ``api/v1/market/data/stk-status-change``.
+        Method: ``GET``.
+        Documented endpoint: ``get_stk_status_change``.
+
+        Args:
+            trade_code: 股票代码（带 .SZ/.SH 后缀），支持逗号分隔多个；不填表示不按代码过滤 (type: string; required: N).
+            change_date: 变更日期，精确过滤，``YYYYMMDD`` 格式 (type: string; required: N).
+            change_type: 变更类型，精确过滤，常见值如 ``上市``、``退市``、``暂停上市`` (type: string; required: N).
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``.
+        """
+        request_params = {'trade_code': trade_code, 'change_date': change_date, 'change_type': change_type}
+        request_params.update(kwargs)
+        return self._call_endpoint(
+            'stk_status_change',
             raw=raw,
             fields=fields,
             as_dataframe=as_dataframe,

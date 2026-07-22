@@ -6,7 +6,7 @@
 
 | 指标 | 数量 |
 |---|---:|
-| SDK 方法总数 | 201 |
+| SDK 方法总数 | 207 |
 
 ## 专题分布
 
@@ -14,7 +14,7 @@
 
 | ftshare-doc 专题 | SDK 方法数 | API mixin 模块 | Endpoint 模块 |
 |---|---:|---|---|
-| 股票数据 | 96 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
+| 股票数据 | 102 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
 | 港股数据 | 14 | `ftshare.apis.hk` | `ftshare.endpoints.hk` |
 | 美股数据 | 9 | `ftshare.apis.us` | `ftshare.endpoints.us` |
 | 指数专题 | 10 | `ftshare.apis.index` | `ftshare.endpoints.index` |
@@ -83,6 +83,7 @@ df = market.baidu_financial_calendar(
 | [`limit_up_pool_yesterday`](#api-limit-up-pool-yesterday) | 昨日涨停池 | `GET` | `api/v1/market/data/limit-up-pool-yesterday` | - | `昨日涨停池.md` |
 | [`margin_trading_details`](#api-margin-trading-details) | 融资融券明细 | `GET` | `api/v1/market/data/margin-trading-details` | `date`, `page`, `page_size` | `融资融券明细.md` |
 | [`margin_trading_details_paginated`](#api-margin-trading-details-paginated) | 融资融券明细分页 | `GET` | `api/v1/market/data/margin-trading-details` | `date`, `page`, `page_size` | `融资融券明细分页.md` |
+| [`namechange`](#api-namechange) | 股票曾用名 | `GET` | `api/v1/market/data/namechange` | `trade_code`, `start_date`, `end_date` | `股票曾用名.md` |
 | [`northbound`](#api-northbound) | 北向资金交易 | `GET` | `api/v1/market/data/northbound` | `date` | `北向资金交易.md` |
 | [`nth_trade_date`](#api-nth-trade-date) | 第N个交易日 | `GET` | `api/v1/market/data/time/get-nth-trade-date` | `n` | `第N个交易日.md` |
 | [`performance_forecasts_paginated`](#api-performance-forecasts-paginated) | 业绩预告 | `GET` | `api/v1/market/data/finance/stock-performance-forecast` | `stock_code`, `year`, `report_type`, `page`, `page_size` | `业绩预告.md` |
@@ -93,8 +94,13 @@ df = market.baidu_financial_calendar(
 | [`sh_hk_stock_connect_members`](#api-sh-hk-stock-connect-members) | 沪股通成份 | `GET` | `api/v1/market/data/sh-hk-stock-connect-members` | - | `沪股通成份.md` |
 | [`southbound`](#api-southbound) | 南向资金交易 | `GET` | `api/v1/market/data/southbound` | `date` | `南向资金交易.md` |
 | [`stk_ah_comparison`](#api-stk-ah-comparison) | AH股对比 | `GET` | `api/v1/market/data/hk/stk-ah-comparison` | `hk_code`, `ts_code`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `AH股对比.md` |
+| [`stk_code_change`](#api-stk-code-change) | A股代码变更 | `GET` | `api/v1/market/data/stk-code-change` | `trade_code`, `start_date`, `end_date` | `A股代码变更.md` |
 | [`stk_limit`](#api-stk-limit) | 涨跌停价 | `GET` | `api/v1/market/data/stk-limit` | `instrument_type`, `symbol`, `symbol_id`, `market_id`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `涨跌停价.md` |
+| [`stk_manager_hold`](#api-stk-manager-hold) | 上市公司管理层持股 | `GET` | `api/v1/market/data/stk-manager-hold` | `trade_code`, `end_date` | `上市公司管理层持股.md` |
+| [`stk_manager_pay`](#api-stk-manager-pay) | 上市公司管理层薪酬 | `GET` | `api/v1/market/data/stk-manager-pay` | `trade_code`, `end_date` | `上市公司管理层薪酬.md` |
+| [`stk_managers`](#api-stk-managers) | 上市公司管理层 | `GET` | `api/v1/market/data/stk-managers` | `trade_code`, `candi_date`, `begin_date`, `end_date` | `上市公司管理层.md` |
 | [`stk_premarket`](#api-stk-premarket) | 盘前数据 | `GET` | `api/v1/market/data/stk-premarket` | `ts_code`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `盘前数据.md` |
+| [`stk_status_change`](#api-stk-status-change) | A股状态变更 | `GET` | `api/v1/market/data/stk-status-change` | `trade_code`, `change_date`, `change_type` | `A股状态变更.md` |
 | [`stock_adjust_factor`](#api-stock-adjust-factor) | 股票复权因子 | `GET` | `api/v1/market/data/stock-adjust-factor` | `symbol`, `trade_date`, `start_date`, `end_date`, `offset`, `limit` | `股票复权因子.md` |
 | [`stock_candlesticks`](#api-stock-candlesticks) | 股票K线 | `POST` | `api/v1/market/data/stock-candlesticks` | `symbol`, `interval_unit`, `interval_value`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit` | `股票K线.md` |
 | [`stock_candlesticks_batch`](#api-stock-candlesticks-batch) | 批量股票K线 | `POST` | `api/v1/market/data/stock-candlesticks/batch` | `symbols`, `interval_unit`, `interval_value`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit` | `批量股票K线.md` |
@@ -1480,6 +1486,37 @@ Returns:
     payloads when multi-page fetching is used with ``raw=True``.
 ```
 
+<h4 id="api-namechange"><code>namechange</code></h4>
+
+- 接口名称：股票曾用名
+- HTTP：`GET`
+- Path：`api/v1/market/data/namechange`
+- 参数：`trade_code`, `start_date`, `end_date`
+- 来源文档：`股票曾用名.md`
+- 原始接口：`get_namechange`
+
+```text
+股票曾用名.
+
+Endpoint: ``api/v1/market/data/namechange``.
+Method: ``GET``.
+Documented endpoint: ``get_namechange``.
+
+Args:
+    trade_code: 股票代码（带 .SZ/.SH 后缀），支持逗号分隔多个 (type: string; required: Y).
+    start_date: 过滤区间起始日期，``YYYYMMDD`` 格式 (type: string; required: N).
+    end_date: 过滤区间结束日期，``YYYYMMDD`` 格式；与 ``start_date`` 同时提供时须 ``start_date`` ≤ ``end_date`` (type: string; required: N).
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
+```
+
 <h4 id="api-nth-trade-date"><code>nth_trade_date</code></h4>
 
 - 接口名称：第N个交易日
@@ -1760,6 +1797,37 @@ Returns:
     payloads when multi-page fetching is used with ``raw=True``.
 ```
 
+<h4 id="api-stk-code-change"><code>stk_code_change</code></h4>
+
+- 接口名称：A股代码变更
+- HTTP：`GET`
+- Path：`api/v1/market/data/stk-code-change`
+- 参数：`trade_code`, `start_date`, `end_date`
+- 来源文档：`A股代码变更.md`
+- 原始接口：`get_stk_code_change`
+
+```text
+A股代码变更.
+
+Endpoint: ``api/v1/market/data/stk-code-change``.
+Method: ``GET``.
+Documented endpoint: ``get_stk_code_change``.
+
+Args:
+    trade_code: 股票代码（带 .SZ/.SH 后缀），支持逗号分隔多个 (type: string; required: Y).
+    start_date: 过滤区间起始日期，``YYYYMMDD`` 格式 (type: string; required: N).
+    end_date: 过滤区间结束日期，``YYYYMMDD`` 格式；与 ``start_date`` 同时提供时须 ``start_date`` ≤ ``end_date`` (type: string; required: N).
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
+```
+
 <h4 id="api-stk-limit"><code>stk_limit</code></h4>
 
 - 接口名称：涨跌停价
@@ -1800,6 +1868,98 @@ Returns:
     payloads when multi-page fetching is used with ``raw=True``.
 ```
 
+<h4 id="api-stk-manager-hold"><code>stk_manager_hold</code></h4>
+
+- 接口名称：上市公司管理层持股
+- HTTP：`GET`
+- Path：`api/v1/market/data/stk-manager-hold`
+- 参数：`trade_code`, `end_date`
+- 来源文档：`上市公司管理层持股.md`
+- 原始接口：`get_stk_manager_hold`
+
+```text
+上市公司管理层持股.
+
+Endpoint: ``api/v1/market/data/stk-manager-hold``.
+Method: ``GET``.
+Documented endpoint: ``get_stk_manager_hold``.
+
+Args:
+    trade_code: 股票代码（带 .SZ/.SH 后缀），支持逗号分隔多个 (type: string; required: Y).
+    end_date: 截止日期，精确匹配，``YYYYMMDD`` 格式 (type: string; required: N).
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
+```
+
+<h4 id="api-stk-manager-pay"><code>stk_manager_pay</code></h4>
+
+- 接口名称：上市公司管理层薪酬
+- HTTP：`GET`
+- Path：`api/v1/market/data/stk-manager-pay`
+- 参数：`trade_code`, `end_date`
+- 来源文档：`上市公司管理层薪酬.md`
+- 原始接口：`get_stk_manager_pay`
+
+```text
+上市公司管理层薪酬.
+
+Endpoint: ``api/v1/market/data/stk-manager-pay``.
+Method: ``GET``.
+Documented endpoint: ``get_stk_manager_pay``.
+
+Args:
+    trade_code: 股票代码（带 .SZ/.SH 后缀），支持逗号分隔多个 (type: string; required: Y).
+    end_date: 截止日期，精确匹配，``YYYYMMDD`` 格式 (type: string; required: N).
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
+```
+
+<h4 id="api-stk-managers"><code>stk_managers</code></h4>
+
+- 接口名称：上市公司管理层
+- HTTP：`GET`
+- Path：`api/v1/market/data/stk-managers`
+- 参数：`trade_code`, `candi_date`, `begin_date`, `end_date`
+- 来源文档：`上市公司管理层.md`
+- 原始接口：`get_stk_managers`
+
+```text
+上市公司管理层.
+
+Endpoint: ``api/v1/market/data/stk-managers``.
+Method: ``GET``.
+Documented endpoint: ``get_stk_managers``.
+
+Args:
+    trade_code: 股票代码（带 .SZ/.SH 后缀），支持逗号分隔多个 (type: string; required: Y).
+    candi_date: 候选日期，精确匹配，``YYYYMMDD`` 格式 (type: string; required: N).
+    begin_date: 任职起始日过滤，``YYYYMMDD`` 格式 (type: string; required: N).
+    end_date: 任职截止日过滤，``YYYYMMDD`` 格式；与 ``begin_date`` 同时提供时须 ``begin_date`` ≤ ``end_date`` (type: string; required: N).
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
+```
+
 <h4 id="api-stk-premarket"><code>stk_premarket</code></h4>
 
 - 接口名称：盘前数据
@@ -1826,6 +1986,37 @@ Args:
     limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
     all_pages: Fetch and combine pages until the server reports the last page.
     max_pages: Optional safety cap for ``all_pages``.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
+```
+
+<h4 id="api-stk-status-change"><code>stk_status_change</code></h4>
+
+- 接口名称：A股状态变更
+- HTTP：`GET`
+- Path：`api/v1/market/data/stk-status-change`
+- 参数：`trade_code`, `change_date`, `change_type`
+- 来源文档：`A股状态变更.md`
+- 原始接口：`get_stk_status_change`
+
+```text
+A股状态变更.
+
+Endpoint: ``api/v1/market/data/stk-status-change``.
+Method: ``GET``.
+Documented endpoint: ``get_stk_status_change``.
+
+Args:
+    trade_code: 股票代码（带 .SZ/.SH 后缀），支持逗号分隔多个；不填表示不按代码过滤 (type: string; required: N).
+    change_date: 变更日期，精确过滤，``YYYYMMDD`` 格式 (type: string; required: N).
+    change_type: 变更类型，精确过滤，常见值如 ``上市``、``退市``、``暂停上市`` (type: string; required: N).
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
