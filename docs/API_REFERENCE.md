@@ -6,7 +6,7 @@
 
 | 指标 | 数量 |
 |---|---:|
-| SDK 方法总数 | 201 |
+| SDK 方法总数 | 200 |
 
 ## 专题分布
 
@@ -14,7 +14,7 @@
 
 | ftshare-doc 专题 | SDK 方法数 | API mixin 模块 | Endpoint 模块 |
 |---|---:|---|---|
-| 股票数据 | 96 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
+| 股票数据 | 95 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
 | 港股数据 | 14 | `ftshare.apis.hk` | `ftshare.endpoints.hk` |
 | 美股数据 | 9 | `ftshare.apis.us` | `ftshare.endpoints.us` |
 | 指数专题 | 10 | `ftshare.apis.index` | `ftshare.endpoints.index` |
@@ -132,7 +132,6 @@ df = market.baidu_financial_calendar(
 | [`stock_share`](#api-stock-share) | 股本 | `GET` | `api/v1/market/data/share/get-stock-share` | `stock_code`, `date` | `股本.md` |
 | [`stock_share_chg`](#api-stock-share-chg) | 股东增减持 | `GET` | `api/v1/market/data/holder/stock-share-chg` | `stock_code`, `is_last`, `page`, `page_size` | `股东增减持.md` |
 | [`stock_signal_latest_snapshot`](#api-stock-signal-latest-snapshot) | 信号最新快照 | `GET` | `api/v1/market/data/stock-signal-latest-snapshot` | `signal_type`, `page`, `page_size` | `信号最新快照.md` |
-| [`stock_trade`](#api-stock-trade) | 标的逐笔成交 | `GET` | `api/v1/market/data/daec/history/trades` | `symbol` | `标的逐笔成交.md` |
 | [`stock_unlock`](#api-stock-unlock) | 限售解禁 | `GET` | `api/v1/market/data/unlock/stock-unlock` | `stock_code`, `page`, `page_size` | `限售解禁.md` |
 | [`stock_unlock_by_date`](#api-stock-unlock-by-date) | 限售解禁按日期 | `GET` | `api/v1/market/data/unlock/stock-unlock-by-date` | `start_date`, `end_date`, `page`, `page_size` | `限售解禁按日期.md` |
 | [`suspension_list`](#api-suspension-list) | 停牌列表 | `GET` | `api/v1/market/data/suspension-list` | `trade_date`, `page`, `page_size` | `停牌列表.md` |
@@ -3063,35 +3062,6 @@ Args:
     limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
     all_pages: Fetch and combine pages until the server reports the last page.
     max_pages: Optional safety cap for ``all_pages``.
-    raw: Return the decoded JSON payload without tabular extraction.
-    fields: Optional field list or comma-separated field string applied after extraction.
-    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
-    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
-
-Returns:
-    A pandas ``DataFrame`` by default, Python rows when
-    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
-    payloads when multi-page fetching is used with ``raw=True``.
-```
-
-<h4 id="api-stock-trade"><code>stock_trade</code></h4>
-
-- 接口名称：标的逐笔成交
-- HTTP：`GET`
-- Path：`api/v1/market/data/daec/history/trades`
-- 参数：`symbol`
-- 来源文档：`标的逐笔成交.md`
-- 原始接口：`stock_trade`
-
-```text
-股票分时成交.
-
-Endpoint: ``api/v1/market/data/daec/history/trades``.
-Method: ``GET``.
-Documented endpoint: ``stock_trade``.
-
-Args:
-    symbol: 标的代码 (type: SymbolKey; required: Y).
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
