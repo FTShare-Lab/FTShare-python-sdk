@@ -175,7 +175,7 @@ def test_endpoint_methods_map_to_expected_paths(method_name, kwargs):
 
 def test_all_documented_endpoints_are_available_as_client_methods():
     client = FtshareClient(session=FakeSession([]))
-    assert len(ENDPOINTS) >= 180
+    assert len(ENDPOINTS) >= 179
 
     missing = [
         name
@@ -270,7 +270,6 @@ def test_missing_path_parameter_raises_value_error():
 
 def test_confirmed_todo_endpoints_map_to_public_server_paths():
     cases = [
-        ("stock_trade", {"symbol": "600000.XSHG"}, "api/v1/market/data/daec/history/trades", {"symbol": "600000.XSHG"}),
         (
             "stock_prev_close",
             {"symbol": "600000.XSHG", "since": "20240501", "until": "20240531"},

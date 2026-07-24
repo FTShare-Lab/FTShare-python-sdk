@@ -598,13 +598,6 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'original_api': 'stock_signal_latest_snapshot',
         'params': ('signal_type', 'page', 'page_size'),
     },
-    'stock_trade': {
-        'path': 'api/v1/market/data/daec/history/trades',
-        'title': '标的逐笔成交',
-        'doc_file': '标的逐笔成交.md',
-        'original_api': 'stock_trade',
-        'params': ('symbol',),
-    },
     'stock_unlock': {
         'path': 'api/v1/market/data/unlock/stock-unlock',
         'title': '限售解禁',
