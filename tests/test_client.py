@@ -175,7 +175,7 @@ def test_endpoint_methods_map_to_expected_paths(method_name, kwargs):
 
 def test_all_documented_endpoints_are_available_as_client_methods():
     client = FtshareClient(session=FakeSession([]))
-    assert len(ENDPOINTS) >= 179
+    assert len(ENDPOINTS) >= 200
 
     missing = [
         name
@@ -184,6 +184,11 @@ def test_all_documented_endpoints_are_available_as_client_methods():
     ]
 
     assert missing == []
+
+
+def test_removed_stock_trade_is_not_exposed():
+    assert "stock_trade" not in ENDPOINTS
+    assert not hasattr(FtshareClient, "stock_trade")
 
 
 def test_generated_method_docstring_includes_parameter_metadata():

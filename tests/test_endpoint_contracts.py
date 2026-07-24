@@ -52,7 +52,7 @@ def _response_payload(name: str) -> Any:
 
 
 def test_contract_cases_cover_all_public_sdk_methods():
-    assert len(PUBLIC_CONTRACTS) == 197
+    assert len(PUBLIC_CONTRACTS) == 196
     assert PUBLIC_CONTRACTS | NON_PUBLISHED_ENDPOINTS == set(ENDPOINTS)
     assert not (PUBLIC_CONTRACTS & NON_PUBLISHED_ENDPOINTS)
 
