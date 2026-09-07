@@ -4100,6 +4100,14 @@ class StockApiMixin:
         return self.get_paginated(path, page=page, page_size=page_size, limit=limit, all_pages=all_pages, max_pages=max_pages, max_page_size=1000, raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
 
 
+    def ths_industry_constituents(self, industry_code: Any | None = None, industry_name: Any | None = None, stock_code: Any | None = None, stock_name: Any | None = None, page: int | None = None, page_size: int | None = None, limit: int | None = None, all_pages: bool = False, max_pages: int | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
+        """同花顺行业成分股列表."""
+        params = {'industry_code': industry_code, 'industry_name': industry_name, 'stock_code': stock_code, 'stock_name': stock_name}
+        params.update(kwargs)
+        path = ENDPOINTS['ths_industry_constituents'].path
+        return self.get_paginated(path, page=page, page_size=page_size, limit=limit, all_pages=all_pages, max_pages=max_pages, max_page_size=1000, raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+
+
     def stock_realtime_minute_kline(self, symbols: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
         """股票实时分钟K线."""
         params = {'symbols': symbols}

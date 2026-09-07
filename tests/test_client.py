@@ -860,6 +860,16 @@ def test_stock_share_chg_forwards_is_last_paging():
     assert session.calls[0]["params"]["is_last"] == "true"
 
 
+def test_ths_industry_constituents_forwards_filters_and_pagination():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.ths_industry_constituents(industry_name="证券", page=1, page_size=1000, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/ths-industry-constituents"
+    assert session.calls[0]["params"] == {"industry_name": "证券", "page": 1, "page_size": 1000}
+
+
 def test_fund_basicinfo_paginated_with_fund_code():
     session = FakeSession([FakeResponse(payload={
         "code": 200,

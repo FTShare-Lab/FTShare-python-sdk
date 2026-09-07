@@ -147,6 +147,7 @@
 | [`ths_stock_daily_flow`](#api-ths-stock-daily-flow) | 同花顺个股资金流日度 | `GET` | `api/v1/market/data/ths-stock-daily-flow` | `start_date`, `end_date`, `code`, `name`, `page`, `page_size` | `同花顺个股资金流日度.md` |
 | [`ths_concept_daily_flow`](#api-ths-concept-daily-flow) | 同花顺概念板块资金流日度 | `GET` | `api/v1/market/data/ths-concept-daily-flow` | `start_date`, `end_date`, `sector_name`, `page`, `page_size` | `同花顺概念板块资金流日度.md` |
 | [`ths_industry_daily_flow`](#api-ths-industry-daily-flow) | 同花顺行业板块资金流日度 | `GET` | `api/v1/market/data/ths-industry-daily-flow` | `start_date`, `end_date`, `sector_name`, `page`, `page_size` | `同花顺行业板块资金流日度.md` |
+| [`ths_industry_constituents`](#api-ths-industry-constituents) | 同花顺行业成分股列表 | `GET` | `api/v1/market/data/ths-industry-constituents` | `industry_code`, `industry_name`, `stock_code`, `stock_name`, `page`, `page_size` | `同花顺行业成分股列表.md` |
 | [`ths_hot_list`](#api-ths-hot-list) | 同花顺热榜 | `GET` | `api/v1/market/data/ths-hot-list` | `list_type`, `trade_date`, `page`, `page_size` | `同花顺热榜.md` |
 | [`trading_calendar`](#api-trading-calendar) | 交易日历 | `GET` | `api/v1/market/data/time/trading-calendar` | `market`, `start_date`, `end_date` | `交易日历.md` |
 | [`xueqiu_rank`](#api-xueqiu-rank) | 雪球股票排名 | `GET` | `api/v1/market/data/xueqiu-rank` | `rank_group`, `period`, `trade_date`, `page`, `page_size` | `雪球股票排名.md` |
@@ -3021,6 +3022,16 @@ Documented endpoint: ``ths_concept_daily_flow``.
 - 参数：`start_date`, `end_date`, `sector_name`, `page`, `page_size
 
 Documented endpoint: ``ths_industry_daily_flow``.
+
+<h4 id="api-ths-industry-constituents"><code>ths_industry_constituents</code></h4>
+
+- 同花顺行业成分股列表
+- 原始接口：`ths_industry_constituents`
+- Path：`api/v1/market/data/ths-industry-constituents`
+- Method：`GET`
+- 参数：`industry_code`, `industry_name`, `stock_code`, `stock_name`, `page`, `page_size`
+
+Documented endpoint: ``ths_industry_constituents``.
 
 <h4 id="api-ths-board-kline"><code>ths_board_kline</code></h4>
 
