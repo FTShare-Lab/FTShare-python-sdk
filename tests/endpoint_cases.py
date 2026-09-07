@@ -56,7 +56,6 @@ SAMPLE_VALUES: dict[str, Any] = {
     "index_slug": "HSI",
     "industry_code": "801010",
     "inst_type": "all_inst",
-    "institution_code": "000001",
     "institution_id": "1001",
     "industry_name": "银行",
     "instrument_id": "A2609",

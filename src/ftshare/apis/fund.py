@@ -13,7 +13,7 @@ class FundApiMixin:
 
     def fund_basicinfo(
         self,
-        institution_code: Any | None = None,
+        fund_code: Any | None = None,
         page: int | None = None,
         page_size: int | None = None,
         limit: int | None = None,
@@ -32,7 +32,7 @@ class FundApiMixin:
         Documented endpoint: ``get_fund_basicinfo``.
 
         Args:
-            institution_code: 基金代码 (type: string; required: Y).
+            fund_code: 基金代码；不传时查询全市场数据的默认分页 (type: string; required: N).
             page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
             page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
             limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
@@ -48,16 +48,17 @@ class FundApiMixin:
             ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
             payloads when multi-page fetching is used with ``raw=True``.
         """
-        request_params = {'institution_code': institution_code}
+        request_params = {'fund_code': fund_code}
         request_params.update(kwargs)
-        path = ENDPOINTS['fund_basicinfo'].path
+        endpoint = ENDPOINTS['fund_basicinfo']
         return self.get_paginated(
-            path,
+            endpoint.path,
             page=page,
             page_size=page_size,
             limit=limit,
             all_pages=all_pages,
             max_pages=max_pages,
+            max_page_size=endpoint.max_page_size,
             raw=raw,
             fields=fields,
             as_dataframe=as_dataframe,
@@ -66,7 +67,7 @@ class FundApiMixin:
 
     def fund_cal_return(
         self,
-        institution_code: Any | None = None,
+        fund_code: Any | None = None,
         cal_type: Any | None = None,
         *,
         raw: bool = False,
@@ -81,7 +82,7 @@ class FundApiMixin:
         Documented endpoint: ``get_fund_cal_return``.
 
         Args:
-            institution_code: 基金代码（6位数字） (type: string; required: Y).
+            fund_code: 基金代码（6位数字） (type: string; required: Y).
             cal_type: 查询区间：1M / 3M / 6M / 1Y / 3Y / 5Y / YTD（请求字段名为 `cal-type`） (type: string; required: Y). Request key: ``cal-type``.
             raw: Return the decoded JSON payload without tabular extraction.
             fields: Optional field list or comma-separated field string applied after extraction.
@@ -93,7 +94,7 @@ class FundApiMixin:
             ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
             payloads when multi-page fetching is used with ``raw=True``.
         """
-        request_params = {'institution_code': institution_code, 'cal-type': cal_type}
+        request_params = {'fund_code': fund_code, 'cal-type': cal_type}
         request_params.update(kwargs)
         return self._call_endpoint(
             'fund_cal_return',

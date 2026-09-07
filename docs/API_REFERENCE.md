@@ -210,8 +210,8 @@
 | SDK 方法 | 接口名称 | HTTP | Path | 参数 | 来源文档 |
 |---|---|---|---|---|---|
 | [`fund_asset_allocation`](#api-fund-asset-allocation) | 基金资产配置 | `GET` | `api/v1/market/data/fund/fund-asset-allocation` | `fund_code`, `report_date`, `publish_date`, `start_date`, `end_date`, `page`, `page_size` | `基金资产配置.md` |
-| [`fund_basicinfo`](#api-fund-basicinfo) | 基金基础信息 | `GET` | `api/v1/market/data/fund/fund-basicinfo` | `institution_code`, `page`, `page_size` | `基金基础信息.md` |
-| [`fund_cal_return`](#api-fund-cal-return) | 基金收益 | `GET` | `api/v1/market/data/fund/fund-cal-return` | `institution_code`, `cal-type` | `基金收益.md` |
+| [`fund_basicinfo`](#api-fund-basicinfo) | 基金基础信息 | `GET` | `api/v1/market/data/fund/fund-basicinfo` | `fund_code`, `page`, `page_size` | `基金基础信息.md` |
+| [`fund_cal_return`](#api-fund-cal-return) | 基金收益 | `GET` | `api/v1/market/data/fund/fund-cal-return` | `fund_code`, `cal-type` | `基金收益.md` |
 | [`fund_classification`](#api-fund-classification) | 基金分类 | `GET` | `api/v1/market/data/fund/fund-classification` | `fund_code`, `classify_std` | `基金分类.md` |
 | [`fund_company`](#api-fund-company) | 基金公司 | `GET` | `api/v1/market/data/fund/fund-company` | `fund_company`, `page`, `page_size` | `基金公司.md` |
 | [`fund_fee`](#api-fund-fee) | 基金费率 | `GET` | `api/v1/market/data/fund/fund-fee` | `fund_code`, `charge_type`, `client_type`, `page`, `page_size` | `基金费率.md` |
@@ -3889,7 +3889,7 @@ Returns:
 - 接口名称：基金基础信息
 - HTTP：`GET`
 - Path：`api/v1/market/data/fund/fund-basicinfo`
-- 参数：`institution_code`, `page`, `page_size`
+- 参数：`fund_code`, `page`, `page_size`
 - 来源文档：`基金基础信息.md`
 - 原始接口：`get_fund_basicinfo`
 
@@ -3901,7 +3901,7 @@ Method: ``GET``.
 Documented endpoint: ``get_fund_basicinfo``.
 
 Args:
-    institution_code: 基金代码 (type: string; required: Y).
+    fund_code: 基金代码；不传时查询全市场数据的默认分页 (type: string; required: N).
     page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
     page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
     limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
@@ -3923,7 +3923,7 @@ Returns:
 - 接口名称：基金收益
 - HTTP：`GET`
 - Path：`api/v1/market/data/fund/fund-cal-return`
-- 参数：`institution_code`, `cal-type`
+- 参数：`fund_code`, `cal-type`
 - 来源文档：`基金收益.md`
 - 原始接口：`get_fund_cal_return`
 
@@ -3935,7 +3935,7 @@ Method: ``GET``.
 Documented endpoint: ``get_fund_cal_return``.
 
 Args:
-    institution_code: 基金代码（6位数字） (type: string; required: Y).
+    fund_code: 基金代码（6位数字） (type: string; required: Y).
     cal_type: 查询区间：1M / 3M / 6M / 1Y / 3Y / 5Y / YTD（请求字段名为 `cal-type`） (type: string; required: Y). Request key: ``cal-type``.
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.

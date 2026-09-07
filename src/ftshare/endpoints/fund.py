@@ -11,14 +11,15 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'title': '基金基础信息',
         'doc_file': '基金基础信息.md',
         'original_api': 'get_fund_basicinfo',
-        'params': ('institution_code', 'page', 'page_size'),
+        'params': ('fund_code', 'page', 'page_size'),
+        'max_page_size': 500,
     },
     'fund_cal_return': {
         'path': 'api/v1/market/data/fund/fund-cal-return',
         'title': '基金收益',
         'doc_file': '基金收益.md',
         'original_api': 'get_fund_cal_return',
-        'params': ('institution_code', 'cal-type'),
+        'params': ('fund_code', 'cal-type'),
     },
     'fund_overview': {
         'path': 'api/v1/market/data/fund/fund-overview',
