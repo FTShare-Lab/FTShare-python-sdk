@@ -813,6 +813,15 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'max_page_size': 1000,
     },
 
+    'ths_industry_constituents': {
+        'path': 'api/v1/market/data/ths-industry-constituents',
+        'title': '同花顺行业成分股列表',
+        'doc_file': '同花顺行业成分股列表.md',
+        'original_api': 'ths_industry_constituents',
+        'params': ('industry_code', 'industry_name', 'stock_code', 'stock_name', 'page', 'page_size'),
+        'max_page_size': 1000,
+    },
+
     'stock_realtime_minute_kline': {
         'path': 'api/v4/market/data/stock-realtime-minute-kline',
         'title': '股票实时分钟K线',

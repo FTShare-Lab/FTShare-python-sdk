@@ -860,6 +860,66 @@ def test_stock_share_chg_forwards_is_last_paging():
     assert session.calls[0]["params"]["is_last"] == "true"
 
 
+def test_ths_industry_constituents_forwards_filters_and_pagination():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.ths_industry_constituents(industry_name="证券", page=1, page_size=1000, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/ths-industry-constituents"
+    assert session.calls[0]["params"] == {"industry_name": "证券", "page": 1, "page_size": 1000}
+
+
+def test_fund_basicinfo_paginated_with_fund_code():
+    session = FakeSession([FakeResponse(payload={
+        "code": 200,
+        "message": "success",
+        "data": {"items": [{"fund_code": "110011", "fund_name": "易方达优质精选混合(QDII)"}],
+                 "page_num": 1, "page_size": 500, "total": 1, "pages": 1},
+    })])
+    client = FtshareClient(session=session)
+
+    rows = client.fund_basicinfo(fund_code="110011", page=1, page_size=500, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-basicinfo"
+    assert session.calls[0]["params"] == {"fund_code": "110011", "page": 1, "page_size": 500}
+    assert rows == [{"fund_code": "110011", "fund_name": "易方达优质精选混合(QDII)"}]
+
+
+def test_fund_basicinfo_rejects_page_size_over_max():
+    session = FakeSession([])
+    client = FtshareClient(session=session)
+
+    with pytest.raises(ValueError):
+        client.fund_basicinfo(page=1, page_size=501, as_dataframe=False)
+
+    assert session.calls == []
+
+
+def test_fund_cal_return_forwards_fund_code_and_cal_type():
+    session = FakeSession([FakeResponse(payload=[])])
+    client = FtshareClient(session=session)
+
+    client.fund_cal_return(fund_code="110011", cal_type="1M", as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-cal-return"
+    assert session.calls[0]["params"] == {"fund_code": "110011", "cal-type": "1M"}
+
+
+def test_fund_cal_return_extracts_bare_array_data():
+    session = FakeSession([FakeResponse(payload={
+        "code": 200,
+        "message": "success",
+        "data": [{"date": 20260522, "return": 0.0}, {"date": 20260525, "return": 0.0016}],
+    })])
+    client = FtshareClient(session=session)
+
+    df = client.fund_cal_return(fund_code="110011", cal_type="1M")
+
+    assert list(df.columns) == ["date", "return"]
+    assert len(df) == 2
+
+
 def test_fund_share_forwards_paginated_params():
     session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
     client = FtshareClient(session=session)

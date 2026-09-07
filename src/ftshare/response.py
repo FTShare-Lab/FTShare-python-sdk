@@ -24,12 +24,16 @@ def extract_tabular(payload: Any) -> Any:
 
     Supported envelopes:
         - ``{"data": {"records": [...]}}``
+        - ``{"data": {"items": [...]}}``
+        - ``{"data": [...]}``
         - ``{"items": [...]}``
 
     Any unsupported shape is returned unchanged so callers do not lose data.
     """
     if isinstance(payload, dict):
         data = payload.get("data")
+        if isinstance(data, list):
+            return data
         if isinstance(data, dict) and isinstance(data.get("records"), list):
             return data["records"]
         if isinstance(data, dict) and isinstance(data.get("items"), list):

@@ -147,6 +147,7 @@
 | [`ths_stock_daily_flow`](#api-ths-stock-daily-flow) | 同花顺个股资金流日度 | `GET` | `api/v1/market/data/ths-stock-daily-flow` | `start_date`, `end_date`, `code`, `name`, `page`, `page_size` | `同花顺个股资金流日度.md` |
 | [`ths_concept_daily_flow`](#api-ths-concept-daily-flow) | 同花顺概念板块资金流日度 | `GET` | `api/v1/market/data/ths-concept-daily-flow` | `start_date`, `end_date`, `sector_name`, `page`, `page_size` | `同花顺概念板块资金流日度.md` |
 | [`ths_industry_daily_flow`](#api-ths-industry-daily-flow) | 同花顺行业板块资金流日度 | `GET` | `api/v1/market/data/ths-industry-daily-flow` | `start_date`, `end_date`, `sector_name`, `page`, `page_size` | `同花顺行业板块资金流日度.md` |
+| [`ths_industry_constituents`](#api-ths-industry-constituents) | 同花顺行业成分股列表 | `GET` | `api/v1/market/data/ths-industry-constituents` | `industry_code`, `industry_name`, `stock_code`, `stock_name`, `page`, `page_size` | `同花顺行业成分股列表.md` |
 | [`ths_hot_list`](#api-ths-hot-list) | 同花顺热榜 | `GET` | `api/v1/market/data/ths-hot-list` | `list_type`, `trade_date`, `page`, `page_size` | `同花顺热榜.md` |
 | [`trading_calendar`](#api-trading-calendar) | 交易日历 | `GET` | `api/v1/market/data/time/trading-calendar` | `market`, `start_date`, `end_date` | `交易日历.md` |
 | [`xueqiu_rank`](#api-xueqiu-rank) | 雪球股票排名 | `GET` | `api/v1/market/data/xueqiu-rank` | `rank_group`, `period`, `trade_date`, `page`, `page_size` | `雪球股票排名.md` |
@@ -210,8 +211,8 @@
 | SDK 方法 | 接口名称 | HTTP | Path | 参数 | 来源文档 |
 |---|---|---|---|---|---|
 | [`fund_asset_allocation`](#api-fund-asset-allocation) | 基金资产配置 | `GET` | `api/v1/market/data/fund/fund-asset-allocation` | `fund_code`, `report_date`, `publish_date`, `start_date`, `end_date`, `page`, `page_size` | `基金资产配置.md` |
-| [`fund_basicinfo`](#api-fund-basicinfo) | 基金基础信息 | `GET` | `api/v1/market/data/fund/fund-basicinfo` | `institution_code`, `page`, `page_size` | `基金基础信息.md` |
-| [`fund_cal_return`](#api-fund-cal-return) | 基金收益 | `GET` | `api/v1/market/data/fund/fund-cal-return` | `institution_code`, `cal-type` | `基金收益.md` |
+| [`fund_basicinfo`](#api-fund-basicinfo) | 基金基础信息 | `GET` | `api/v1/market/data/fund/fund-basicinfo` | `fund_code`, `page`, `page_size` | `基金基础信息.md` |
+| [`fund_cal_return`](#api-fund-cal-return) | 基金收益 | `GET` | `api/v1/market/data/fund/fund-cal-return` | `fund_code`, `cal-type` | `基金收益.md` |
 | [`fund_classification`](#api-fund-classification) | 基金分类 | `GET` | `api/v1/market/data/fund/fund-classification` | `fund_code`, `classify_std` | `基金分类.md` |
 | [`fund_company`](#api-fund-company) | 基金公司 | `GET` | `api/v1/market/data/fund/fund-company` | `fund_company`, `page`, `page_size` | `基金公司.md` |
 | [`fund_fee`](#api-fund-fee) | 基金费率 | `GET` | `api/v1/market/data/fund/fund-fee` | `fund_code`, `charge_type`, `client_type`, `page`, `page_size` | `基金费率.md` |
@@ -3022,6 +3023,16 @@ Documented endpoint: ``ths_concept_daily_flow``.
 
 Documented endpoint: ``ths_industry_daily_flow``.
 
+<h4 id="api-ths-industry-constituents"><code>ths_industry_constituents</code></h4>
+
+- 同花顺行业成分股列表
+- 原始接口：`ths_industry_constituents`
+- Path：`api/v1/market/data/ths-industry-constituents`
+- Method：`GET`
+- 参数：`industry_code`, `industry_name`, `stock_code`, `stock_name`, `page`, `page_size`
+
+Documented endpoint: ``ths_industry_constituents``.
+
 <h4 id="api-ths-board-kline"><code>ths_board_kline</code></h4>
 
 - 接口名称：同花顺板块K线
@@ -3889,7 +3900,7 @@ Returns:
 - 接口名称：基金基础信息
 - HTTP：`GET`
 - Path：`api/v1/market/data/fund/fund-basicinfo`
-- 参数：`institution_code`, `page`, `page_size`
+- 参数：`fund_code`, `page`, `page_size`
 - 来源文档：`基金基础信息.md`
 - 原始接口：`get_fund_basicinfo`
 
@@ -3901,7 +3912,7 @@ Method: ``GET``.
 Documented endpoint: ``get_fund_basicinfo``.
 
 Args:
-    institution_code: 基金代码 (type: string; required: Y).
+    fund_code: 基金代码；不传时查询全市场数据的默认分页 (type: string; required: N).
     page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
     page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
     limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
@@ -3923,7 +3934,7 @@ Returns:
 - 接口名称：基金收益
 - HTTP：`GET`
 - Path：`api/v1/market/data/fund/fund-cal-return`
-- 参数：`institution_code`, `cal-type`
+- 参数：`fund_code`, `cal-type`
 - 来源文档：`基金收益.md`
 - 原始接口：`get_fund_cal_return`
 
@@ -3935,7 +3946,7 @@ Method: ``GET``.
 Documented endpoint: ``get_fund_cal_return``.
 
 Args:
-    institution_code: 基金代码（6位数字） (type: string; required: Y).
+    fund_code: 基金代码（6位数字） (type: string; required: Y).
     cal_type: 查询区间：1M / 3M / 6M / 1Y / 3Y / 5Y / YTD（请求字段名为 `cal-type`） (type: string; required: Y). Request key: ``cal-type``.
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
