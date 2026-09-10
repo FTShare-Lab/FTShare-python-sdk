@@ -68,6 +68,7 @@ class BaseClient:
         raw: bool = False,
         fields: Sequence[str] | str | None = None,
         as_dataframe: bool = True,
+        unwrap_bare_data: bool = False,
         **params: Any,
     ) -> Any:
         """Send a GET request and normalize the response.
@@ -82,6 +83,10 @@ class BaseClient:
                 selection is applied after tabular extraction.
             as_dataframe: Return a pandas ``DataFrame`` by default. Set to
                 ``False`` to return Python rows such as ``list[dict]``.
+            unwrap_bare_data: When ``True``, an object-shaped ``data`` field
+                is returned directly instead of the full envelope. Intended
+                for single-item query endpoints documented to answer with a
+                bare object.
             **params: Query parameters. Values set to ``None`` are omitted.
 
         Returns:
@@ -99,6 +104,7 @@ class BaseClient:
             raw=raw,
             fields=fields,
             as_dataframe=as_dataframe,
+            unwrap_bare_data=unwrap_bare_data,
             **params,
         )
 
@@ -128,6 +134,7 @@ class BaseClient:
         raw: bool = False,
         fields: Sequence[str] | str | None = None,
         as_dataframe: bool = True,
+        unwrap_bare_data: bool = False,
         **params: Any,
     ) -> Any:
         """Send an HTTP request and normalize the response."""
@@ -159,7 +166,7 @@ class BaseClient:
         if raw:
             return payload
 
-        result = self._extract_tabular(payload)
+        result = self._extract_tabular(payload, unwrap_bare_data=unwrap_bare_data)
         result = self._select_fields(result, fields)
         if as_dataframe:
             return self._to_dataframe(result)
@@ -195,6 +202,7 @@ class BaseClient:
         raw: bool = False,
         fields: Sequence[str] | str | None = None,
         as_dataframe: bool = True,
+        unwrap_bare_data: bool = False,
         **params: Any,
     ) -> Any:
         """Send a request to an endpoint that supports page/page_size.
@@ -214,6 +222,9 @@ class BaseClient:
                 list of raw page payloads.
             fields: Optional field list or comma-separated field string.
             as_dataframe: Return a pandas ``DataFrame`` by default.
+            unwrap_bare_data: When ``True``, an object-shaped ``data`` field
+                is returned directly instead of the full envelope. Only used
+                on the single-request path (no ``limit``/``all_pages``).
             **params: Query parameters. Values set to ``None`` are omitted.
 
         Returns:
@@ -232,6 +243,7 @@ class BaseClient:
                 raw=raw,
                 fields=fields,
                 as_dataframe=as_dataframe,
+                unwrap_bare_data=unwrap_bare_data,
                 **params,
             )
 
@@ -404,9 +416,9 @@ class BaseClient:
         raise_for_api_error(payload)
 
     @classmethod
-    def _extract_tabular(cls, payload: Any) -> Any:
+    def _extract_tabular(cls, payload: Any, unwrap_bare_data: bool = False) -> Any:
         """Extract common row containers from FTShare response shapes."""
-        return extract_tabular(payload)
+        return extract_tabular(payload, unwrap_bare_data=unwrap_bare_data)
 
     @staticmethod
     def _total_pages(payload: Any) -> int | None:

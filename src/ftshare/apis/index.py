@@ -6,6 +6,7 @@ from collections.abc import Sequence
 from typing import Any
 
 from ..endpoints import ENDPOINTS
+from ..params import symbols_to_json_string
 
 
 class IndexApiMixin:
@@ -470,14 +471,14 @@ class IndexApiMixin:
 
     def index_realtime_minute_kline(self, symbols: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
         """指数实时分钟K线."""
-        params = {'symbols': symbols}
+        params = {'symbols': symbols_to_json_string(symbols)}
         params.update(kwargs)
         return self._call_endpoint('index_realtime_minute_kline', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
 
 
     def index_realtime_day_kline(self, symbols: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
         """指数实时日K线."""
-        params = {'symbols': symbols}
+        params = {'symbols': symbols_to_json_string(symbols)}
         params.update(kwargs)
         return self._call_endpoint('index_realtime_day_kline', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
 
@@ -492,3 +493,9 @@ class IndexApiMixin:
         params = {'symbols': symbols, 'interval_value': interval_value, 'since_ts_millis': since_ts_millis, 'until_ts_millis': until_ts_millis, 'limit': limit}
         params.update(kwargs)
         return self._call_endpoint('index_minutes_batch', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+
+    def index_candlesticks_batch(self, symbols: Any | None = None, interval_unit: Any | None = None, adjust_kind: Any | None = None, since_ts_millis: Any | None = None, until_ts_millis: Any | None = None, limit: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
+        """批量指数K线."""
+        params = {'symbols': symbols, 'interval_unit': interval_unit, 'adjust_kind': adjust_kind, 'since_ts_millis': since_ts_millis, 'until_ts_millis': until_ts_millis, 'limit': limit}
+        params.update(kwargs)
+        return self._call_endpoint('index_candlesticks_batch', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)

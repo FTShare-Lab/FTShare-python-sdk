@@ -231,6 +231,14 @@ def test_requested_endpoint_api_versions():
         "sw_index_history_minutes": "api/v1/market/data/sw-index/history-minutes",
         "index_minutes_batch": "api/v2/market/data/index_minutes/batch",
         "etf_minutes_batch": "api/v2/market/data/etf_minutes/batch",
+        "etf_announcements": "api/v2/market/data/announcements/etf-announcements",
+        "etf_candlesticks_batch": "api/v2/market/data/etf-candlesticks/batch",
+        "etf_component_details": "api/v2/market/data/etf-component-details",
+        "etf_net_value": "api/v2/market/data/etf-net-value",
+        "etf_pcf_infos": "api/v2/market/data/etf-pcf/etf-pcf-infos",
+        "etf_share": "api/v2/market/data/etf-share",
+        "index_candlesticks_batch": "api/v2/market/data/index-candlesticks/batch",
+        "stock_dividends_effective": "api/v2/market/data/stock-dividends-effective",
         "eastmoney_dapan_flow": "api/v1/market/data/eastmoney-dapan-flow",
         "search": "api/v1/market/security/search/",
         "eastmoney_rank": "api/v1/market/data/eastmoney-rank",
@@ -254,6 +262,28 @@ def test_new_batch_endpoints_forward_symbols_and_documented_parameters():
                 "symbols": '["600519.SH"]',
                 "interval_unit": "day",
                 "interval_value": 1,
+                "adjust_kind": "forward",
+                "since_ts_millis": 1784048400000,
+                "until_ts_millis": 1784050200000,
+                "limit": 5,
+            },
+        ),
+        (
+            "etf_candlesticks_batch",
+            {
+                "symbols": '["510300.SH"]',
+                "interval_unit": "day",
+                "adjust_kind": "forward",
+                "since_ts_millis": 1784048400000,
+                "until_ts_millis": 1784050200000,
+                "limit": 5,
+            },
+        ),
+        (
+            "index_candlesticks_batch",
+            {
+                "symbols": '["000300.SH"]',
+                "interval_unit": "day",
                 "adjust_kind": "forward",
                 "since_ts_millis": 1784048400000,
                 "until_ts_millis": 1784050200000,
@@ -410,13 +440,135 @@ def test_new_paginated_endpoints_forward_parameters():
 
     client.stock_signal_latest_snapshot(signal_type="new_high_60d", page=2, page_size=5)
     client.ths_stock_daily_flow(start_date="20260805", end_date="20260805", code="600000", page=1, page_size=1000)
-    client.ths_concept_daily_flow(start_date="20260805", end_date="20260805", sector_name="机器人概念", page=1, page_size=1000)
-    client.ths_industry_daily_flow(start_date="20260805", end_date="20260805", sector_name="证券", page=1, page_size=1000)
+    client.ths_concept_daily_flow(start_date="20260805", end_date="20260805", board_name="机器人概念", page=1, page_size=1000)
+    client.ths_industry_daily_flow(start_date="20260805", end_date="20260805", board_name="证券", page=1, page_size=1000)
 
     assert session.calls[0]["params"] == {"signal_type": "new_high_60d", "page": 2, "page_size": 5}
     assert session.calls[1]["params"] == {"start_date": "20260805", "end_date": "20260805", "code": "600000", "page": 1, "page_size": 1000}
-    assert session.calls[2]["params"] == {"start_date": "20260805", "end_date": "20260805", "sector_name": "机器人概念", "page": 1, "page_size": 1000}
-    assert session.calls[3]["params"] == {"start_date": "20260805", "end_date": "20260805", "sector_name": "证券", "page": 1, "page_size": 1000}
+    assert session.calls[2]["params"] == {"start_date": "20260805", "end_date": "20260805", "board_name": "机器人概念", "page": 1, "page_size": 1000}
+    assert session.calls[3]["params"] == {"start_date": "20260805", "end_date": "20260805", "board_name": "证券", "page": 1, "page_size": 1000}
+
+
+def test_eastmoney_sector_flow_forwards_board_parameters():
+    session = FakeSession([FakeResponse(payload=paginated_records([]))])
+    client = FtshareClient(session=session)
+
+    client.eastmoney_sector_flow(board_code="BK0488", board_type="industry", board_level=2, page=1, page_size=5)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + ENDPOINTS["eastmoney_sector_flow"].path
+    assert session.calls[0]["params"] == {"board_code": "BK0488", "board_type": "industry", "board_level": 2, "page": 1, "page_size": 5}
+
+
+def test_new_etf_document_endpoints_forward_documented_parameters():
+    cases = [
+        (
+            "etf_pcf_infos",
+            {"symbol": "510300.SH", "trade_date": "20260909", "page": 1, "page_size": 5},
+            {"symbol": "510300.SH", "trade_date": "20260909", "page": 1, "page_size": 5},
+        ),
+        (
+            "etf_share",
+            {"etf_code": "510300", "stati_perd": "日", "page": 1, "page_size": 5},
+            {"etf_code": "510300", "stati_perd": "日", "page": 1, "page_size": 5},
+        ),
+        (
+            "etf_net_value",
+            {"etf_code": "510300", "nav_date": 20260909, "page": 1, "page_size": 5},
+            {"etf_code": "510300", "nav_date": 20260909, "page": 1, "page_size": 5},
+        ),
+        (
+            "etf_announcements",
+            {"etf_code": "159915", "page": 1, "page_size": 5},
+            {"etf_code": "159915", "page": 1, "page_size": 5},
+        ),
+        (
+            "etf_component_details",
+            {"symbol": "510300.SH", "trade_date": 20260908},
+            {"symbol": "510300.SH", "trade_date": 20260908},
+        ),
+    ]
+
+    for method_name, kwargs, expected_params in cases:
+        session = FakeSession([FakeResponse(payload={"code": 200, "message": "success", "data": {"records": [], "pages": 1}})])
+        client = FtshareClient(session=session)
+
+        getattr(client, method_name)(as_dataframe=False, **kwargs)
+
+        assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + ENDPOINTS[method_name].path
+        assert session.calls[0]["params"] == expected_params
+
+
+def test_etf_share_and_net_value_reject_page_size_above_200():
+    client = FtshareClient(session=FakeSession([]))
+
+    with pytest.raises(ValueError, match="page_size must be between 1 and 200"):
+        client.etf_share(etf_code="510300", page_size=201)
+    with pytest.raises(ValueError, match="page_size must be between 1 and 200"):
+        client.etf_net_value(etf_code="510300", page_size=201)
+
+
+def test_realtime_kline_methods_serialize_symbols_list_to_json():
+    realtime_payload = {"code": 200, "message": "success", "data": [{"symbol": "600519.SH", "items": [], "total": 0}]}
+    methods = [
+        "stock_realtime_day_kline",
+        "stock_realtime_minute_kline",
+        "etf_realtime_day_kline",
+        "etf_realtime_minute_kline",
+        "index_realtime_day_kline",
+        "index_realtime_minute_kline",
+    ]
+
+    for method_name in methods:
+        session = FakeSession([FakeResponse(payload=realtime_payload)])
+        client = FtshareClient(session=session)
+
+        getattr(client, method_name)(symbols=["600519.SH", "000001.SZ"], as_dataframe=False)
+
+        assert session.calls[0]["params"] == {"symbols": '["600519.SH", "000001.SZ"]'}
+
+    session = FakeSession([FakeResponse(payload=realtime_payload)])
+    client = FtshareClient(session=session)
+
+    client.stock_realtime_day_kline(symbols='["600519.SH"]', as_dataframe=False)
+
+    assert session.calls[0]["params"] == {"symbols": '["600519.SH"]'}
+
+
+def test_etf_pcf_infos_unwraps_bare_object_data():
+    session = FakeSession([FakeResponse(payload={"code": 200, "message": "success", "data": {"symbol": "510300.SH", "trade_date": 20260909, "creation_redemption_unit": 900000}})])
+    client = FtshareClient(session=session)
+
+    result = client.etf_pcf_infos(symbol="510300.SH", trade_date="20260909", as_dataframe=False)
+
+    assert result == {"symbol": "510300.SH", "trade_date": 20260909, "creation_redemption_unit": 900000}
+
+
+def test_etf_pcf_infos_bare_object_dataframe_is_single_row():
+    session = FakeSession([FakeResponse(payload={"code": 200, "message": "success", "data": {"symbol": "510300.SH", "trade_date": 20260909, "creation_redemption_unit": 900000}})])
+    client = FtshareClient(session=session)
+
+    frame = client.etf_pcf_infos(symbol="510300.SH", trade_date="20260909")
+
+    assert isinstance(frame, pd.DataFrame)
+    assert len(frame) == 1
+    assert frame.loc[0, "symbol"] == "510300.SH"
+    assert frame.loc[0, "creation_redemption_unit"] == 900000
+
+
+def test_etf_pcf_infos_keeps_records_shape_and_envelope_passthrough():
+    session = FakeSession([FakeResponse(payload=paginated_records([{"symbol": "510300.SH"}]))])
+    client = FtshareClient(session=session)
+
+    rows = client.etf_pcf_infos(symbol="510300.SH", start_date="20260901", end_date="20260909", as_dataframe=False)
+
+    assert rows == [{"symbol": "510300.SH"}]
+
+    session = FakeSession([FakeResponse(payload={"code": 200, "message": "success", "data": {"symbol": "510300.SH", "trade_date": 20260909}})])
+    client = FtshareClient(session=session)
+
+    result = client.get(ENDPOINTS["etf_pcf_infos"].path, raw=False, as_dataframe=False)
+
+    assert result == {"code": 200, "message": "success", "data": {"symbol": "510300.SH", "trade_date": 20260909}}
 
 
 def test_new_flow_endpoints_reject_page_size_above_1000():

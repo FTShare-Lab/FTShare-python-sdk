@@ -19,7 +19,7 @@ def raise_for_api_error(payload: Any) -> None:
         raise FtshareAPIError(payload.get("code"), str(message) if message is not None else None, payload)
 
 
-def extract_tabular(payload: Any) -> Any:
+def extract_tabular(payload: Any, unwrap_bare_data: bool = False) -> Any:
     """Extract common row containers from FTShare response shapes.
 
     Supported envelopes:
@@ -28,16 +28,23 @@ def extract_tabular(payload: Any) -> Any:
         - ``{"data": [...]}``
         - ``{"items": [...]}``
 
+    When ``unwrap_bare_data`` is true and ``data`` is an object without
+    ``records``/``items`` rows (single-item query shapes), the ``data``
+    object itself is returned instead of the full envelope.
+
     Any unsupported shape is returned unchanged so callers do not lose data.
     """
     if isinstance(payload, dict):
         data = payload.get("data")
         if isinstance(data, list):
             return data
-        if isinstance(data, dict) and isinstance(data.get("records"), list):
-            return data["records"]
-        if isinstance(data, dict) and isinstance(data.get("items"), list):
-            return data["items"]
+        if isinstance(data, dict):
+            if isinstance(data.get("records"), list):
+                return data["records"]
+            if isinstance(data.get("items"), list):
+                return data["items"]
+            if unwrap_bare_data:
+                return data
         if isinstance(payload.get("items"), list):
             return payload["items"]
     return payload
