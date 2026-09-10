@@ -2431,6 +2431,9 @@ class StockApiMixin:
     def margin_trading_details(
         self,
         date: Any | None = None,
+        start_date: Any | None = None,
+        end_date: Any | None = None,
+        stock: Any | None = None,
         page: int | None = None,
         page_size: int | None = None,
         limit: int | None = None,
@@ -2449,7 +2452,10 @@ class StockApiMixin:
         Documented endpoint: ``margin_trading_details``.
 
         Args:
-            date: 查询日期 YYYYMMDD；不传则使用当前内存快照 (type: string; required: N).
+            date: 查询日期 YYYYMMDD，必须为交易日；不传则使用前一交易日快照；不能与 start_date/end_date 同时使用 (type: string; required: N).
+            start_date: 区间查询开始日期 YYYYMMDD；须与 end_date、stock 同时提供，间隔不能超过 3 年 (type: string; required: N).
+            end_date: 区间查询结束日期 YYYYMMDD；须与 start_date、stock 同时提供 (type: string; required: N).
+            stock: 股票代码过滤条件 (type: string; required: N).
             page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
             page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
             limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
@@ -2465,7 +2471,7 @@ class StockApiMixin:
             ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
             payloads when multi-page fetching is used with ``raw=True``.
         """
-        request_params = {'date': date}
+        request_params = {'date': date, 'start_date': start_date, 'end_date': end_date, 'stock': stock}
         request_params.update(kwargs)
         path = ENDPOINTS['margin_trading_details'].path
         return self.get_paginated(

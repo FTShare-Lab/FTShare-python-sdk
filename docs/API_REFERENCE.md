@@ -76,7 +76,7 @@
 | [`limit_list`](#api-limit-list) | 涨跌停池 | `GET` | `api/v1/market/data/limit-list` | `limit_type`, `trade_date` | `涨跌停池.md` |
 | [`limit_up_briefs`](#api-limit-up-briefs) | 涨停简报 | `GET` | `api/v3/market/data/limit-up-reports/briefs` | `date` | `涨停简报.md` |
 | [`limit_up_public_report`](#api-limit-up-public-report) | 涨停对外归因报告 | `GET` | `api/v3/market/data/limit-up-reports/public-report` | `date`, `security_code` | `涨停对外归因报告.md` |
-| [`margin_trading_details`](#api-margin-trading-details) | 融资融券明细 | `GET` | `api/v1/market/data/margin-trading-details` | `date`, `page`, `page_size` | `融资融券明细.md` |
+| [`margin_trading_details`](#api-margin-trading-details) | 融资融券明细 | `GET` | `api/v1/market/data/margin-trading-details` | `date`, `start_date`, `end_date`, `stock`, `page`, `page_size` | `融资融券明细.md` |
 | [`namechange`](#api-namechange) | 股票曾用名 | `GET` | `api/v1/market/data/namechange` | `trade_code`, `start_date`, `end_date` | `股票曾用名.md` |
 | [`nth_trade_date`](#api-nth-trade-date) | 第N个交易日 | `GET` | `api/v1/market/data/time/get-nth-trade-date` | `n` | `第N个交易日.md` |
 | [`northbound`](#api-northbound) | 北向资金交易 | `GET` | `api/v1/market/data/northbound` | `date` | `北向资金交易.md` |
@@ -1294,7 +1294,7 @@ Returns:
 - 接口名称：融资融券明细
 - HTTP：`GET`
 - Path：`api/v1/market/data/margin-trading-details`
-- 参数：`date`, `page`, `page_size`
+- 参数：`date`, `start_date`, `end_date`, `stock`, `page`, `page_size`
 - 来源文档：`融资融券明细.md`
 - 原始接口：`margin_trading_details`
 
@@ -1306,7 +1306,10 @@ Method: ``GET``.
 Documented endpoint: ``margin_trading_details``.
 
 Args:
-    date: 查询日期 YYYYMMDD；不传则使用当前内存快照 (type: string; required: N).
+    date: 查询日期 YYYYMMDD，必须为交易日；不传则使用前一交易日快照；不能与 start_date/end_date 同时使用 (type: string; required: N).
+    start_date: 区间查询开始日期 YYYYMMDD；须与 end_date、stock 同时提供，间隔不能超过 3 年 (type: string; required: N).
+    end_date: 区间查询结束日期 YYYYMMDD；须与 start_date、stock 同时提供 (type: string; required: N).
+    stock: 股票代码过滤条件 (type: string; required: N).
     page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
     page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
     limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.

@@ -459,6 +459,25 @@ def test_eastmoney_sector_flow_forwards_board_parameters():
     assert session.calls[0]["params"] == {"board_code": "BK0488", "board_type": "industry", "board_level": 2, "page": 1, "page_size": 5}
 
 
+def test_margin_trading_details_forwards_range_query():
+    session = FakeSession([FakeResponse(payload=paginated_records([{"symbol": "600000.SH"}]))])
+    client = FtshareClient(session=session)
+
+    rows = client.margin_trading_details(start_date="20260601", end_date="20260623", stock="600000.SH", page=1, page_size=5, as_dataframe=False)
+
+    assert rows == [{"symbol": "600000.SH"}]
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + ENDPOINTS["margin_trading_details"].path
+    assert session.calls[0]["params"] == {"start_date": "20260601", "end_date": "20260623", "stock": "600000.SH", "page": 1, "page_size": 5}
+
+    session = FakeSession([FakeResponse(payload=paginated_records([{"symbol": "000001.SZ"}]))])
+    client = FtshareClient(session=session)
+
+    rows = client.margin_trading_details(date="20260717", as_dataframe=False)
+
+    assert rows == [{"symbol": "000001.SZ"}]
+    assert session.calls[0]["params"] == {"date": "20260717"}
+
+
 def test_new_etf_document_endpoints_forward_documented_parameters():
     cases = [
         (

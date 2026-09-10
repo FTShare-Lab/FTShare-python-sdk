@@ -201,7 +201,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'title': '融资融券明细',
         'doc_file': '融资融券明细.md',
         'original_api': 'margin_trading_details',
-        'params': ('date', 'page', 'page_size'),
+        'params': ('date', 'start_date', 'end_date', 'stock', 'page', 'page_size'),
     },
     'northbound': {
         'path': 'api/v1/market/data/northbound',
