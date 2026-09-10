@@ -6,6 +6,7 @@ from collections.abc import Sequence
 from typing import Any
 
 from ..endpoints import ENDPOINTS
+from ..params import symbols_to_json_string
 
 
 def _present_params(params: dict[str, Any]) -> list[str]:
@@ -1414,8 +1415,9 @@ class StockApiMixin:
 
     def eastmoney_sector_flow(
         self,
-        sector_code: Any | None = None,
-        sector_type: Any | None = None,
+        board_code: Any | None = None,
+        board_type: Any | None = None,
+        board_level: Any | None = None,
         trade_date: Any | None = None,
         start_date: Any | None = None,
         end_date: Any | None = None,
@@ -1437,11 +1439,12 @@ class StockApiMixin:
         Documented endpoint: ``get_eastmoney_sector_flow``.
 
         Args:
-            sector_code: 板块代码，如 BK0488 (type: string; required: N).
-            sector_type: 板块类型：industry / concept / regional (type: string; required: N).
-            trade_date: 交易日 YYYYMMDD；与 start_date/end_date 互斥 (type: string; required: N).
-            start_date: 区间起始日 YYYYMMDD；需与 end_date 同时提供 (type: string; required: N).
-            end_date: 区间结束日 YYYYMMDD；需与 start_date 同时提供 (type: string; required: N).
+            board_code: 板块代码，如 BK0488 (type: string; required: N).
+            board_type: 板块类型：industry / concept / regional (type: string; required: N).
+            board_level: 行业层级：1=一级、2=二级、3=三级；不传返回全部层级，仅匹配 industry (type: integer; required: N).
+            trade_date: 交易日 YYYYMMDD (type: string; required: N).
+            start_date: 区间起始日 YYYYMMDD (type: string; required: N).
+            end_date: 区间结束日 YYYYMMDD (type: string; required: N).
             page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
             page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
             limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
@@ -1457,7 +1460,7 @@ class StockApiMixin:
             ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
             payloads when multi-page fetching is used with ``raw=True``.
         """
-        request_params = {'sector_code': sector_code, 'sector_type': sector_type, 'trade_date': trade_date, 'start_date': start_date, 'end_date': end_date}
+        request_params = {'board_code': board_code, 'board_type': board_type, 'board_level': board_level, 'trade_date': trade_date, 'start_date': start_date, 'end_date': end_date}
         request_params.update(kwargs)
         path = ENDPOINTS['eastmoney_sector_flow'].path
         return self.get_paginated(
@@ -2428,6 +2431,9 @@ class StockApiMixin:
     def margin_trading_details(
         self,
         date: Any | None = None,
+        start_date: Any | None = None,
+        end_date: Any | None = None,
+        stock: Any | None = None,
         page: int | None = None,
         page_size: int | None = None,
         limit: int | None = None,
@@ -2446,7 +2452,10 @@ class StockApiMixin:
         Documented endpoint: ``margin_trading_details``.
 
         Args:
-            date: 查询日期 YYYYMMDD；不传则使用当前内存快照 (type: string; required: N).
+            date: 查询日期 YYYYMMDD，必须为交易日；不传则使用前一交易日快照；不能与 start_date/end_date 同时使用 (type: string; required: N).
+            start_date: 区间查询开始日期 YYYYMMDD；须与 end_date、stock 同时提供，间隔不能超过 3 年 (type: string; required: N).
+            end_date: 区间查询结束日期 YYYYMMDD；须与 start_date、stock 同时提供 (type: string; required: N).
+            stock: 股票代码过滤条件 (type: string; required: N).
             page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
             page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
             limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
@@ -2462,7 +2471,7 @@ class StockApiMixin:
             ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
             payloads when multi-page fetching is used with ``raw=True``.
         """
-        request_params = {'date': date}
+        request_params = {'date': date, 'start_date': start_date, 'end_date': end_date, 'stock': stock}
         request_params.update(kwargs)
         path = ENDPOINTS['margin_trading_details'].path
         return self.get_paginated(
@@ -3920,6 +3929,14 @@ class StockApiMixin:
         return self._call_endpoint('stock_dividends', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
 
 
+    def stock_dividends_effective(self, symbol: Any | None = None, since_date: Any | None = None, until_date: Any | None = None, page: int | None = None, page_size: int | None = None, limit: int | None = None, all_pages: bool = False, max_pages: int | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
+        """股票有效分红记录."""
+        params = {'symbol': symbol, 'since_date': since_date, 'until_date': until_date}
+        params.update(kwargs)
+        path = ENDPOINTS['stock_dividends_effective'].path
+        return self.get_paginated(path, page=page, page_size=page_size, limit=limit, all_pages=all_pages, max_pages=max_pages, max_page_size=200, raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+
+
     def stock_history_list(self, trade_date: Any | None = None, code: Any | None = None, page: int | None = None, page_size: int | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
         """股票历史列表."""
         params = {'trade_date': trade_date, 'code': code, 'page': page, 'page_size': page_size}
@@ -4084,17 +4101,17 @@ class StockApiMixin:
         return self.get_paginated(path, page=page, page_size=page_size, limit=limit, all_pages=all_pages, max_pages=max_pages, max_page_size=1000, raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
 
 
-    def ths_concept_daily_flow(self, start_date: Any | None = None, end_date: Any | None = None, sector_name: Any | None = None, page: int | None = None, page_size: int | None = None, limit: int | None = None, all_pages: bool = False, max_pages: int | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
+    def ths_concept_daily_flow(self, start_date: Any | None = None, end_date: Any | None = None, board_name: Any | None = None, page: int | None = None, page_size: int | None = None, limit: int | None = None, all_pages: bool = False, max_pages: int | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
         """同花顺概念板块资金流日度."""
-        params = {'start_date': start_date, 'end_date': end_date, 'sector_name': sector_name}
+        params = {'start_date': start_date, 'end_date': end_date, 'board_name': board_name}
         params.update(kwargs)
         path = ENDPOINTS['ths_concept_daily_flow'].path
         return self.get_paginated(path, page=page, page_size=page_size, limit=limit, all_pages=all_pages, max_pages=max_pages, max_page_size=1000, raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
 
 
-    def ths_industry_daily_flow(self, start_date: Any | None = None, end_date: Any | None = None, sector_name: Any | None = None, page: int | None = None, page_size: int | None = None, limit: int | None = None, all_pages: bool = False, max_pages: int | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
+    def ths_industry_daily_flow(self, start_date: Any | None = None, end_date: Any | None = None, board_name: Any | None = None, page: int | None = None, page_size: int | None = None, limit: int | None = None, all_pages: bool = False, max_pages: int | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
         """同花顺行业板块资金流日度."""
-        params = {'start_date': start_date, 'end_date': end_date, 'sector_name': sector_name}
+        params = {'start_date': start_date, 'end_date': end_date, 'board_name': board_name}
         params.update(kwargs)
         path = ENDPOINTS['ths_industry_daily_flow'].path
         return self.get_paginated(path, page=page, page_size=page_size, limit=limit, all_pages=all_pages, max_pages=max_pages, max_page_size=1000, raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
@@ -4110,14 +4127,14 @@ class StockApiMixin:
 
     def stock_realtime_minute_kline(self, symbols: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
         """股票实时分钟K线."""
-        params = {'symbols': symbols}
+        params = {'symbols': symbols_to_json_string(symbols)}
         params.update(kwargs)
         return self._call_endpoint('stock_realtime_minute_kline', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
 
 
     def stock_realtime_day_kline(self, symbols: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
         """股票实时日K线."""
-        params = {'symbols': symbols}
+        params = {'symbols': symbols_to_json_string(symbols)}
         params.update(kwargs)
         return self._call_endpoint('stock_realtime_day_kline', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
 

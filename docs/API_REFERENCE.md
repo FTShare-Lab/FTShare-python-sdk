@@ -6,17 +6,17 @@
 
 | 指标 | 数量 |
 |---|---:|
-| SDK 方法总数 | 219 |
+| SDK 方法总数 | 227 |
 
 ## 专题分布
 
 | ftshare-doc 专题 | SDK 方法数 | API mixin 模块 | Endpoint 模块 |
 |---|---:|---|---|
-| 股票数据 | 118 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
+| 股票数据 | 119 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
 | 港股数据 | 3 | `ftshare.apis.hk` | `ftshare.endpoints.hk` |
 | 美股数据 | 2 | `ftshare.apis.us` | `ftshare.endpoints.us` |
-| 指数专题 | 14 | `ftshare.apis.index` | `ftshare.endpoints.index` |
-| ETF专题 | 11 | `ftshare.apis.etf` | `ftshare.endpoints.etf` |
+| 指数专题 | 15 | `ftshare.apis.index` | `ftshare.endpoints.index` |
+| ETF专题 | 17 | `ftshare.apis.etf` | `ftshare.endpoints.etf` |
 | 公募基金 | 18 | `ftshare.apis.fund` | `ftshare.endpoints.fund` |
 | 期货数据 | 18 | `ftshare.apis.futures` | `ftshare.endpoints.futures` |
 | 债券专题 | 6 | `ftshare.apis.bond` | `ftshare.endpoints.bond` |
@@ -33,6 +33,7 @@
 | [`report_announcement_list`](#api-report-announcement-list) | 报告公告列表 | `GET` | `api/v1/market/data/report-announcements/list` | `date`, `sec_code`, `page`, `page_size` | `报告公告列表.md` |
 | [`report_announcement_summary`](#api-report-announcement-summary) | 报告公告摘要 | `GET` | `api/v1/market/data/report-announcements/summary` | `announcement_id` | `报告公告摘要.md` |
 | [`stock_candlesticks_batch`](#api-stock-candlesticks-batch) | 批量股票K线 | `GET` | `api/v1/market/data/stock-candlesticks/batch` | `symbols`, `interval_unit`, `interval_value`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit` | `批量股票K线.md` |
+| [`stock_dividends_effective`](#api-stock-dividends-effective) | 股票有效分红记录 | `GET` | `api/v2/market/data/stock-dividends-effective` | `symbol`, `since_date`, `until_date`, `page`, `page_size` | `股票有效分红记录.md` |
 | [`stock_ggmx`](#api-stock-ggmx) | 董监高持股变动 | `GET` | `api/v1/market/data/holder/stock-ggmx` | `stock_code`, `change_direction`, `start_date`, `end_date`, `page`, `page_size` | `董监高持股变动.md` |
 | [`stock_intraday_auction_volume_symbol`](#api-stock-intraday-auction-volume-symbol) | 单标的连续竞价成交量 | `GET` | `api/v1/market/data/intraday-auction-volume/symbol` | `symbol`, `trade_date`, `page`, `page_size` | `单标的连续竞价成交量.md` |
 | [`stock_minutes_batch`](#api-stock-minutes-batch) | 批量股票历史分钟行情 | `GET` | `api/v2/market/data/stock_minutes/batch` | `symbols`, `interval_value`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit` | `批量股票历史分钟行情.md` |
@@ -60,7 +61,7 @@
 | [`eastmoney_dapan_flow`](#api-eastmoney-dapan-flow) | 东方财富大盘资金流 | `GET` | `api/v1/market/data/eastmoney-dapan-flow` | `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `东方财富大盘资金流.md` |
 | [`eastmoney_market_valuation`](#api-eastmoney-market-valuation) | 东方财富市场估值 | `GET` | `api/v1/market/data/eastmoney-market-valuation` | `market_code`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `东方财富市场估值.md` |
 | [`eastmoney_rank`](#api-eastmoney-rank) | 东方财富股票排名 | `GET` | `api/v1/market/data/eastmoney-rank` | `rank_group`, `market`, `trade_date` | `东方财富股票排名.md` |
-| [`eastmoney_sector_flow`](#api-eastmoney-sector-flow) | 东方财富板块资金流 | `GET` | `api/v1/market/data/eastmoney-sector-flow` | `sector_code`, `sector_type`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `东方财富板块资金流.md` |
+| [`eastmoney_sector_flow`](#api-eastmoney-sector-flow) | 东方财富板块资金流 | `GET` | `api/v1/market/data/eastmoney-sector-flow` | `board_code`, `board_type`, `board_level`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `东方财富板块资金流.md` |
 | [`eastmoney_stock_flow`](#api-eastmoney-stock-flow) | 东方财富个股资金流 | `GET` | `api/v1/market/data/eastmoney-stock-flow` | `symbol`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `东方财富个股资金流.md` |
 | [`eastmoney_stock_valuation`](#api-eastmoney-stock-valuation) | 东方财富个股估值 | `GET` | `api/v1/market/data/eastmoney-stock-valuation` | `symbol`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `东方财富个股估值.md` |
 | [`exchange_margin_summaries`](#api-exchange-margin-summaries) | 交易所融资融券汇总日度 | `GET` | `api/v1/market/data/exchange-margin-summaries` | `start_date`, `end_date`, `exchange`, `page`, `page_size` | `交易所融资融券汇总日度.md` |
@@ -75,7 +76,7 @@
 | [`limit_list`](#api-limit-list) | 涨跌停池 | `GET` | `api/v1/market/data/limit-list` | `limit_type`, `trade_date` | `涨跌停池.md` |
 | [`limit_up_briefs`](#api-limit-up-briefs) | 涨停简报 | `GET` | `api/v3/market/data/limit-up-reports/briefs` | `date` | `涨停简报.md` |
 | [`limit_up_public_report`](#api-limit-up-public-report) | 涨停对外归因报告 | `GET` | `api/v3/market/data/limit-up-reports/public-report` | `date`, `security_code` | `涨停对外归因报告.md` |
-| [`margin_trading_details`](#api-margin-trading-details) | 融资融券明细 | `GET` | `api/v1/market/data/margin-trading-details` | `date`, `page`, `page_size` | `融资融券明细.md` |
+| [`margin_trading_details`](#api-margin-trading-details) | 融资融券明细 | `GET` | `api/v1/market/data/margin-trading-details` | `date`, `start_date`, `end_date`, `stock`, `page`, `page_size` | `融资融券明细.md` |
 | [`namechange`](#api-namechange) | 股票曾用名 | `GET` | `api/v1/market/data/namechange` | `trade_code`, `start_date`, `end_date` | `股票曾用名.md` |
 | [`nth_trade_date`](#api-nth-trade-date) | 第N个交易日 | `GET` | `api/v1/market/data/time/get-nth-trade-date` | `n` | `第N个交易日.md` |
 | [`northbound`](#api-northbound) | 北向资金交易 | `GET` | `api/v1/market/data/northbound` | `date` | `北向资金交易.md` |
@@ -145,8 +146,8 @@
 | [`ths_board_kline`](#api-ths-board-kline) | 同花顺板块K线 | `GET` | `api/v1/market/data/ths-board-kline` | `board_code`, `page`, `page_size` | `同花顺板块K线.md` |
 | [`stock_signal_latest_snapshot`](#api-stock-signal-latest-snapshot) | 信号最新快照 | `GET` | `api/v3/market/data/stock-signal-latest-snapshot` | `signal_type`, `page`, `page_size` | `信号最新快照.md` |
 | [`ths_stock_daily_flow`](#api-ths-stock-daily-flow) | 同花顺个股资金流日度 | `GET` | `api/v1/market/data/ths-stock-daily-flow` | `start_date`, `end_date`, `code`, `name`, `page`, `page_size` | `同花顺个股资金流日度.md` |
-| [`ths_concept_daily_flow`](#api-ths-concept-daily-flow) | 同花顺概念板块资金流日度 | `GET` | `api/v1/market/data/ths-concept-daily-flow` | `start_date`, `end_date`, `sector_name`, `page`, `page_size` | `同花顺概念板块资金流日度.md` |
-| [`ths_industry_daily_flow`](#api-ths-industry-daily-flow) | 同花顺行业板块资金流日度 | `GET` | `api/v1/market/data/ths-industry-daily-flow` | `start_date`, `end_date`, `sector_name`, `page`, `page_size` | `同花顺行业板块资金流日度.md` |
+| [`ths_concept_daily_flow`](#api-ths-concept-daily-flow) | 同花顺概念板块资金流日度 | `GET` | `api/v1/market/data/ths-concept-daily-flow` | `start_date`, `end_date`, `board_name`, `page`, `page_size` | `同花顺概念板块资金流日度.md` |
+| [`ths_industry_daily_flow`](#api-ths-industry-daily-flow) | 同花顺行业板块资金流日度 | `GET` | `api/v1/market/data/ths-industry-daily-flow` | `start_date`, `end_date`, `board_name`, `page`, `page_size` | `同花顺行业板块资金流日度.md` |
 | [`ths_industry_constituents`](#api-ths-industry-constituents) | 同花顺行业成分股列表 | `GET` | `api/v1/market/data/ths-industry-constituents` | `industry_code`, `industry_name`, `stock_code`, `stock_name`, `page`, `page_size` | `同花顺行业成分股列表.md` |
 | [`ths_hot_list`](#api-ths-hot-list) | 同花顺热榜 | `GET` | `api/v1/market/data/ths-hot-list` | `list_type`, `trade_date`, `page`, `page_size` | `同花顺热榜.md` |
 | [`trading_calendar`](#api-trading-calendar) | 交易日历 | `GET` | `api/v1/market/data/time/trading-calendar` | `market`, `start_date`, `end_date` | `交易日历.md` |
@@ -172,6 +173,7 @@
 ### 指数专题
 
 | [`index_minutes_batch`](#api-index-minutes-batch) | 批量指数历史分钟行情 | `GET` | `api/v2/market/data/index_minutes/batch` | `symbols`, `interval_value`, `since_ts_millis`, `until_ts_millis`, `limit` | `批量指数历史分钟行情.md` |
+| [`index_candlesticks_batch`](#api-index-candlesticks-batch) | 批量指数K线 | `GET` | `api/v2/market/data/index-candlesticks/batch` | `symbols`, `interval_unit`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit` | `批量指数K线.md` |
 | [`sw_index_history_minutes`](#api-sw-index-history-minutes) | 申万指数历史分钟K线 | `GET` | `api/v1/market/data/sw-index/history-minutes` | `index_code`, `start_date`, `end_date`, `page`, `page_size` | `申万指数历史分钟K线.md` |
 
 | SDK 方法 | 接口名称 | HTTP | Path | 参数 | 来源文档 |
@@ -192,6 +194,12 @@
 ### ETF专题
 
 | [`etf_minutes_batch`](#api-etf-minutes-batch) | 批量ETF历史分钟行情 | `GET` | `api/v2/market/data/etf_minutes/batch` | `symbols`, `interval_value`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit` | `批量ETF历史分钟行情.md` |
+| [`etf_announcements`](#api-etf-announcements) | ETF公告列表 | `GET` | `api/v2/market/data/announcements/etf-announcements` | `etf_code`, `start_date`, `end_date`, `page`, `page_size` | `ETF公告列表.md` |
+| [`etf_candlesticks_batch`](#api-etf-candlesticks-batch) | 批量ETFK线 | `GET` | `api/v2/market/data/etf-candlesticks/batch` | `symbols`, `interval_unit`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit` | `批量ETFK线.md` |
+| [`etf_component_details`](#api-etf-component-details) | ETF成分证券明细 | `GET` | `api/v2/market/data/etf-component-details` | `symbol`, `trade_date` | `ETF成分证券明细.md` |
+| [`etf_net_value`](#api-etf-net-value) | ETF净值 | `GET` | `api/v2/market/data/etf-net-value` | `etf_code`, `nav_date`, `start_date`, `end_date`, `page`, `page_size` | `ETF净值.md` |
+| [`etf_pcf_infos`](#api-etf-pcf-infos) | ETF申赎清单 | `GET` | `api/v2/market/data/etf-pcf/etf-pcf-infos` | `symbol`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `ETF-PCF信息.md` |
+| [`etf_share`](#api-etf-share) | ETF份额 | `GET` | `api/v2/market/data/etf-share` | `etf_code`, `stati_perd`, `start_date`, `end_date`, `page`, `page_size` | `ETF份额.md` |
 
 | SDK 方法 | 接口名称 | HTTP | Path | 参数 | 来源文档 |
 |---|---|---|---|---|---|
@@ -878,7 +886,7 @@ Returns:
 - 接口名称：东方财富板块资金流
 - HTTP：`GET`
 - Path：`api/v1/market/data/eastmoney-sector-flow`
-- 参数：`sector_code`, `sector_type`, `trade_date`, `start_date`, `end_date`, `page`, `page_size`
+- 参数：`board_code`, `board_type`, `board_level`, `trade_date`, `start_date`, `end_date`, `page`, `page_size`
 - 来源文档：`东方财富板块资金流.md`
 - 原始接口：`get_eastmoney_sector_flow`
 
@@ -890,11 +898,12 @@ Method: ``GET``.
 Documented endpoint: ``get_eastmoney_sector_flow``.
 
 Args:
-    sector_code: 板块代码，如 BK0488 (type: string; required: N).
-    sector_type: 板块类型：industry / concept / regional (type: string; required: N).
-    trade_date: 交易日 YYYYMMDD；与 start_date/end_date 互斥 (type: string; required: N).
-    start_date: 区间起始日 YYYYMMDD；需与 end_date 同时提供 (type: string; required: N).
-    end_date: 区间结束日 YYYYMMDD；需与 start_date 同时提供 (type: string; required: N).
+    board_code: 板块代码，如 BK0488 (type: string; required: N).
+    board_type: 板块类型：industry / concept / regional (type: string; required: N).
+    board_level: 行业层级：1=一级、2=二级、3=三级；不传返回全部层级，仅匹配 industry (type: integer; required: N).
+    trade_date: 交易日 YYYYMMDD (type: string; required: N).
+    start_date: 区间起始日 YYYYMMDD (type: string; required: N).
+    end_date: 区间结束日 YYYYMMDD (type: string; required: N).
     page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
     page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
     limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
@@ -1285,7 +1294,7 @@ Returns:
 - 接口名称：融资融券明细
 - HTTP：`GET`
 - Path：`api/v1/market/data/margin-trading-details`
-- 参数：`date`, `page`, `page_size`
+- 参数：`date`, `start_date`, `end_date`, `stock`, `page`, `page_size`
 - 来源文档：`融资融券明细.md`
 - 原始接口：`margin_trading_details`
 
@@ -1297,7 +1306,10 @@ Method: ``GET``.
 Documented endpoint: ``margin_trading_details``.
 
 Args:
-    date: 查询日期 YYYYMMDD；不传则使用当前内存快照 (type: string; required: N).
+    date: 查询日期 YYYYMMDD，必须为交易日；不传则使用前一交易日快照；不能与 start_date/end_date 同时使用 (type: string; required: N).
+    start_date: 区间查询开始日期 YYYYMMDD；须与 end_date、stock 同时提供，间隔不能超过 3 年 (type: string; required: N).
+    end_date: 区间查询结束日期 YYYYMMDD；须与 start_date、stock 同时提供 (type: string; required: N).
+    stock: 股票代码过滤条件 (type: string; required: N).
     page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
     page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
     limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
@@ -2690,6 +2702,7 @@ Returns:
 - HTTP：`GET`
 - Path：`api/v4/market/data/stock-realtime-day-kline`
 - 参数：`symbols`
+- 说明：`symbols` 支持 list/tuple（SDK 自动序列化为 JSON 字符串数组）或 JSON 字符串。
 - 来源文档：`股票实时日K线.md`
 - 原始接口：`stock_realtime_day_kline`
 
@@ -2737,6 +2750,7 @@ Returns:
 - HTTP：`GET`
 - Path：`api/v4/market/data/stock-realtime-minute-kline`
 - 参数：`symbols`
+- 说明：`symbols` 支持 list/tuple（SDK 自动序列化为 JSON 字符串数组）或 JSON 字符串。
 - 来源文档：`股票实时分钟K线.md`
 - 原始接口：`stock_realtime_minute_kline`
 
@@ -3009,7 +3023,7 @@ Documented endpoint: ``ths_stock_daily_flow``.
 - 原始接口：`ths_concept_daily_flow`
 - Path：`api/v1/market/data/ths-concept-daily-flow`
 - Method：`GET`
-- 参数：`start_date`, `end_date`, `sector_name`, `page`, `page_size
+- 参数：`start_date`, `end_date`, `board_name`, `page`, `page_size
 
 Documented endpoint: ``ths_concept_daily_flow``.
 
@@ -3019,7 +3033,7 @@ Documented endpoint: ``ths_concept_daily_flow``.
 - 原始接口：`ths_industry_daily_flow`
 - Path：`api/v1/market/data/ths-industry-daily-flow`
 - Method：`GET`
-- 参数：`start_date`, `end_date`, `sector_name`, `page`, `page_size
+- 参数：`start_date`, `end_date`, `board_name`, `page`, `page_size
 
 Documented endpoint: ``ths_industry_daily_flow``.
 
@@ -3405,6 +3419,7 @@ Returns:
 - HTTP：`GET`
 - Path：`api/v4/market/data/index-realtime-day-kline`
 - 参数：`symbols`
+- 说明：`symbols` 支持 list/tuple（SDK 自动序列化为 JSON 字符串数组）或 JSON 字符串。
 - 来源文档：`指数实时日K线.md`
 - 原始接口：`index_realtime_day_kline`
 
@@ -3418,6 +3433,7 @@ Returns:
 - HTTP：`GET`
 - Path：`api/v4/market/data/index-realtime-minute-kline`
 - 参数：`symbols`
+- 说明：`symbols` 支持 list/tuple（SDK 自动序列化为 JSON 字符串数组）或 JSON 字符串。
 - 来源文档：`指数实时分钟K线.md`
 - 原始接口：`index_realtime_minute_kline`
 
@@ -3835,6 +3851,7 @@ Returns:
 - HTTP：`GET`
 - Path：`api/v4/market/data/etf-realtime-day-kline`
 - 参数：`symbols`
+- 说明：`symbols` 支持 list/tuple（SDK 自动序列化为 JSON 字符串数组）或 JSON 字符串。
 - 来源文档：`ETF实时日K线.md`
 - 原始接口：`etf_realtime_day_kline`
 
@@ -3848,6 +3865,7 @@ ETF实时日K线.
 - HTTP：`GET`
 - Path：`api/v4/market/data/etf-realtime-minute-kline`
 - 参数：`symbols`
+- 说明：`symbols` 支持 list/tuple（SDK 自动序列化为 JSON 字符串数组）或 JSON 字符串。
 - 来源文档：`ETF实时分钟K线.md`
 - 原始接口：`etf_realtime_minute_kline`
 
@@ -5778,3 +5796,52 @@ Returns:
 - Path：`api/v1/market/data/cb/cb-lists`
 - 参数：`-`
 - 来源文档：`可转债列表.md`
+
+<h4 id="api-etf-announcements"><code>etf_announcements</code></h4>
+
+- Path：`api/v2/market/data/announcements/etf-announcements`
+- 参数：`etf_code, start_date, end_date, page, page_size`
+- 来源文档：`ETF公告列表.md`
+
+<h4 id="api-etf-candlesticks-batch"><code>etf_candlesticks_batch</code></h4>
+
+- Path：`api/v2/market/data/etf-candlesticks/batch`
+- 参数：`symbols, interval_unit, adjust_kind, since_ts_millis, until_ts_millis, limit`
+- 来源文档：`批量ETFK线.md`
+
+<h4 id="api-etf-component-details"><code>etf_component_details</code></h4>
+
+- Path：`api/v2/market/data/etf-component-details`
+- 参数：`symbol, trade_date`
+- 来源文档：`ETF成分证券明细.md`
+
+<h4 id="api-etf-net-value"><code>etf_net_value</code></h4>
+
+- Path：`api/v2/market/data/etf-net-value`
+- 参数：`etf_code, nav_date, start_date, end_date, page, page_size`
+- 来源文档：`ETF净值.md`
+
+<h4 id="api-etf-pcf-infos"><code>etf_pcf_infos</code></h4>
+
+- Path：`api/v2/market/data/etf-pcf/etf-pcf-infos`
+- 参数：`symbol, trade_date, start_date, end_date, page, page_size`
+- 来源文档：`ETF-PCF信息.md`
+- 说明：单标的单日查询时服务端返回裸对象，SDK 直接返回 `data` 对象（默认为单行 DataFrame）；区间/多行查询仍返回行列表。
+
+<h4 id="api-etf-share"><code>etf_share</code></h4>
+
+- Path：`api/v2/market/data/etf-share`
+- 参数：`etf_code, stati_perd, start_date, end_date, page, page_size`
+- 来源文档：`ETF份额.md`
+
+<h4 id="api-index-candlesticks-batch"><code>index_candlesticks_batch</code></h4>
+
+- Path：`api/v2/market/data/index-candlesticks/batch`
+- 参数：`symbols, interval_unit, adjust_kind, since_ts_millis, until_ts_millis, limit`
+- 来源文档：`批量指数K线.md`
+
+<h4 id="api-stock-dividends-effective"><code>stock_dividends_effective</code></h4>
+
+- Path：`api/v2/market/data/stock-dividends-effective`
+- 参数：`symbol, since_date, until_date, page, page_size`
+- 来源文档：`股票有效分红记录.md`

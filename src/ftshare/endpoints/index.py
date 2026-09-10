@@ -112,4 +112,12 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'params': ('symbols', 'interval_value', 'since_ts_millis', 'until_ts_millis', 'limit'),
     },
 
+    'index_candlesticks_batch': {
+        'path': 'api/v2/market/data/index-candlesticks/batch',
+        'title': '批量指数K线',
+        'doc_file': '批量指数K线.md',
+        'original_api': 'index_candlesticks_batch',
+        'params': ('symbols', 'interval_unit', 'adjust_kind', 'since_ts_millis', 'until_ts_millis', 'limit'),
+    },
+
 })

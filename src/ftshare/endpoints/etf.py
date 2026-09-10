@@ -88,4 +88,55 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'params': ('symbols', 'interval_value', 'adjust_kind', 'since_ts_millis', 'until_ts_millis', 'limit'),
     },
 
+    'etf_announcements': {
+        'path': 'api/v2/market/data/announcements/etf-announcements',
+        'title': 'ETF公告列表',
+        'doc_file': 'ETF公告列表.md',
+        'original_api': 'etf_announcements',
+        'params': ('etf_code', 'start_date', 'end_date', 'page', 'page_size'),
+    },
+
+    'etf_candlesticks_batch': {
+        'path': 'api/v2/market/data/etf-candlesticks/batch',
+        'title': '批量ETFK线',
+        'doc_file': '批量ETFK线.md',
+        'original_api': 'etf_candlesticks_batch',
+        'params': ('symbols', 'interval_unit', 'adjust_kind', 'since_ts_millis', 'until_ts_millis', 'limit'),
+    },
+
+    'etf_component_details': {
+        'path': 'api/v2/market/data/etf-component-details',
+        'title': 'ETF成分证券明细',
+        'doc_file': 'ETF成分证券明细.md',
+        'original_api': 'etf_component_details',
+        'params': ('symbol', 'trade_date'),
+    },
+
+    'etf_net_value': {
+        'path': 'api/v2/market/data/etf-net-value',
+        'title': 'ETF净值',
+        'doc_file': 'ETF净值.md',
+        'original_api': 'etf_net_value',
+        'params': ('etf_code', 'nav_date', 'start_date', 'end_date', 'page', 'page_size'),
+        'max_page_size': 200,
+    },
+
+    'etf_pcf_infos': {
+        'path': 'api/v2/market/data/etf-pcf/etf-pcf-infos',
+        'title': 'ETF申赎清单',
+        'doc_file': 'ETF-PCF信息.md',
+        'original_api': 'etf_pcf_infos',
+        'params': ('symbol', 'trade_date', 'start_date', 'end_date', 'page', 'page_size'),
+        'max_page_size': 500,
+    },
+
+    'etf_share': {
+        'path': 'api/v2/market/data/etf-share',
+        'title': 'ETF份额',
+        'doc_file': 'ETF份额.md',
+        'original_api': 'etf_share',
+        'params': ('etf_code', 'stati_perd', 'start_date', 'end_date', 'page', 'page_size'),
+        'max_page_size': 200,
+    },
+
 })

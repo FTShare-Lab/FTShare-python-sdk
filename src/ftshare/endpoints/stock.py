@@ -124,7 +124,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'title': '东方财富板块资金流',
         'doc_file': '东方财富板块资金流.md',
         'original_api': 'get_eastmoney_sector_flow',
-        'params': ('sector_code', 'sector_type', 'trade_date', 'start_date', 'end_date', 'page', 'page_size'),
+        'params': ('board_code', 'board_type', 'board_level', 'trade_date', 'start_date', 'end_date', 'page', 'page_size'),
     },
     'eastmoney_stock_flow': {
         'path': 'api/v1/market/data/eastmoney-stock-flow',
@@ -201,7 +201,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'title': '融资融券明细',
         'doc_file': '融资融券明细.md',
         'original_api': 'margin_trading_details',
-        'params': ('date', 'page', 'page_size'),
+        'params': ('date', 'start_date', 'end_date', 'stock', 'page', 'page_size'),
     },
     'northbound': {
         'path': 'api/v1/market/data/northbound',
@@ -800,7 +800,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'title': '同花顺概念板块资金流日度',
         'doc_file': '同花顺概念板块资金流日度.md',
         'original_api': 'ths_concept_daily_flow',
-        'params': ('start_date', 'end_date', 'sector_name', 'page', 'page_size'),
+        'params': ('start_date', 'end_date', 'board_name', 'page', 'page_size'),
         'max_page_size': 1000,
     },
 
@@ -809,7 +809,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'title': '同花顺行业板块资金流日度',
         'doc_file': '同花顺行业板块资金流日度.md',
         'original_api': 'ths_industry_daily_flow',
-        'params': ('start_date', 'end_date', 'sector_name', 'page', 'page_size'),
+        'params': ('start_date', 'end_date', 'board_name', 'page', 'page_size'),
         'max_page_size': 1000,
     },
 
@@ -899,6 +899,14 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'doc_file': '批量股票历史分钟行情.md',
         'original_api': 'stock_minutes_batch',
         'params': ('symbols', 'interval_value', 'adjust_kind', 'since_ts_millis', 'until_ts_millis', 'limit'),
+    },
+
+    'stock_dividends_effective': {
+        'path': 'api/v2/market/data/stock-dividends-effective',
+        'title': '股票有效分红记录',
+        'doc_file': '股票有效分红记录.md',
+        'original_api': 'stock_dividends_effective',
+        'params': ('symbol', 'since_date', 'until_date', 'page', 'page_size'),
     },
 
 })

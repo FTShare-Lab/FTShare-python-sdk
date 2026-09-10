@@ -6,6 +6,7 @@ from collections.abc import Sequence
 from typing import Any
 
 from ..endpoints import ENDPOINTS
+from ..params import symbols_to_json_string
 
 
 class EtfApiMixin:
@@ -317,14 +318,14 @@ class EtfApiMixin:
 
     def etf_realtime_minute_kline(self, symbols: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
         """ETF实时分钟K线."""
-        params = {'symbols': symbols}
+        params = {'symbols': symbols_to_json_string(symbols)}
         params.update(kwargs)
         return self._call_endpoint('etf_realtime_minute_kline', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
 
 
     def etf_realtime_day_kline(self, symbols: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
         """ETF实时日K线."""
-        params = {'symbols': symbols}
+        params = {'symbols': symbols_to_json_string(symbols)}
         params.update(kwargs)
         return self._call_endpoint('etf_realtime_day_kline', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
 
@@ -333,3 +334,255 @@ class EtfApiMixin:
         params = {'symbols': symbols, 'interval_value': interval_value, 'adjust_kind': adjust_kind, 'since_ts_millis': since_ts_millis, 'until_ts_millis': until_ts_millis, 'limit': limit}
         params.update(kwargs)
         return self._call_endpoint('etf_minutes_batch', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+
+    def etf_announcements(
+        self,
+        etf_code: Any | None = None,
+        start_date: Any | None = None,
+        end_date: Any | None = None,
+        page: int | None = None,
+        page_size: int | None = None,
+        limit: int | None = None,
+        all_pages: bool = False,
+        max_pages: int | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """ETF公告列表.
+
+        Endpoint: ``api/v2/market/data/announcements/etf-announcements``.
+        Method: ``GET``.
+        Documented endpoint: ``etf_announcements``.
+
+        Args:
+            etf_code: ETF 代码（按标的查询时必填），支持裸代码/短后缀/长后缀 (type: string; required: N).
+            start_date: 日期 YYYYMMDD（按日期查询时必填，单日）；与 etf_code 二选一 (type: string; required: N).
+            end_date: 日期 YYYYMMDD，不填默认等于 start_date（必须等于 start_date） (type: string; required: N).
+            page: 页码。
+            page_size: 每页条数。
+            limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+            all_pages: Fetch and combine pages until the server reports the last page.
+            max_pages: Optional safety cap for ``all_pages``.
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``.
+        """
+        request_params = {'etf_code': etf_code, 'start_date': start_date, 'end_date': end_date}
+        request_params.update(kwargs)
+        path = ENDPOINTS['etf_announcements'].path
+        return self.get_paginated(
+            path,
+            page=page,
+            page_size=page_size,
+            limit=limit,
+            all_pages=all_pages,
+            max_pages=max_pages,
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
+
+    def etf_candlesticks_batch(self, symbols: Any | None = None, interval_unit: Any | None = None, adjust_kind: Any | None = None, since_ts_millis: Any | None = None, until_ts_millis: Any | None = None, limit: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
+        """批量ETFK线."""
+        params = {'symbols': symbols, 'interval_unit': interval_unit, 'adjust_kind': adjust_kind, 'since_ts_millis': since_ts_millis, 'until_ts_millis': until_ts_millis, 'limit': limit}
+        params.update(kwargs)
+        return self._call_endpoint('etf_candlesticks_batch', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+
+    def etf_component_details(self, symbol: Any | None = None, trade_date: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
+        """ETF成分证券明细."""
+        params = {'symbol': symbol, 'trade_date': trade_date}
+        params.update(kwargs)
+        return self._call_endpoint('etf_component_details', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+
+    def etf_net_value(
+        self,
+        etf_code: Any | None = None,
+        nav_date: Any | None = None,
+        start_date: Any | None = None,
+        end_date: Any | None = None,
+        page: int | None = None,
+        page_size: int | None = None,
+        limit: int | None = None,
+        all_pages: bool = False,
+        max_pages: int | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """ETF净值.
+
+        Endpoint: ``api/v2/market/data/etf-net-value``.
+        Method: ``GET``.
+        Documented endpoint: ``etf_net_value``.
+
+        Args:
+            etf_code: ETF 代码，如 510300；兼容参数名 fund_code (type: string; required: Y).
+            nav_date: 净值日期 YYYYMMDD；与日期区间参数互斥 (type: integer; required: N).
+            start_date: 净值开始日期 YYYYMMDD；须与 end_date 同时提供 (type: integer; required: N).
+            end_date: 净值结束日期 YYYYMMDD；须与 start_date 同时提供 (type: integer; required: N).
+            page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+            page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+            limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+            all_pages: Fetch and combine pages until the server reports the last page.
+            max_pages: Optional safety cap for ``all_pages``.
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``.
+        """
+        request_params = {'etf_code': etf_code, 'nav_date': nav_date, 'start_date': start_date, 'end_date': end_date}
+        request_params.update(kwargs)
+        path = ENDPOINTS['etf_net_value'].path
+        return self.get_paginated(
+            path,
+            page=page,
+            page_size=page_size,
+            limit=limit,
+            all_pages=all_pages,
+            max_pages=max_pages,
+            max_page_size=ENDPOINTS['etf_net_value'].max_page_size,
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
+
+    def etf_pcf_infos(
+        self,
+        symbol: Any | None = None,
+        trade_date: Any | None = None,
+        start_date: Any | None = None,
+        end_date: Any | None = None,
+        page: int | None = None,
+        page_size: int | None = None,
+        limit: int | None = None,
+        all_pages: bool = False,
+        max_pages: int | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """ETF申赎清单.
+
+        Endpoint: ``api/v2/market/data/etf-pcf/etf-pcf-infos``.
+        Method: ``GET``.
+        Documented endpoint: ``etf_pcf_infos``.
+
+        Args:
+            symbol: ETF 代码；单标的单日或区间查询时必填，如 510300.SH (type: string; required: N).
+            trade_date: 交易日 YYYYMMDD；单日查询时必填，不能与 start_date/end_date 同时使用 (type: integer; required: N).
+            start_date: 区间开始日期 YYYYMMDD；须与 end_date、symbol 同时提供 (type: integer; required: N).
+            end_date: 区间结束日期 YYYYMMDD；须与 start_date、symbol 同时提供 (type: integer; required: N).
+            page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+            page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+            limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+            all_pages: Fetch and combine pages until the server reports the last page.
+            max_pages: Optional safety cap for ``all_pages``.
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``.
+            单标的单日查询时服务端返回裸对象，SDK 直接返回该 ``data`` 对象
+            （``as_dataframe=True`` 时为单行 DataFrame）。
+        """
+        request_params = {'symbol': symbol, 'trade_date': trade_date, 'start_date': start_date, 'end_date': end_date}
+        request_params.update(kwargs)
+        path = ENDPOINTS['etf_pcf_infos'].path
+        return self.get_paginated(
+            path,
+            page=page,
+            page_size=page_size,
+            limit=limit,
+            all_pages=all_pages,
+            max_pages=max_pages,
+            max_page_size=ENDPOINTS['etf_pcf_infos'].max_page_size,
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            unwrap_bare_data=True,
+            **request_params,
+        )
+
+    def etf_share(
+        self,
+        etf_code: Any | None = None,
+        stati_perd: Any | None = None,
+        start_date: Any | None = None,
+        end_date: Any | None = None,
+        page: int | None = None,
+        page_size: int | None = None,
+        limit: int | None = None,
+        all_pages: bool = False,
+        max_pages: int | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """ETF份额.
+
+        Endpoint: ``api/v2/market/data/etf-share``.
+        Method: ``GET``.
+        Documented endpoint: ``etf_share``.
+
+        Args:
+            etf_code: ETF 代码，如 510300；兼容参数名 fund_code (type: string; required: Y).
+            stati_perd: 统计周期：日/季度/年度/截止时点/半年/全部，默认全部 (type: string; required: N).
+            start_date: 开始日期 YYYYMMDD，按 trade_date 过滤 (type: integer; required: N).
+            end_date: 结束日期 YYYYMMDD，按 trade_date 过滤 (type: integer; required: N).
+            page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+            page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+            limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+            all_pages: Fetch and combine pages until the server reports the last page.
+            max_pages: Optional safety cap for ``all_pages``.
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``.
+        """
+        request_params = {'etf_code': etf_code, 'stati_perd': stati_perd, 'start_date': start_date, 'end_date': end_date}
+        request_params.update(kwargs)
+        path = ENDPOINTS['etf_share'].path
+        return self.get_paginated(
+            path,
+            page=page,
+            page_size=page_size,
+            limit=limit,
+            all_pages=all_pages,
+            max_pages=max_pages,
+            max_page_size=ENDPOINTS['etf_share'].max_page_size,
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
