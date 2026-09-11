@@ -117,6 +117,7 @@ SAMPLE_VALUES: dict[str, Any] = {
     "start_date": "20260701",
     "start_week": "202628",
     "start_time": "09:30:00",
+    "st_type": "*ST",
     "stat_date": "20260717",
     "stati_perd": "日",
     "stock_code": "000001.SZ",

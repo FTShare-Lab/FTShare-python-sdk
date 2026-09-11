@@ -909,4 +909,12 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'params': ('symbol', 'since_date', 'until_date', 'page', 'page_size'),
     },
 
+    'stock_st_history': {
+        'path': 'api/v1/market/data/stock-st-history',
+        'title': '股票历史ST状态',
+        'doc_file': '股票历史ST状态.md',
+        'original_api': 'stock_st_history',
+        'params': ('symbol', 'st_type'),
+    },
+
 })

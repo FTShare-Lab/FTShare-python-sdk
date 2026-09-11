@@ -6,13 +6,13 @@
 
 | 指标 | 数量 |
 |---|---:|
-| SDK 方法总数 | 227 |
+| SDK 方法总数 | 228 |
 
 ## 专题分布
 
 | ftshare-doc 专题 | SDK 方法数 | API mixin 模块 | Endpoint 模块 |
 |---|---:|---|---|
-| 股票数据 | 119 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
+| 股票数据 | 120 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
 | 港股数据 | 3 | `ftshare.apis.hk` | `ftshare.endpoints.hk` |
 | 美股数据 | 2 | `ftshare.apis.us` | `ftshare.endpoints.us` |
 | 指数专题 | 15 | `ftshare.apis.index` | `ftshare.endpoints.index` |
@@ -133,6 +133,7 @@
 | [`stock_realtime_minute_kline`](#api-stock-realtime-minute-kline) | 股票实时分钟K线 | `GET` | `api/v4/market/data/stock-realtime-minute-kline` | `symbols` | `股票实时分钟K线.md` |
 | [`stock_share`](#api-stock-share) | 股本 | `GET` | `api/v2/market/data/share/get-stock-share` | `stock_code`, `date` | `股本.md` |
 | [`stock_share_chg`](#api-stock-share-chg) | 股东增减持 | `GET` | `api/v1/market/data/holder/stock-share-chg` | `stock_code`, `is_last`, `page`, `page_size` | `股东增减持.md` |
+| [`stock_st_history`](#api-stock-st-history) | 股票历史ST状态 | `GET` | `api/v1/market/data/stock-st-history` | `symbol`, `st_type` | `股票历史ST状态.md` |
 | [`stock_unlock`](#api-stock-unlock) | 限售解禁 | `GET` | `api/v1/market/data/unlock/stock_unlock` | `stock_code`, `start_date`, `end_date`, `page`, `page_size` | `限售解禁.md` |
 | [`supply_chain_company_supply_chain_companies`](#api-supply-chain-company-supply-chain-companies) | 供应链公司候选 | `GET` | `api/v3/market/data/supply-chain/company-supply-chain-companies` | `trade_code`, `direction`, `page`, `page_size` | `供应链公司候选.md` |
 | [`supply_chain_subindustry_subsubindustries`](#api-supply-chain-subindustry-subsubindustries) | 供应链子行业层级展开 | `GET` | `api/v3/market/data/supply-chain/subindustry-subsubindustries` | `industry_name` | `供应链子行业层级展开.md` |
@@ -2821,6 +2822,31 @@ Returns:
     A pandas ``DataFrame`` by default, Python rows when
     ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
     payloads when multi-page fetching is used with ``raw=True``.
+```
+
+<h4 id="api-stock-st-history"><code>stock_st_history</code></h4>
+
+- 接口名称：股票历史ST状态
+- HTTP：`GET`
+- Path：`api/v1/market/data/stock-st-history`
+- 参数：`symbol`, `st_type`
+- 来源文档：`股票历史ST状态.md`
+- 原始接口：`stock_st_history`
+
+```text
+股票历史ST状态.
+
+Endpoint: ``api/v1/market/data/stock-st-history``.
+Method: ``GET``.
+Documented endpoint: ``stock_st_history``.
+
+Args:
+    symbol: 股票代码（带 .SH/.SZ 后缀），逗号分隔支持批量，去重后最多 50 只 (type: string; required: Y).
+    st_type: 阶段类型过滤，取值 ST / *ST / PT / 退市整理期 (type: string; required: N).
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
 ```
 
 <h4 id="api-stock-unlock"><code>stock_unlock</code></h4>
