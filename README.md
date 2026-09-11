@@ -210,12 +210,12 @@ FTSHARE_RUN_INTEGRATION=1 python3 -m pytest tests/test_integration_market.py
 欢迎加入 FTShare 社区交流群，讨论 Python SDK、特色因子、金融数据接口、MCP、Skill 和 Agent 使用。
 
 <p align="center">
-  <img src="./docs/assets/wechat-group-20260909.png" width="320" alt="FTShare 微信社区交流群二维码，有效期至 2026 年 9 月 9 日">
+  <img src="./docs/assets/wechat-group-20260918.png" width="320" alt="FTShare 微信社区交流群二维码，有效期至 2026 年 9 月 18 日">
 </p>
 
 > 群内用于交流使用经验和补充问题信息；Bug、功能需求和接口问题建议优先通过 GitHub Issues 提交，便于公开跟踪和沉淀。
 
-**二维码有效期至 2026 年 9 月 9 日。** 如二维码失效，请在 Issues 中留言。
+**二维码有效期至 2026 年 9 月 18 日。** 如二维码失效，请在 Issues 中留言。
 
 ---
 
