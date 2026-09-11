@@ -83,6 +83,24 @@ def test_new_endpoints_forward_documented_parameters():
     assert session.calls[4]["params"] == {"n": 5}
 
 
+def test_stock_st_history_forwards_documented_parameters():
+    session = FakeSession(
+        [
+            FakeResponse(payload={"code": 200, "message": "success", "data": [{"symbol": "600735.SH", "st_type": "ST"}]}),
+            FakeResponse(payload={"code": 200, "message": "success", "data": []}),
+        ]
+    )
+    client = FtshareClient(session=session)
+
+    rows = client.stock_st_history(symbol="600735.SH,000004.SZ", as_dataframe=False)
+    client.stock_st_history(symbol="000004.SZ", st_type="退市整理期", as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/stock-st-history"
+    assert session.calls[0]["params"] == {"symbol": "600735.SH,000004.SZ"}
+    assert rows == [{"symbol": "600735.SH", "st_type": "ST"}]
+    assert session.calls[1]["params"] == {"symbol": "000004.SZ", "st_type": "退市整理期"}
+
+
 def test_stock_ggcg_em_rejects_page_size_above_200():
     client = FtshareClient(session=FakeSession([]))
 

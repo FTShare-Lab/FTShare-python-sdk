@@ -4192,3 +4192,23 @@ class StockApiMixin:
         params = {'symbols': symbols, 'interval_value': interval_value, 'adjust_kind': adjust_kind, 'since_ts_millis': since_ts_millis, 'until_ts_millis': until_ts_millis, 'limit': limit}
         params.update(kwargs)
         return self._call_endpoint('stock_minutes_batch', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+
+
+    def stock_st_history(self, symbol: Any | None = None, st_type: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
+        """股票历史ST状态.
+
+        Endpoint: ``api/v1/market/data/stock-st-history``.
+        Method: ``GET``.
+        Documented endpoint: ``stock_st_history``.
+
+        Args:
+            symbol: 股票代码（带 .SH/.SZ 后缀），逗号分隔支持批量，去重后最多 50 只 (type: string; required: Y).
+            st_type: 阶段类型过滤，取值 ST / *ST / PT / 退市整理期 (type: string; required: N).
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+        """
+        params = {'symbol': symbol, 'st_type': st_type}
+        params.update(kwargs)
+        return self._call_endpoint('stock_st_history', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
