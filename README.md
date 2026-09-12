@@ -16,7 +16,7 @@
 <p align="center">
   <a href="https://ftai.chat/?tab=ft-share"><strong>FTShare 正式版</strong></a>
   · <a href="https://ftai.chat/me/profile">获取 API Key</a>
-  · <a href="https://market.ft.tech/gateway/doc/p/t5alo2h9">数据接口文档</a>
+  · <a href="https://market.ft.tech/gateway/doc">数据接口文档</a>
   · <a href="https://github.com/FTShare-Lab/FTShare-python-sdk/issues">问题反馈</a>
 </p>
 
@@ -162,7 +162,7 @@ df = market.ashare_news_sentiment_factors(
 )
 ```
 
-详细的接口参数、字段与专题说明请查看 [FTShare 数据接口文档](https://market.ft.tech/gateway/doc/p/t5alo2h9)。
+详细的接口参数、字段与专题说明请查看 [FTShare 数据接口文档](https://market.ft.tech/gateway/doc)。
 
 ## 错误处理
 
