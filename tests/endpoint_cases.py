@@ -75,6 +75,7 @@ SAMPLE_VALUES: dict[str, Any] = {
     "limit": 5,
     "limit_type": "up",
     "listing_date_since": "20260101",
+    "lookback_hours": 48,
     "market": "cn",
     "market_code": "000300",
     "market_id": 1,

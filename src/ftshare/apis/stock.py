@@ -4212,3 +4212,30 @@ class StockApiMixin:
         params = {'symbol': symbol, 'st_type': st_type}
         params.update(kwargs)
         return self._call_endpoint('stock_st_history', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+
+    def news_reaction_snapshot(self, symbol: Any | None = None, start_date: Any | None = None, end_date: Any | None = None, lookback_hours: Any | None = None, page: int | None = None, page_size: int | None = None, limit: int | None = None, all_pages: bool = False, max_pages: int | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
+        """消息量价共振.
+
+        Endpoint: ``api/v3/market/data/news-reaction-snapshot``.
+        Method: ``GET``.
+        Documented endpoint: ``news_reaction_snapshot``.
+
+        Args:
+            symbol: 股票代码，必须带交易所后缀，如 000333.SZ (type: string; required: Y).
+            start_date: 起始交易日（含），YYYYMMDD 或 YYYY-MM-DD (type: string; required: Y).
+            end_date: 截止交易日（含），与起始日期相隔不超过 31 天 (type: string; required: Y).
+            lookback_hours: 新闻回看窗口，仅 24 或 48；不传则两套窗口都返回 (type: number; required: N).
+            page: 页码，从 1 开始，默认 1，最大 1000.
+            page_size: 每页条数，默认 50，最大 200.
+            limit: Maximum number of rows to return when aggregating pages.
+            all_pages: Fetch every page.
+            max_pages: Safety bound when ``all_pages`` is enabled.
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+        """
+        params = {'symbol': symbol, 'start_date': start_date, 'end_date': end_date, 'lookback_hours': lookback_hours}
+        params.update(kwargs)
+        path = ENDPOINTS['news_reaction_snapshot'].path
+        return self.get_paginated(path, page=page, page_size=page_size, limit=limit, all_pages=all_pages, max_pages=max_pages, max_page_size=200, raw=raw, fields=fields, as_dataframe=as_dataframe, **params)

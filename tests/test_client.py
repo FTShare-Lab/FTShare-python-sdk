@@ -467,6 +467,36 @@ def test_new_paginated_endpoints_forward_parameters():
     assert session.calls[3]["params"] == {"start_date": "20260805", "end_date": "20260805", "board_name": "证券", "page": 1, "page_size": 1000}
 
 
+def test_news_reaction_snapshot_forwards_filters_and_extracts_records():
+    records = [{"trade_date": "20260819", "symbol": "600519.SH", "lookback_hours": 48}]
+    session = FakeSession([FakeResponse(payload=paginated_records(records))])
+    client = FtshareClient(session=session)
+
+    frame = client.news_reaction_snapshot(
+        symbol="600519.SH",
+        start_date="20260818",
+        end_date="20260828",
+        lookback_hours=48,
+        page=1,
+        page_size=5,
+    )
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + ENDPOINTS["news_reaction_snapshot"].path
+    assert "json" not in session.calls[0]
+    assert session.calls[0]["params"] == {
+        "symbol": "600519.SH",
+        "start_date": "20260818",
+        "end_date": "20260828",
+        "lookback_hours": 48,
+        "page": 1,
+        "page_size": 5,
+    }
+    assert list(frame.columns) == ["trade_date", "symbol", "lookback_hours"]
+
+    with pytest.raises(ValueError, match="page_size must be between 1 and 200"):
+        client.news_reaction_snapshot(symbol="600519.SH", start_date="20260818", end_date="20260828", page_size=201)
+
+
 def test_eastmoney_sector_flow_forwards_board_parameters():
     session = FakeSession([FakeResponse(payload=paginated_records([]))])
     client = FtshareClient(session=session)

@@ -6,13 +6,13 @@
 
 | 指标 | 数量 |
 |---|---:|
-| SDK 方法总数 | 228 |
+| SDK 方法总数 | 229 |
 
 ## 专题分布
 
 | ftshare-doc 专题 | SDK 方法数 | API mixin 模块 | Endpoint 模块 |
 |---|---:|---|---|
-| 股票数据 | 120 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
+| 股票数据 | 121 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
 | 港股数据 | 3 | `ftshare.apis.hk` | `ftshare.endpoints.hk` |
 | 美股数据 | 2 | `ftshare.apis.us` | `ftshare.endpoints.us` |
 | 指数专题 | 15 | `ftshare.apis.index` | `ftshare.endpoints.index` |
@@ -78,6 +78,7 @@
 | [`limit_up_public_report`](#api-limit-up-public-report) | 涨停对外归因报告 | `GET` | `api/v3/market/data/limit-up-reports/public-report` | `date`, `security_code` | `涨停对外归因报告.md` |
 | [`margin_trading_details`](#api-margin-trading-details) | 融资融券明细 | `GET` | `api/v1/market/data/margin-trading-details` | `date`, `start_date`, `end_date`, `stock`, `page`, `page_size` | `融资融券明细.md` |
 | [`namechange`](#api-namechange) | 股票曾用名 | `GET` | `api/v1/market/data/namechange` | `trade_code`, `start_date`, `end_date` | `股票曾用名.md` |
+| [`news_reaction_snapshot`](#api-news-reaction-snapshot) | 消息量价共振 | `GET` | `api/v3/market/data/news-reaction-snapshot` | `symbol`, `start_date`, `end_date`, `lookback_hours`, `page`, `page_size` | `消息量价共振.md` |
 | [`nth_trade_date`](#api-nth-trade-date) | 第N个交易日 | `GET` | `api/v1/market/data/time/get-nth-trade-date` | `n` | `第N个交易日.md` |
 | [`northbound`](#api-northbound) | 北向资金交易 | `GET` | `api/v1/market/data/northbound` | `date` | `北向资金交易.md` |
 | [`performance_forecasts_paginated`](#api-performance-forecasts-paginated) | 业绩预告 | `GET` | `api/v1/market/data/finance/stock-performance-forecast` | `stock_code`, `year`, `report_type`, `page`, `page_size` | `业绩预告.md` |
@@ -5871,3 +5872,13 @@ Returns:
 - Path：`api/v2/market/data/stock-dividends-effective`
 - 参数：`symbol, since_date, until_date, page, page_size`
 - 来源文档：`股票有效分红记录.md`
+
+<h4 id="api-news-reaction-snapshot"><code>news_reaction_snapshot</code></h4>
+
+- 接口名称：消息量价共振
+- HTTP：`GET`
+- Path：`api/v3/market/data/news-reaction-snapshot`
+- 参数：`symbol`, `start_date`, `end_date`, `lookback_hours`, `page`, `page_size`
+- 来源文档：`消息量价共振.md`
+- 原始接口：`news_reaction_snapshot`
+- 说明：返回 `code/message/data` 分页信封，快照记录位于 `data.records`；`symbol`、`start_date`、`end_date` 必填，`lookback_hours` 仅 `24` 或 `48`，日期跨度不超过 31 天，`page_size` 上限 200。

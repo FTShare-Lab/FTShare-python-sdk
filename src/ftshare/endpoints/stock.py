@@ -917,4 +917,13 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'params': ('symbol', 'st_type'),
     },
 
+    'news_reaction_snapshot': {
+        'path': 'api/v3/market/data/news-reaction-snapshot',
+        'title': '消息量价共振',
+        'doc_file': '消息量价共振.md',
+        'original_api': 'news_reaction_snapshot',
+        'params': ('symbol', 'start_date', 'end_date', 'lookback_hours', 'page', 'page_size'),
+        'max_page_size': 200,
+    },
+
 })
