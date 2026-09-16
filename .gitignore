@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+build/
+dist/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Test / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+
+# Type / lint caches
+.mypy_cache/
+.ruff_cache/
+.pyre/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Logs / runtime
+*.log
+
+# Local API documentation checkout used to regenerate SDK metadata
+ftshare-doc/
+
+# Local SDK verification workspace; not shipped with package releases
+sdk_smoke_test/
+
+# Secrets / env
+.env
+.env.local
+*.pem

@@ -1,0 +1,1333 @@
+from __future__ import annotations
+
+import pytest
+import pandas as pd
+
+import ftshare as ft
+from ftshare import FtshareAPIError, FtshareDecodeError, FtshareHTTPError
+from ftshare.client import FtshareClient
+from ftshare.endpoints import ENDPOINTS
+
+
+class FakeResponse:
+    def __init__(self, status_code=200, payload=None, text="{}", json_error=False):
+        self.status_code = status_code
+        self._payload = payload
+        self.text = text
+        self._json_error = json_error
+
+    def json(self):
+        if self._json_error:
+            raise ValueError("not json")
+        return self._payload
+
+
+class FakeSession:
+    def __init__(self, responses):
+        self.responses = list(responses)
+        self.calls = []
+
+    def get(self, url, params=None, timeout=None, headers=None):
+        self.calls.append(
+            {
+                "url": url,
+                "params": params,
+                "timeout": timeout,
+                "headers": headers,
+            }
+        )
+        return self.responses.pop(0)
+
+    def post(self, url, json=None, timeout=None, headers=None):
+        self.calls.append(
+            {
+                "url": url,
+                "json": json,
+                "timeout": timeout,
+                "headers": headers,
+            }
+        )
+        return self.responses.pop(0)
+
+
+def paginated_records(records, page=1, pages=1):
+    return {
+        "code": 0,
+        "message": "success",
+        "data": {
+            "pageNum": page,
+            "pageSize": 2,
+            "total": len(records),
+            "pages": pages,
+            "records": records,
+        },
+    }
+
+
+def test_new_endpoints_forward_documented_parameters():
+    session = FakeSession([FakeResponse(payload=paginated_records([{"code": "NVDA"}]))] * 2 + [FakeResponse(payload={"code": 200, "message": "success", "data": {"n": 5}})] * 3)
+    client = FtshareClient(session=session)
+
+    client.eastmoney_us_stock_list(refresh=True, page=1, page_size=5, as_dataframe=False)
+    client.stock_ggcg_em(symbol="股东增持", page=1, page_size=5, as_dataframe=False)
+    client.stk_code_change(trade_code="000001.SZ", start_date="20200101", end_date="20201231", as_dataframe=False)
+    client.stk_status_change(trade_code="000001.SZ", change_date="20200101", change_type="上市", as_dataframe=False)
+    client.nth_trade_date(n=5, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/eastmoney-us-stock-list"
+    assert session.calls[0]["params"] == {"refresh": "true", "page": 1, "page_size": 5}
+    assert session.calls[1]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/holder/stock-ggcg-em"
+    assert session.calls[1]["params"] == {"symbol": "股东增持", "page": 1, "page_size": 5}
+    assert session.calls[2]["params"] == {"trade_code": "000001.SZ", "start_date": "20200101", "end_date": "20201231"}
+    assert session.calls[3]["params"] == {"trade_code": "000001.SZ", "change_date": "20200101", "change_type": "上市"}
+    assert session.calls[4]["params"] == {"n": 5}
+
+
+def test_stock_st_history_forwards_documented_parameters():
+    session = FakeSession(
+        [
+            FakeResponse(payload={"code": 200, "message": "success", "data": [{"symbol": "600735.SH", "st_type": "ST"}]}),
+            FakeResponse(payload={"code": 200, "message": "success", "data": []}),
+        ]
+    )
+    client = FtshareClient(session=session)
+
+    rows = client.stock_st_history(symbol="600735.SH,000004.SZ", as_dataframe=False)
+    client.stock_st_history(symbol="000004.SZ", st_type="退市整理期", as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/stock-st-history"
+    assert session.calls[0]["params"] == {"symbol": "600735.SH,000004.SZ"}
+    assert rows == [{"symbol": "600735.SH", "st_type": "ST"}]
+    assert session.calls[1]["params"] == {"symbol": "000004.SZ", "st_type": "退市整理期"}
+
+
+def test_stock_ggcg_em_rejects_page_size_above_200():
+    client = FtshareClient(session=FakeSession([]))
+
+    with pytest.raises(ValueError, match="page_size must be between 1 and 200"):
+        client.stock_ggcg_em(page_size=201)
+
+
+def test_api_key_is_sent_as_header_and_not_query_param(monkeypatch):
+    monkeypatch.delenv("FTSHARE_API_KEY", raising=False)
+    session = FakeSession([FakeResponse(payload={})])
+    client = FtshareClient(
+        session=session,
+        api_key="explicit-key",
+        headers={"User-Agent": "test"},
+    )
+
+    client.get("api/v1/market/data/demo", symbol="000001.SZ")
+
+    assert session.calls[0]["headers"] == {
+        "User-Agent": "test",
+        "FTSHARE_API_KEY": "explicit-key",
+    }
+    assert session.calls[0]["params"] == {"symbol": "000001.SZ"}
+
+
+def test_api_key_falls_back_to_environment(monkeypatch):
+    monkeypatch.setenv("FTSHARE_API_KEY", "environment-key")
+    session = FakeSession([FakeResponse(payload={})])
+
+    FtshareClient(session=session).get("api/v1/market/data/demo")
+
+    assert session.calls[0]["headers"] == {"FTSHARE_API_KEY": "environment-key"}
+
+
+def test_explicit_api_key_overrides_header_value(monkeypatch):
+    monkeypatch.setenv("FTSHARE_API_KEY", "environment-key")
+    session = FakeSession([FakeResponse(payload={})])
+    client = FtshareClient(session=session, api_key="explicit-key", headers={"FTSHARE_API_KEY": "old-key"})
+
+    client.get("api/v1/market/data/demo")
+
+    assert session.calls[0]["headers"]["FTSHARE_API_KEY"] == "explicit-key"
+
+
+def test_package_base_url_assignment_is_used_by_market_api():
+    original = ft.BASE_URL
+    ft.BASE_URL = "https://assigned.example.com/data/"
+    try:
+        assert ft.market_api().base_url == "https://assigned.example.com/data/"
+    finally:
+        ft.set_base_url(original)
+
+
+def test_url_join_and_none_params_are_filtered():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(base_url="https://market.ft.tech/gateway/", session=session)
+
+    client.stk_limit(symbol="000001.SZ", trade_date=None, page=1)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/stk-limit"
+    assert session.calls[0]["params"] == {"symbol": "000001.SZ", "page": 1}
+
+
+def test_data_prefix_is_not_duplicated():
+    session = FakeSession([FakeResponse(payload={})])
+    client = FtshareClient(base_url="https://market.ft.tech/gateway/", session=session)
+
+    client.get("/data/api/v1/market/data/demo")
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/demo"
+
+
+def test_gateway_prefix_is_not_duplicated():
+    session = FakeSession([FakeResponse(payload={})])
+    client = FtshareClient(base_url="https://market.ft.tech/gateway/", session=session)
+
+    client.get("/gateway/api/v1/market/data/demo")
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/demo"
+
+
+def test_get_defaults_to_extracted_records():
+    session = FakeSession([FakeResponse(payload=paginated_records([{"id": 1}]))])
+    client = FtshareClient(session=session)
+
+    df = client.get("api/v1/market/data/demo")
+
+    assert isinstance(df, pd.DataFrame)
+    assert df.to_dict("records") == [{"id": 1}]
+
+
+def test_get_as_dataframe_false_returns_records():
+    session = FakeSession([FakeResponse(payload=paginated_records([{"id": 1}]))])
+    client = FtshareClient(session=session)
+
+    rows = client.get("api/v1/market/data/demo", as_dataframe=False)
+
+    assert rows == [{"id": 1}]
+
+
+def test_get_raw_true_returns_full_payload():
+    payload = paginated_records([{"id": 1}])
+    session = FakeSession([FakeResponse(payload=payload)])
+    client = FtshareClient(session=session)
+
+    assert client.get("api/v1/market/data/demo", raw=True) == payload
+
+
+def test_requested_endpoint_api_versions():
+    expected_paths = {
+        "hk_candlesticks": "api/v2/market/data/hk/hk-candlesticks",
+        "stock_announcements": "api/v2/market/data/announcements/stock-announcements",
+        "stock_reports": "api/v2/market/data/report/stock-reports",
+        "stock_minutes": "api/v2/market/data/stock_minutes",
+        "futures_minutes": "api/v2/market/data/futures_minutes",
+        "etf_minutes": "api/v2/market/data/etf_minutes",
+        "index_minutes": "api/v2/market/data/index_minutes",
+        "stock_ggmx_buy_ranking": "api/v2/market/data/holder/stock-ggmx-buy-ranking",
+        "stock_ggmx_sell_ranking": "api/v2/market/data/holder/stock-ggmx-sell-ranking",
+        "stock_institution_holdings": "api/v2/market/data/share/stock-institution-holdings",
+        "stock_institution_holdings_detail": "api/v2/market/data/share/stock-institution-holdings-detail",
+        "stock_institution_share_holdings": "api/v2/market/data/institution/institution-share-holdings",
+        "ashare_interactions": "api/v2/market/data/ashare-interactions",
+        "eastmoney_concept_boards": "api/v1/market/data/eastmoney-concept-boards",
+        "eastmoney_board_constituents": "api/v1/market/data/eastmoney-board-constituents",
+        "eastmoney_board_daily_kline": "api/v1/market/data/eastmoney-board-daily-ohlc",
+        "global_index_daily_kline": "api/v1/market/data/global-index/daily-kline",
+        "eastmoney_sector_flow": "api/v1/market/data/eastmoney-sector-flow",
+        "ths_board_kline": "api/v1/market/data/ths-board-kline",
+        "ths_board_list": "api/v1/market/data/ths-board-list",
+        "eastmoney_all_board_daily_kline": "api/v1/market/data/eastmoney-all-board-daily-ohlc",
+        "stock_ggmx": "api/v1/market/data/holder/stock-ggmx",
+        "report_announcement_list": "api/v1/market/data/report-announcements/list",
+        "report_announcement_summary": "api/v2/market/data/report-announcements/summary",
+        "stock_intraday_auction_volume_symbol": "api/v1/market/data/intraday-auction-volume/symbol",
+        "ths_all_board_kline": "api/v1/market/data/ths-all-board-kline",
+        "stock_candlesticks_batch": "api/v2/market/data/stock-candlesticks/batch",
+        "stock_minutes_batch": "api/v2/market/data/stock_minutes/batch",
+        "cb_lists": "api/v1/market/data/cb/cb-lists",
+        "eastmoney_futures_strange": "api/v1/market/data/eastmoney-futures-strange",
+        "member_build_process": "api/v2/market/data/member-build-process",
+        "member_position_ranking": "api/v2/market/data/member-position-ranking",
+        "futures_minutes_batch": "api/v2/market/data/futures_minutes/batch",
+        "hsi_daily_weight": "api/v1/market/data/hk/hsi-daily-weight",
+        "stk_ah_comparison": "api/v1/market/data/hk/stk-ah-comparison",
+        "sw_index_history_minutes": "api/v1/market/data/sw-index/history-minutes",
+        "index_minutes_batch": "api/v2/market/data/index_minutes/batch",
+        "etf_minutes_batch": "api/v2/market/data/etf_minutes/batch",
+        "etf_announcements": "api/v2/market/data/announcements/etf-announcements",
+        "etf_candlesticks_batch": "api/v2/market/data/etf-candlesticks/batch",
+        "etf_component_details": "api/v2/market/data/etf-component-details",
+        "etf_net_value": "api/v2/market/data/etf-net-value",
+        "etf_pcf_infos": "api/v2/market/data/etf-pcf/etf-pcf-infos",
+        "etf_share": "api/v2/market/data/etf-share",
+        "index_candlesticks_batch": "api/v2/market/data/index-candlesticks/batch",
+        "stock_dividends_effective": "api/v2/market/data/stock-dividends-effective",
+        "eastmoney_dapan_flow": "api/v1/market/data/eastmoney-dapan-flow",
+        "search": "api/v1/market/security/search/",
+        "eastmoney_rank": "api/v1/market/data/eastmoney-rank",
+        "ths_hot_list": "api/v1/market/data/ths-hot-list",
+        "xueqiu_rank": "api/v1/market/data/xueqiu-rank",
+        "tdx_board_members": "api/v1/market/data/tdx-board-members",
+        "stock_signal_latest_snapshot": "api/v3/market/data/stock-signal-latest-snapshot",
+        "ths_stock_daily_flow": "api/v1/market/data/ths-stock-daily-flow",
+        "ths_concept_daily_flow": "api/v1/market/data/ths-concept-daily-flow",
+        "ths_industry_daily_flow": "api/v1/market/data/ths-industry-daily-flow",
+    }
+
+    assert {name: ENDPOINTS[name].path for name in expected_paths} == expected_paths
+
+
+def test_new_batch_endpoints_forward_symbols_and_documented_parameters():
+    cases = [
+        (
+            "stock_candlesticks_batch",
+            {
+                "symbols": '["600519.SH"]',
+                "interval_unit": "day",
+                "interval_value": 1,
+                "adjust_kind": "forward",
+                "since_ts_millis": 1784048400000,
+                "until_ts_millis": 1784050200000,
+                "limit": 5,
+            },
+        ),
+        (
+            "etf_candlesticks_batch",
+            {
+                "symbols": '["510300.SH"]',
+                "interval_unit": "day",
+                "adjust_kind": "forward",
+                "since_ts_millis": 1784048400000,
+                "until_ts_millis": 1784050200000,
+                "limit": 5,
+            },
+        ),
+        (
+            "index_candlesticks_batch",
+            {
+                "symbols": '["000300.SH"]',
+                "interval_unit": "day",
+                "adjust_kind": "forward",
+                "since_ts_millis": 1784048400000,
+                "until_ts_millis": 1784050200000,
+                "limit": 5,
+            },
+        ),
+        (
+            "stock_minutes_batch",
+            {
+                "symbols": '["600519.SH"]',
+                "interval_value": 1,
+                "adjust_kind": "none",
+                "since_ts_millis": 1784048400000,
+                "until_ts_millis": 1784050200000,
+                "limit": 5,
+            },
+        ),
+        (
+            "etf_minutes_batch",
+            {
+                "symbols": '["510300.SH"]',
+                "interval_value": 1,
+                "adjust_kind": "none",
+                "since_ts_millis": 1784048400000,
+                "until_ts_millis": 1784050200000,
+                "limit": 5,
+            },
+        ),
+        (
+            "index_minutes_batch",
+            {
+                "symbols": '["000300.SH"]',
+                "interval_value": 1,
+                "since_ts_millis": 1784048400000,
+                "until_ts_millis": 1784050200000,
+                "limit": 5,
+            },
+        ),
+        (
+            "futures_minutes_batch",
+            {
+                "symbols": '["A2609.DCE"]',
+                "interval": "1min",
+                "start": 1784048400000,
+                "end": 1784050200000,
+                "limit": 5,
+            },
+        ),
+    ]
+
+    for method_name, kwargs in cases:
+        session = FakeSession([FakeResponse(payload=[])])
+        client = FtshareClient(session=session)
+
+        getattr(client, method_name)(as_dataframe=False, **kwargs)
+
+        assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + ENDPOINTS[method_name].path
+        assert session.calls[0]["params"] == kwargs
+
+
+def test_stock_description_uses_paginated_route_and_filters():
+    session = FakeSession([FakeResponse(payload=paginated_records([{"symbol": "600000.SH"}]))])
+    client = FtshareClient(session=session)
+
+    rows = client.stock_description(
+        symbol_id="600000.SH",
+        page=1,
+        page_size=1,
+        as_dataframe=False,
+    )
+
+    assert rows == [{"symbol": "600000.SH"}]
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/stock-description"
+    assert session.calls[0]["params"] == {
+        "symbol_id": "600000.SH",
+        "page": 1,
+        "page_size": 1,
+    }
+
+
+def test_stock_description_rejects_page_size_above_200():
+    client = FtshareClient(session=FakeSession([]))
+
+    with pytest.raises(ValueError, match="page_size must be between 1 and 200"):
+        client.stock_description(page_size=201)
+
+
+
+    session = FakeSession([FakeResponse(payload=paginated_records([]))] * 2)
+    client = FtshareClient(session=session)
+
+    client.eastmoney_all_board_daily_kline(page_size=200)
+    client.stk_ah_comparison(page_size=1000)
+
+    assert session.calls[0]["params"] == {"page_size": 200}
+    assert session.calls[1]["params"] == {"page_size": 1000}
+
+    with pytest.raises(ValueError, match="page_size must be between 1 and 200"):
+        client.eastmoney_all_board_daily_kline(page_size=201)
+    with pytest.raises(ValueError, match="page_size must be between 1 and 1000"):
+        client.stk_ah_comparison(page_size=1001)
+
+
+@pytest.mark.parametrize(
+    ("method_name", "kwargs"),
+    [
+        ("stock_unlock", {"stock_code": "000001"}),
+        ("yzxdr_detail", {"year": 2026, "quarter": 2}),
+        ("futures_minutes", {"symbol": "A2605.DCE", "interval": "1min", "limit": 5}),
+        ("futures_contract_kline", {"symbol": "A2605.DCE", "interval": "daily", "limit": 5}),
+        ("company_list", {}),
+        ("wallstreetcn_financial_calendar", {"start_date": "2026-05-01", "end_date": "2026-05-07"}),
+        ("stk_limit", {}),
+        ("stk_premarket", {}),
+        ("baidu_financial_calendar", {"start_date": "2026-05-01", "end_date": "2026-05-07"}),
+        ("stock_capital_flows", {}),
+        ("stock_ggmx_sell_ranking", {}),
+        ("stock_ggmx_buy_ranking", {}),
+        ("pledge_summary", {}),
+        ("index_weight_summary", {"index_code": "000300"}),
+    ],
+)
+def test_endpoint_methods_map_to_expected_paths(method_name, kwargs):
+    session = FakeSession([FakeResponse(payload={"code": 0, "message": "success", "data": {"records": []}})])
+    client = FtshareClient(session=session)
+
+    getattr(client, method_name)(**kwargs)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + ENDPOINTS[method_name].path
+
+
+def test_all_documented_endpoints_are_available_as_client_methods():
+    client = FtshareClient(session=FakeSession([]))
+    assert len(ENDPOINTS) >= 190
+
+    missing = [
+        name
+        for name, endpoint in ENDPOINTS.items()
+        if endpoint.original_api and not hasattr(client, name)
+    ]
+
+    assert missing == []
+
+
+def test_removed_requested_endpoints_are_not_exposed():
+    for name in ("hk_stock_info_all", "risk_warning_stock_quotes"):
+        assert name not in ENDPOINTS
+        assert not hasattr(FtshareClient, name)
+
+
+def test_new_paginated_endpoints_forward_parameters():
+    session = FakeSession([FakeResponse(payload=paginated_records([]))] * 4)
+    client = FtshareClient(session=session)
+
+    client.stock_signal_latest_snapshot(signal_type="new_high_60d", page=2, page_size=5)
+    client.ths_stock_daily_flow(start_date="20260805", end_date="20260805", code="600000", page=1, page_size=1000)
+    client.ths_concept_daily_flow(start_date="20260805", end_date="20260805", board_name="机器人概念", page=1, page_size=1000)
+    client.ths_industry_daily_flow(start_date="20260805", end_date="20260805", board_name="证券", page=1, page_size=1000)
+
+    assert session.calls[0]["params"] == {"signal_type": "new_high_60d", "page": 2, "page_size": 5}
+    assert session.calls[1]["params"] == {"start_date": "20260805", "end_date": "20260805", "code": "600000", "page": 1, "page_size": 1000}
+    assert session.calls[2]["params"] == {"start_date": "20260805", "end_date": "20260805", "board_name": "机器人概念", "page": 1, "page_size": 1000}
+    assert session.calls[3]["params"] == {"start_date": "20260805", "end_date": "20260805", "board_name": "证券", "page": 1, "page_size": 1000}
+
+
+def test_news_reaction_snapshot_forwards_filters_and_extracts_records():
+    records = [{"trade_date": "20260819", "symbol": "600519.SH", "lookback_hours": 48}]
+    session = FakeSession([FakeResponse(payload=paginated_records(records))])
+    client = FtshareClient(session=session)
+
+    frame = client.news_reaction_snapshot(
+        symbol="600519.SH",
+        start_date="20260818",
+        end_date="20260828",
+        lookback_hours=48,
+        page=1,
+        page_size=5,
+    )
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + ENDPOINTS["news_reaction_snapshot"].path
+    assert "json" not in session.calls[0]
+    assert session.calls[0]["params"] == {
+        "symbol": "600519.SH",
+        "start_date": "20260818",
+        "end_date": "20260828",
+        "lookback_hours": 48,
+        "page": 1,
+        "page_size": 5,
+    }
+    assert list(frame.columns) == ["trade_date", "symbol", "lookback_hours"]
+
+    with pytest.raises(ValueError, match="page_size must be between 1 and 200"):
+        client.news_reaction_snapshot(symbol="600519.SH", start_date="20260818", end_date="20260828", page_size=201)
+
+
+def test_eastmoney_sector_flow_forwards_board_parameters():
+    session = FakeSession([FakeResponse(payload=paginated_records([]))])
+    client = FtshareClient(session=session)
+
+    client.eastmoney_sector_flow(board_code="BK0488", board_type="industry", board_level=2, page=1, page_size=5)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + ENDPOINTS["eastmoney_sector_flow"].path
+    assert session.calls[0]["params"] == {"board_code": "BK0488", "board_type": "industry", "board_level": 2, "page": 1, "page_size": 5}
+
+
+def test_margin_trading_details_forwards_range_query():
+    session = FakeSession([FakeResponse(payload=paginated_records([{"symbol": "600000.SH"}]))])
+    client = FtshareClient(session=session)
+
+    rows = client.margin_trading_details(start_date="20260601", end_date="20260623", stock="600000.SH", page=1, page_size=5, as_dataframe=False)
+
+    assert rows == [{"symbol": "600000.SH"}]
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + ENDPOINTS["margin_trading_details"].path
+    assert session.calls[0]["params"] == {"start_date": "20260601", "end_date": "20260623", "stock": "600000.SH", "page": 1, "page_size": 5}
+
+    session = FakeSession([FakeResponse(payload=paginated_records([{"symbol": "000001.SZ"}]))])
+    client = FtshareClient(session=session)
+
+    rows = client.margin_trading_details(date="20260717", as_dataframe=False)
+
+    assert rows == [{"symbol": "000001.SZ"}]
+    assert session.calls[0]["params"] == {"date": "20260717"}
+
+
+def test_new_etf_document_endpoints_forward_documented_parameters():
+    cases = [
+        (
+            "etf_pcf_infos",
+            {"symbol": "510300.SH", "trade_date": "20260909", "page": 1, "page_size": 5},
+            {"symbol": "510300.SH", "trade_date": "20260909", "page": 1, "page_size": 5},
+        ),
+        (
+            "etf_share",
+            {"etf_code": "510300", "stati_perd": "日", "page": 1, "page_size": 5},
+            {"etf_code": "510300", "stati_perd": "日", "page": 1, "page_size": 5},
+        ),
+        (
+            "etf_net_value",
+            {"etf_code": "510300", "nav_date": 20260909, "page": 1, "page_size": 5},
+            {"etf_code": "510300", "nav_date": 20260909, "page": 1, "page_size": 5},
+        ),
+        (
+            "etf_announcements",
+            {"etf_code": "159915", "page": 1, "page_size": 5},
+            {"etf_code": "159915", "page": 1, "page_size": 5},
+        ),
+        (
+            "etf_component_details",
+            {"symbol": "510300.SH", "trade_date": 20260908},
+            {"symbol": "510300.SH", "trade_date": 20260908},
+        ),
+    ]
+
+    for method_name, kwargs, expected_params in cases:
+        session = FakeSession([FakeResponse(payload={"code": 200, "message": "success", "data": {"records": [], "pages": 1}})])
+        client = FtshareClient(session=session)
+
+        getattr(client, method_name)(as_dataframe=False, **kwargs)
+
+        assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + ENDPOINTS[method_name].path
+        assert session.calls[0]["params"] == expected_params
+
+
+def test_etf_share_and_net_value_reject_page_size_above_200():
+    client = FtshareClient(session=FakeSession([]))
+
+    with pytest.raises(ValueError, match="page_size must be between 1 and 200"):
+        client.etf_share(etf_code="510300", page_size=201)
+    with pytest.raises(ValueError, match="page_size must be between 1 and 200"):
+        client.etf_net_value(etf_code="510300", page_size=201)
+
+
+def test_realtime_kline_methods_serialize_symbols_list_to_json():
+    realtime_payload = {"code": 200, "message": "success", "data": [{"symbol": "600519.SH", "items": [], "total": 0}]}
+    methods = [
+        "stock_realtime_day_kline",
+        "stock_realtime_minute_kline",
+        "etf_realtime_day_kline",
+        "etf_realtime_minute_kline",
+        "index_realtime_day_kline",
+        "index_realtime_minute_kline",
+    ]
+
+    for method_name in methods:
+        session = FakeSession([FakeResponse(payload=realtime_payload)])
+        client = FtshareClient(session=session)
+
+        getattr(client, method_name)(symbols=["600519.SH", "000001.SZ"], as_dataframe=False)
+
+        assert session.calls[0]["params"] == {"symbols": '["600519.SH", "000001.SZ"]'}
+
+    session = FakeSession([FakeResponse(payload=realtime_payload)])
+    client = FtshareClient(session=session)
+
+    client.stock_realtime_day_kline(symbols='["600519.SH"]', as_dataframe=False)
+
+    assert session.calls[0]["params"] == {"symbols": '["600519.SH"]'}
+
+
+def test_etf_pcf_infos_unwraps_bare_object_data():
+    session = FakeSession([FakeResponse(payload={"code": 200, "message": "success", "data": {"symbol": "510300.SH", "trade_date": 20260909, "creation_redemption_unit": 900000}})])
+    client = FtshareClient(session=session)
+
+    result = client.etf_pcf_infos(symbol="510300.SH", trade_date="20260909", as_dataframe=False)
+
+    assert result == {"symbol": "510300.SH", "trade_date": 20260909, "creation_redemption_unit": 900000}
+
+
+def test_etf_pcf_infos_bare_object_dataframe_is_single_row():
+    session = FakeSession([FakeResponse(payload={"code": 200, "message": "success", "data": {"symbol": "510300.SH", "trade_date": 20260909, "creation_redemption_unit": 900000}})])
+    client = FtshareClient(session=session)
+
+    frame = client.etf_pcf_infos(symbol="510300.SH", trade_date="20260909")
+
+    assert isinstance(frame, pd.DataFrame)
+    assert len(frame) == 1
+    assert frame.loc[0, "symbol"] == "510300.SH"
+    assert frame.loc[0, "creation_redemption_unit"] == 900000
+
+
+def test_etf_pcf_infos_keeps_records_shape_and_envelope_passthrough():
+    session = FakeSession([FakeResponse(payload=paginated_records([{"symbol": "510300.SH"}]))])
+    client = FtshareClient(session=session)
+
+    rows = client.etf_pcf_infos(symbol="510300.SH", start_date="20260901", end_date="20260909", as_dataframe=False)
+
+    assert rows == [{"symbol": "510300.SH"}]
+
+    session = FakeSession([FakeResponse(payload={"code": 200, "message": "success", "data": {"symbol": "510300.SH", "trade_date": 20260909}})])
+    client = FtshareClient(session=session)
+
+    result = client.get(ENDPOINTS["etf_pcf_infos"].path, raw=False, as_dataframe=False)
+
+    assert result == {"code": 200, "message": "success", "data": {"symbol": "510300.SH", "trade_date": 20260909}}
+
+
+def test_new_flow_endpoints_reject_page_size_above_1000():
+    client = FtshareClient(session=FakeSession([]))
+
+    with pytest.raises(ValueError, match="page_size must be between 1 and 1000"):
+        client.ths_stock_daily_flow(page_size=1001)
+
+
+def test_generated_method_docstring_includes_parameter_metadata():
+    doc = FtshareClient.baidu_financial_calendar.__doc__ or ""
+
+    assert "Endpoint: ``api/v1/market/data/finance/financial-calendar/baidu``" in doc
+    assert "start_date: 起始日期 (type: string; required: Y)." in doc
+    assert "category: 筛选大类" in doc
+    assert "page_size: Rows per page." in doc
+
+
+def test_http_error():
+    session = FakeSession([FakeResponse(status_code=500, text="server error")])
+    client = FtshareClient(session=session)
+
+    with pytest.raises(FtshareHTTPError):
+        client.stk_limit()
+
+
+def test_decode_error():
+    session = FakeSession([FakeResponse(text="<html>", json_error=True)])
+    client = FtshareClient(session=session)
+
+    with pytest.raises(FtshareDecodeError):
+        client.stk_limit()
+
+
+def test_api_error():
+    session = FakeSession([FakeResponse(payload={"code": 1001, "message": "bad request"})])
+    client = FtshareClient(session=session)
+
+    with pytest.raises(FtshareAPIError):
+        client.stk_limit()
+
+
+def test_search_uses_public_path_without_trailing_slash_and_q_param():
+    session = FakeSession([FakeResponse(payload=[{"symbol": "600519.SH"}])])
+    client = FtshareClient(session=session)
+
+    rows = client.search(query="maotai", limit=1, as_dataframe=False)
+
+    assert rows == [{"symbol": "600519.SH"}]
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/security/search/"
+    assert session.calls[0]["params"] == {"q": "maotai", "limit": 1}
+
+
+def test_stock_market_list_families_format_board_path_parameters():
+    cases = [
+        (
+            "stock_daec_stocks",
+            {"board": "all", "page": 1, "page_size": 5, "filter": "close > 10", "order_by": "change_rate desc"},
+            "api/v1/market/data/daec/stocks/all",
+            {"filter": "close > 10", "order_by": "change_rate desc", "page": 1, "page_size": 5},
+        ),
+        (
+            "stock_realtime_list",
+            {"board": "chi-next", "page": 1, "page_size": 5},
+            "api/v1/market/data/stock-list/chi-next",
+            {"page": 1, "page_size": 5},
+        ),
+    ]
+
+    for method_name, kwargs, path, expected_params in cases:
+        session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+        client = FtshareClient(session=session)
+
+        getattr(client, method_name)(**kwargs)
+
+        assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + path
+        assert session.calls[0]["params"] == expected_params
+
+
+def test_endpoint_default_returns_dataframe_from_records():
+    session = FakeSession([FakeResponse(payload=paginated_records([{"ts_code": "000001.SZ"}]))])
+    client = FtshareClient(session=session)
+
+    df = client.stk_limit()
+
+    assert isinstance(df, pd.DataFrame)
+    assert df.to_dict("records") == [{"ts_code": "000001.SZ"}]
+
+
+def test_endpoint_default_returns_dataframe_from_items():
+    session = FakeSession(
+        [
+            FakeResponse(
+                payload={
+                    "items": [{"ts_code": "000001.SZ"}],
+                    "total_pages": 1,
+                    "total_items": 1,
+                }
+            )
+        ]
+    )
+    client = FtshareClient(session=session)
+
+    df = client.stk_limit()
+
+    assert isinstance(df, pd.DataFrame)
+    assert df.to_dict("records") == [{"ts_code": "000001.SZ"}]
+
+
+def test_endpoint_as_dataframe_false_returns_rows():
+    session = FakeSession([FakeResponse(payload=paginated_records([{"ts_code": "000001.SZ"}]))])
+    client = FtshareClient(session=session)
+
+    rows = client.stk_limit(as_dataframe=False)
+
+    assert rows == [{"ts_code": "000001.SZ"}]
+
+
+def test_endpoint_raw_true_returns_full_payload():
+    payload = paginated_records([{"ts_code": "000001.SZ"}])
+    session = FakeSession([FakeResponse(payload=payload)])
+    client = FtshareClient(session=session)
+
+    assert client.stk_limit(raw=True) == payload
+
+
+def test_fields_extract_and_filter_tabular_data():
+    session = FakeSession([FakeResponse(payload=paginated_records([{"ts_code": "000001.SZ", "up_limit": "11.55"}]))])
+    client = FtshareClient(session=session)
+
+    df = client.stk_limit(fields=["ts_code"])
+
+    assert isinstance(df, pd.DataFrame)
+    assert df.to_dict("records") == [{"ts_code": "000001.SZ"}]
+
+
+def test_limit_sets_total_rows_and_uses_page_size_for_first_page():
+    session = FakeSession([FakeResponse(payload=paginated_records([{"id": 1}]))])
+    client = FtshareClient(session=session)
+
+    df = client.baidu_financial_calendar(
+        start_date="2026-05-01",
+        end_date="2026-05-02",
+        limit=5,
+    )
+
+    assert isinstance(df, pd.DataFrame)
+    assert session.calls[0]["params"] == {
+        "start_date": "2026-05-01",
+        "end_date": "2026-05-02",
+        "page": 1,
+        "page_size": 5,
+    }
+
+
+def test_limit_caps_requested_page_size_when_smaller():
+    session = FakeSession([FakeResponse(payload=paginated_records([{"id": 1}]))])
+    client = FtshareClient(session=session)
+
+    client.baidu_financial_calendar(
+        start_date="2026-05-01",
+        end_date="2026-05-02",
+        limit=5,
+        page_size=10,
+    )
+
+    assert session.calls[0]["params"]["page_size"] == 5
+
+
+def test_limit_above_single_page_fetches_multiple_pages():
+    session = FakeSession(
+        [
+            FakeResponse(payload=paginated_records([{"id": i} for i in range(1, 201)], page=1, pages=2)),
+            FakeResponse(payload=paginated_records([{"id": i} for i in range(201, 301)], page=2, pages=2)),
+        ]
+    )
+    client = FtshareClient(session=session)
+
+    df = client.baidu_financial_calendar(
+        start_date="2026-05-01",
+        end_date="2026-05-02",
+        limit=300,
+    )
+
+    assert isinstance(df, pd.DataFrame)
+    assert len(df) == 300
+    assert session.calls[0]["params"]["page"] == 1
+    assert session.calls[0]["params"]["page_size"] == 200
+    assert session.calls[1]["params"]["page"] == 2
+    assert session.calls[1]["params"]["page_size"] == 100
+
+
+@pytest.mark.parametrize(
+    ("kwargs", "message"),
+    [
+        ({"page": 0}, "page must be >= 1"),
+        ({"limit": 0}, "limit must be >= 1"),
+        ({"page_size": 201}, "page_size must be between 1 and 200"),
+        ({"all_pages": True, "max_pages": 0}, "max_pages must be >= 1"),
+    ],
+)
+def test_paginated_endpoint_validates_pagination_controls(kwargs, message):
+    client = FtshareClient(session=FakeSession([]))
+
+    with pytest.raises(ValueError, match=message):
+        client.baidu_financial_calendar(
+            start_date="2026-05-01",
+            end_date="2026-05-02",
+            **kwargs,
+        )
+
+
+def test_stk_limit_uses_500_as_default_request_page_size():
+    session = FakeSession(
+        [
+            FakeResponse(payload=paginated_records([{"id": i} for i in range(1, 501)], page=1, pages=2)),
+            FakeResponse(payload=paginated_records([{"id": 501}], page=2, pages=2)),
+        ]
+    )
+    client = FtshareClient(session=session)
+
+    df = client.stk_limit(limit=501)
+
+    assert isinstance(df, pd.DataFrame)
+    assert len(df) == 501
+    assert session.calls[0]["params"]["page_size"] == 500
+    assert session.calls[1]["params"]["page_size"] == 1
+
+
+def test_stk_limit_allows_500_page_size():
+    session = FakeSession([FakeResponse(payload=paginated_records([{"id": 1}]))])
+    client = FtshareClient(session=session)
+
+    client.stk_limit(page_size=500)
+
+    assert session.calls[0]["params"]["page_size"] == 500
+
+
+def test_stk_limit_rejects_page_size_above_500():
+    client = FtshareClient(session=FakeSession([]))
+
+    with pytest.raises(ValueError, match="page_size must be between 1 and 500"):
+        client.stk_limit(page_size=501)
+
+
+def test_all_pages_combines_paginated_endpoint_rows():
+    session = FakeSession(
+        [
+            FakeResponse(payload=paginated_records([{"id": 1}, {"id": 2}], page=1, pages=2)),
+            FakeResponse(payload=paginated_records([{"id": 3}], page=2, pages=2)),
+        ]
+    )
+    client = FtshareClient(session=session)
+
+    df = client.baidu_financial_calendar(
+        start_date="2026-05-01",
+        end_date="2026-05-02",
+        page_size=2,
+        all_pages=True,
+    )
+
+    assert isinstance(df, pd.DataFrame)
+    assert df.to_dict("records") == [{"id": 1}, {"id": 2}, {"id": 3}]
+    assert session.calls[0]["params"]["page"] == 1
+    assert session.calls[0]["params"]["page_size"] == 2
+    assert session.calls[1]["params"]["page"] == 2
+    assert session.calls[1]["params"]["page_size"] == 2
+
+
+def test_all_pages_raw_true_returns_page_payloads():
+    first = paginated_records([{"id": 1}], page=1, pages=2)
+    second = paginated_records([{"id": 2}], page=2, pages=2)
+    session = FakeSession([FakeResponse(payload=first), FakeResponse(payload=second)])
+    client = FtshareClient(session=session)
+
+    payloads = client.baidu_financial_calendar(
+        start_date="2026-05-01",
+        end_date="2026-05-02",
+        page_size=1,
+        all_pages=True,
+        raw=True,
+    )
+
+    assert payloads == [first, second]
+
+
+def test_fetch_all_combines_pages():
+    session = FakeSession(
+        [
+            FakeResponse(payload=paginated_records([{"id": 1}, {"id": 2}], page=1, pages=2)),
+            FakeResponse(payload=paginated_records([{"id": 3}], page=2, pages=2)),
+        ]
+    )
+    client = FtshareClient(session=session)
+
+    df = client.fetch_all("baidu_financial_calendar", start_date="2026-05-01", end_date="2026-05-02", page_size=2)
+
+    assert isinstance(df, pd.DataFrame)
+    assert df.to_dict("records") == [{"id": 1}, {"id": 2}, {"id": 3}]
+    assert session.calls[0]["params"]["page"] == 1
+    assert session.calls[1]["params"]["page"] == 2
+
+
+def test_fetch_all_as_dataframe_false_returns_rows():
+    session = FakeSession(
+        [
+            FakeResponse(payload=paginated_records([{"id": 1}, {"id": 2}], page=1, pages=2)),
+            FakeResponse(payload=paginated_records([{"id": 3}], page=2, pages=2)),
+        ]
+    )
+    client = FtshareClient(session=session)
+
+    rows = client.fetch_all(
+        "baidu_financial_calendar",
+        start_date="2026-05-01",
+        end_date="2026-05-02",
+        page_size=2,
+        as_dataframe=False,
+    )
+
+    assert rows == [{"id": 1}, {"id": 2}, {"id": 3}]
+
+
+def test_as_dataframe_true_returns_dataframe():
+    session = FakeSession([FakeResponse(payload=paginated_records([{"ts_code": "000001.SZ"}]))])
+    client = FtshareClient(session=session)
+
+    df = client.stk_limit(as_dataframe=True)
+
+    assert list(df.columns) == ["ts_code"]
+    assert df.iloc[0]["ts_code"] == "000001.SZ"
+
+
+def test_get_query_booleans_are_lowercase_strings():
+    session = FakeSession([FakeResponse(payload=[])])
+    client = FtshareClient(session=session)
+
+    client.get("api/v1/market/data/demo", enabled=True, disabled=False, as_dataframe=False)
+
+    assert session.calls[0]["params"] == {"enabled": "true", "disabled": "false"}
+
+
+def test_etf_candlesticks_uses_get_query_params():
+    session = FakeSession([FakeResponse(payload=[{"close": "4.5"}])])
+    client = FtshareClient(session=session)
+
+    client.etf_candlesticks(
+        symbol="510300.XSHG",
+        interval_unit="Day",
+        until_ts_millis=1756791000000,
+        limit=5,
+        as_dataframe=False,
+    )
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/etf-candlesticks"
+    assert session.calls[0]["params"] == {
+        "symbol": "510300.XSHG",
+        "interval_unit": "Day",
+        "until_ts_millis": 1756791000000,
+        "limit": 5,
+    }
+
+
+def test_convertible_bond_candlesticks_uses_get_query_params():
+    session = FakeSession([FakeResponse(payload=[{"close": "200"}])])
+    client = FtshareClient(session=session)
+
+    client.convertible_bond_candlesticks(
+        symbol="113027.XSHG",
+        interval_unit="Day",
+        until_ts_millis=1756791000000,
+        as_dataframe=False,
+    )
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/convertible-bond-candlesticks"
+    assert session.calls[0]["params"] == {
+        "symbol": "113027.XSHG",
+        "interval_unit": "Day",
+        "until_ts_millis": 1756791000000,
+    }
+
+
+def test_index_candlesticks_uses_get_query_params():
+    session = FakeSession([FakeResponse(payload=[{"close": "4500"}])])
+    client = FtshareClient(session=session)
+
+    client.index_candlesticks(
+        symbol="000300.XSHG",
+        interval_unit="Day",
+        until_ts_millis=1756791000000,
+        as_dataframe=False,
+    )
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/index-candlesticks"
+    assert session.calls[0]["params"] == {
+        "symbol": "000300.XSHG",
+        "interval_unit": "Day",
+        "until_ts_millis": 1756791000000,
+    }
+
+
+def test_limit_event_timeline_3s_forwards_symbol_and_trade_date():
+    session = FakeSession([FakeResponse(payload=[])])
+    client = FtshareClient(session=session)
+
+    client.limit_event_timeline_3s(symbol="000504.XSHE", trade_date="20260713", as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v2/market/data/limit-event-timeline-3s"
+    assert session.calls[0]["params"] == {"symbol": "000504.XSHE", "trade_date": "20260713"}
+
+
+def test_stock_filter_forwards_symbol_param():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.stock_filter(symbol="600519.SH", page=1, page_size=5, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v2/market/data/stock-list/filter"
+    assert session.calls[0]["params"]["symbol"] == "600519.SH"
+    assert "board" not in session.calls[0]["params"]
+    assert "listing_date_since" not in session.calls[0]["params"]
+
+
+def test_stock_float_holders_forwards_is_last_paging():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.stock_float_holders(is_last=True, page=1, page_size=5, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/holder/stock-holder-ften"
+    assert session.calls[0]["params"]["is_last"] == "true"
+
+
+def test_stock_share_chg_forwards_is_last_paging():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.stock_share_chg(is_last=True, page=1, page_size=5, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/holder/stock-share-chg"
+    assert session.calls[0]["params"]["is_last"] == "true"
+
+
+def test_ths_industry_constituents_forwards_filters_and_pagination():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.ths_industry_constituents(industry_name="证券", page=1, page_size=1000, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/ths-industry-constituents"
+    assert session.calls[0]["params"] == {"industry_name": "证券", "page": 1, "page_size": 1000}
+
+
+def test_fund_basicinfo_paginated_with_fund_code():
+    session = FakeSession([FakeResponse(payload={
+        "code": 200,
+        "message": "success",
+        "data": {"items": [{"fund_code": "110011", "fund_name": "易方达优质精选混合(QDII)"}],
+                 "page_num": 1, "page_size": 500, "total": 1, "pages": 1},
+    })])
+    client = FtshareClient(session=session)
+
+    rows = client.fund_basicinfo(fund_code="110011", page=1, page_size=500, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-basicinfo"
+    assert session.calls[0]["params"] == {"fund_code": "110011", "page": 1, "page_size": 500}
+    assert rows == [{"fund_code": "110011", "fund_name": "易方达优质精选混合(QDII)"}]
+
+
+def test_fund_basicinfo_rejects_page_size_over_max():
+    session = FakeSession([])
+    client = FtshareClient(session=session)
+
+    with pytest.raises(ValueError):
+        client.fund_basicinfo(page=1, page_size=501, as_dataframe=False)
+
+    assert session.calls == []
+
+
+def test_fund_cal_return_forwards_fund_code_and_cal_type():
+    session = FakeSession([FakeResponse(payload=[])])
+    client = FtshareClient(session=session)
+
+    client.fund_cal_return(fund_code="110011", cal_type="1M", as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-cal-return"
+    assert session.calls[0]["params"] == {"fund_code": "110011", "cal-type": "1M"}
+
+
+def test_fund_cal_return_extracts_bare_array_data():
+    session = FakeSession([FakeResponse(payload={
+        "code": 200,
+        "message": "success",
+        "data": [{"date": 20260522, "return": 0.0}, {"date": 20260525, "return": 0.0016}],
+    })])
+    client = FtshareClient(session=session)
+
+    df = client.fund_cal_return(fund_code="110011", cal_type="1M")
+
+    assert list(df.columns) == ["date", "return"]
+    assert len(df) == 2
+
+
+def test_fund_share_forwards_paginated_params():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.fund_share(fund_code="000001", stati_perd="日", start_date=20260101, end_date=20260717,
+                     page=1, page_size=50, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-share"
+    assert session.calls[0]["params"] == {
+        "fund_code": "000001",
+        "stati_perd": "日",
+        "start_date": 20260101,
+        "end_date": 20260717,
+        "page": 1,
+        "page_size": 50,
+    }
+
+
+def test_fund_company_paginated_filter():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.fund_company(fund_company="华夏基金", page=1, page_size=50, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-company"
+    assert session.calls[0]["params"]["fund_company"] == "华夏基金"
+
+
+def test_fund_net_value_performance_interval_params():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.fund_net_value_performance(fund_code="000001", start_date=20260101, end_date=20260717,
+                                       page=1, page_size=50, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-net-value-performance"
+    assert session.calls[0]["params"]["start_date"] == 20260101
+
+
+def test_fund_net_value_paginated():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.fund_net_value(fund_code="000001", nav_date=20260717, page=1, page_size=50, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-net-value"
+    assert session.calls[0]["params"]["nav_date"] == 20260717
+
+
+def test_fund_classification_single_object():
+    session = FakeSession([FakeResponse(payload={"fund_code": "000001", "fund_name": "华夏成长",
+                                                  "classifications": {}})])
+    client = FtshareClient(session=session)
+
+    client.fund_classification(fund_code="000001", as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-classification"
+    assert session.calls[0]["params"]["fund_code"] == "000001"
+
+
+def test_fund_list_paginated_filter():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.fund_list(fund_type="股票型", page=1, page_size=50, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-list"
+    assert session.calls[0]["params"]["fund_type"] == "股票型"
+
+
+def test_fund_portfolio_paginated():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.fund_portfolio(fund_code="000001", report_date=20260331, page=1, page_size=50, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-portfolio"
+    assert session.calls[0]["params"]["report_date"] == 20260331
+
+
+def test_fund_holder_structure_array_response():
+    session = FakeSession([FakeResponse(payload=[])])
+    client = FtshareClient(session=session)
+
+    client.fund_holder_structure(fund_code="000001", as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-holder-structure"
+    assert session.calls[0]["params"]["fund_code"] == "000001"
+
+
+def test_fund_new_found_paginated():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.fund_new_found(start_date=20260101, end_date=20260717, fund_type="混合型",
+                          page=1, page_size=50, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-new-found"
+    assert session.calls[0]["params"]["fund_type"] == "混合型"
+
+
+def test_fund_manager_paginated():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.fund_manager(fund_code="000001", is_inoffice="1", page=1, page_size=50, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-manager"
+    assert session.calls[0]["params"]["is_inoffice"] == "1"
+
+
+def test_fund_fee_paginated_filter():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.fund_fee(fund_code="000001", charge_type="日常申购费", client_type="一般",
+                    page=1, page_size=50, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-fee"
+    assert session.calls[0]["params"]["charge_type"] == "日常申购费"
+
+
+def test_fund_asset_allocation_paginated():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.fund_asset_allocation(fund_code="000001", report_date=20260331,
+                                 page=1, page_size=50, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-asset-allocation"
+    assert session.calls[0]["params"]["report_date"] == 20260331
+
+
+def test_fund_risk_level_array_response():
+    session = FakeSession([FakeResponse(payload=[])])
+    client = FtshareClient(session=session)
+
+    client.fund_risk_level(fund_code="000001", history=True, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/fund/fund-risk-level"
+    assert session.calls[0]["params"]["history"] == "true"
+
+
+def test_fund_index_fund_array_response():
+    session = FakeSession([FakeResponse(payload=[])])
+    client = FtshareClient(session=session)
+
+    client.fund_index_fund(index_code="000300", scope="etf", as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v2/market/data/fund/index-fund"
+    assert session.calls[0]["params"] == {"index_code": "000300", "scope": "etf"}
+
+
+@pytest.mark.parametrize(
+    ("method_name", "kwargs", "expected_path", "expected_params"),
+    [
+        (
+            "namechange",
+            {"trade_code": "600848.SH", "start_date": "20200101", "end_date": "20241231"},
+            "api/v1/market/data/namechange",
+            {"trade_code": "600848.SH", "start_date": "20200101", "end_date": "20241231"},
+        ),
+        (
+            "stk_managers",
+            {"trade_code": "600848.SH,000001.SZ", "begin_date": "20200101", "end_date": "20241231"},
+            "api/v1/market/data/stk-managers",
+            {"trade_code": "600848.SH,000001.SZ", "begin_date": "20200101", "end_date": "20241231"},
+        ),
+        (
+            "stk_manager_hold",
+            {"trade_code": "600848.SH", "end_date": "20241231"},
+            "api/v1/market/data/stk-manager-hold",
+            {"trade_code": "600848.SH", "end_date": "20241231"},
+        ),
+        (
+            "stk_manager_pay",
+            {"trade_code": "600848.SH", "end_date": "20241231"},
+            "api/v1/market/data/stk-manager-pay",
+            {"trade_code": "600848.SH", "end_date": "20241231"},
+        ),
+    ],
+)
+def test_a_share_reference_endpoints_map_to_expected_paths(
+    method_name, kwargs, expected_path, expected_params
+):
+    session = FakeSession([FakeResponse(payload={"items": []})])
+    client = FtshareClient(session=session)
+
+    getattr(client, method_name)(**kwargs)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + expected_path
+    assert session.calls[0]["params"] == expected_params
