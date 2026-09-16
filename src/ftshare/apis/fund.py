@@ -469,7 +469,7 @@ class FundApiMixin:
 
         Args:
             fund_code: 基金代码 (type: string; required: Y).
-            classify_std: 分类标准：证监会基金分类/晨星基金分类/银河证券分类2017版/Gangtise基金分类/Gangtise基金概念分类，缺省全部 (type: string; required: N).
+            classify_std: 分类标准：证监会基金分类/晨星基金分类/银河证券分类2017版，缺省全部 (type: string; required: N).
             raw: Return the decoded JSON payload without tabular extraction.
             fields: Optional field list or comma-separated field string applied after extraction.
             as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.

@@ -4022,7 +4022,7 @@ Documented endpoint: ``get_fund_classification``.
 
 Args:
     fund_code: 基金代码 (type: string; required: Y).
-    classify_std: 分类标准：证监会基金分类/晨星基金分类/银河证券分类2017版/Gangtise基金分类/Gangtise基金概念分类，缺省全部 (type: string; required: N).
+    classify_std: 分类标准：证监会基金分类/晨星基金分类/银河证券分类2017版，缺省全部 (type: string; required: N).
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -4534,7 +4534,7 @@ Documented endpoint: ``get_china_futures_base_data_handler``.
 
 Args:
     trade_date: 交易日 YYYYMMDD；不传则使用前一交易日（CST） (type: int; required: N).
-    symbol: WIND 合约全码如 A2605.DCE；大小写不敏感；不传或空表示该日全部 (type: string; required: N).
+    symbol: 合约全码如 A2605.DCE；大小写不敏感；不传或空表示该日全部 (type: string; required: N).
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
