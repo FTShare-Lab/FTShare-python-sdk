@@ -417,6 +417,13 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'original_api': 'get_stock_institution_share_holdings',
         'params': ('institution_id', 'year', 'report_type', 'invest_type'),
     },
+    'stock_intraday': {
+        'path': 'api/v4/market/data/stock-intraday',
+        'title': '股票跨日分时行情',
+        'doc_file': '股票跨日分时行情.md',
+        'original_api': 'stock_intraday',
+        'params': ('symbol', 'range', 'days', 'ts_ms'),
+    },
     'stock_intraday_auction_volume': {
         'path': 'api/v2/market/data/intraday-auction-volume',
         'title': '连续竞价成交量',
