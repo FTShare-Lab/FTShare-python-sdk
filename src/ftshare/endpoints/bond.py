@@ -8,12 +8,45 @@ from .types import Endpoint, build_endpoints
 ENDPOINTS: dict[str, Endpoint] = build_endpoints({
     'convertible_bond_candlesticks': {
         'path': 'api/v1/market/data/convertible-bond-candlesticks',
-        'title': '可转债K线',
-        'doc_file': '可转债K线.md',
+        'title': '可转债历史K线',
+        'doc_file': '可转债历史K线.md',
         'original_api': 'convertible_bond_candlesticks',
         'method': 'GET',
         'params': ('symbol', 'interval_unit', 'interval_value', 'adjust_kind', 'since_ts_millis', 'until_ts_millis', 'limit'),
     },
+
+    'convertible_bond_candlesticks_batch': {
+        'path': 'api/v2/market/data/convertible-bond-candlesticks/batch',
+        'title': '批量可转债历史K线',
+        'doc_file': '批量可转债历史K线.md',
+        'original_api': 'convertible_bond_candlesticks_batch',
+        'params': ('symbols', 'interval_unit', 'interval_value', 'adjust_kind', 'since_ts_millis', 'until_ts_millis', 'limit'),
+    },
+
+    'convertible_bond_minute_candlesticks': {
+        'path': 'api/v2/market/data/convertible-bond-minute-candlesticks',
+        'title': '可转债历史分钟K线',
+        'doc_file': '可转债历史分钟K线.md',
+        'original_api': 'convertible_bond_minute_candlesticks',
+        'params': ('symbol', 'symbols', 'interval_value', 'since_ts_millis', 'until_ts_millis', 'limit'),
+    },
+
+    'convertible_bond_realtime_day_kline': {
+        'path': 'api/v4/market/data/convertible-bond-realtime-day-kline',
+        'title': '可转债实时日K线',
+        'doc_file': '可转债实时日K线.md',
+        'original_api': 'convertible_bond_realtime_day_kline',
+        'params': ('symbols',),
+    },
+
+    'convertible_bond_realtime_minute_kline': {
+        'path': 'api/v4/market/data/convertible-bond-realtime-minute-kline',
+        'title': '可转债实时分钟K线',
+        'doc_file': '可转债实时分钟K线.md',
+        'original_api': 'convertible_bond_realtime_minute_kline',
+        'params': ('symbols',),
+    },
+
     'szse_convertible_bond_matching_trades': {
         'path': 'api/v1/market/data/convertible-bond/szse/matching-trades',
         'title': '深交所可转债匹配成交',

@@ -6,22 +6,22 @@
 
 | 指标 | 数量 |
 |---|---:|
-| SDK 方法总数 | 229 |
+| SDK 方法总数 | 236 |
 
 ## 专题分布
 
 | ftshare-doc 专题 | SDK 方法数 | API mixin 模块 | Endpoint 模块 |
 |---|---:|---|---|
-| 股票数据 | 121 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
+| 股票数据 | 124 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
 | 港股数据 | 3 | `ftshare.apis.hk` | `ftshare.endpoints.hk` |
 | 美股数据 | 2 | `ftshare.apis.us` | `ftshare.endpoints.us` |
 | 指数专题 | 15 | `ftshare.apis.index` | `ftshare.endpoints.index` |
 | ETF专题 | 17 | `ftshare.apis.etf` | `ftshare.endpoints.etf` |
 | 公募基金 | 18 | `ftshare.apis.fund` | `ftshare.endpoints.fund` |
 | 期货数据 | 18 | `ftshare.apis.futures` | `ftshare.endpoints.futures` |
-| 债券专题 | 6 | `ftshare.apis.bond` | `ftshare.endpoints.bond` |
+| 债券专题 | 10 | `ftshare.apis.bond` | `ftshare.endpoints.bond` |
 | 宏观经济 | 23 | `ftshare.apis.economic` | `ftshare.endpoints.economic` |
-| 大模型语料 | 4 | `ftshare.apis.llm_corpus` | `ftshare.endpoints.llm_corpus` |
+| 大模型语料 | 5 | `ftshare.apis.llm_corpus` | `ftshare.endpoints.llm_corpus` |
 | 现货数据 | 1 | `ftshare.apis.spot` | `ftshare.endpoints.spot` |
 | 外汇数据 | 0 | `ftshare.apis.forex` | `ftshare.endpoints.forex` |
 
@@ -120,6 +120,7 @@
 | [`stock_institution_holdings`](#api-stock-institution-holdings) | 机构持股 | `GET` | `api/v2/market/data/share/stock-institution-holdings` | `year`, `report_type`, `inst_type`, `page`, `page_size` | `机构持股.md` |
 | [`stock_institution_holdings_detail`](#api-stock-institution-holdings-detail) | 机构持股明细 | `GET` | `api/v2/market/data/share/stock-institution-holdings-detail` | `stock_code`, `year`, `report_type`, `inst_type`, `page`, `page_size` | `机构持股明细.md` |
 | [`stock_institution_share_holdings`](#api-stock-institution-share-holdings) | 机构股本持股 | `GET` | `api/v2/market/data/institution/institution-share-holdings` | `institution_id`, `year`, `report_type`, `invest_type` | `机构股本持股.md` |
+| [`stock_intraday`](#api-stock-intraday) | 股票跨日分时行情 | `GET` | `api/v4/market/data/stock-intraday` | `symbol`, `range`, `days`, `ts_ms` | `股票跨日分时行情.md` |
 | [`stock_intraday_auction_volume`](#api-stock-intraday-auction-volume) | 连续竞价成交量 | `GET` | `api/v2/market/data/intraday-auction-volume` | `trade_date`, `page`, `page_size` | `连续竞价成交量.md` |
 | [`stock_intraday_prices`](#api-stock-intraday-prices) | 标的分时数据 | `GET` | `api/v4/market/data/daec/history/prices` | `symbol`, `range`, `days`, `ts_ms` | `标的分时数据.md` |
 | [`stock_ipos`](#api-stock-ipos) | 股票IPO | `GET` | `api/v1/market/data/stock-ipos` | `page`, `page_size` | `股票IPO.md` |
@@ -265,11 +266,14 @@
 
 ### 债券专题
 
-| [`cb_lists`](#api-cb-lists) | 可转债列表 | `GET` | `api/v1/market/data/cb/cb-lists` | - | `可转债列表.md` |
-
 | SDK 方法 | 接口名称 | HTTP | Path | 参数 | 来源文档 |
 |---|---|---|---|---|---|
-| [`convertible_bond_candlesticks`](#api-convertible-bond-candlesticks) | 可转债K线 | `GET` | `api/v1/market/data/convertible-bond-candlesticks` | `symbol`, `interval_unit`, `interval_value`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit` | `可转债K线.md` |
+| [`cb_lists`](#api-cb-lists) | 可转债列表 | `GET` | `api/v1/market/data/cb/cb-lists` | - | `可转债列表.md` |
+| [`convertible_bond_candlesticks`](#api-convertible-bond-candlesticks) | 可转债历史K线 | `GET` | `api/v1/market/data/convertible-bond-candlesticks` | `symbol`, `interval_unit`, `interval_value`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit` | `可转债历史K线.md` |
+| [`convertible_bond_candlesticks_batch`](#api-convertible-bond-candlesticks-batch) | 批量可转债历史K线 | `GET` | `api/v2/market/data/convertible-bond-candlesticks/batch` | `symbols`, `interval_unit`, `interval_value`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit` | `批量可转债历史K线.md` |
+| [`convertible_bond_minute_candlesticks`](#api-convertible-bond-minute-candlesticks) | 可转债历史分钟K线 | `GET` | `api/v2/market/data/convertible-bond-minute-candlesticks` | `symbol`, `symbols`, `interval_value`, `since_ts_millis`, `until_ts_millis`, `limit` | `可转债历史分钟K线.md` |
+| [`convertible_bond_realtime_day_kline`](#api-convertible-bond-realtime-day-kline) | 可转债实时日K线 | `GET` | `api/v4/market/data/convertible-bond-realtime-day-kline` | `symbols` | `可转债实时日K线.md` |
+| [`convertible_bond_realtime_minute_kline`](#api-convertible-bond-realtime-minute-kline) | 可转债实时分钟K线 | `GET` | `api/v4/market/data/convertible-bond-realtime-minute-kline` | `symbols` | `可转债实时分钟K线.md` |
 | [`szse_convertible_bond_declaration_snapshots`](#api-szse-convertible-bond-declaration-snapshots) | 深交所可转债申报快照 | `GET` | `api/v1/market/data/convertible-bond/szse/declaration-snapshots` | `security_code`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `深交所可转债申报快照.md` |
 | [`szse_convertible_bond_directed_trades`](#api-szse-convertible-bond-directed-trades) | 深交所可转债定向成交 | `GET` | `api/v1/market/data/convertible-bond/szse/directed-trades` | `security_code`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `深交所可转债定向成交.md` |
 | [`szse_convertible_bond_matching_trades`](#api-szse-convertible-bond-matching-trades) | 深交所可转债匹配成交 | `GET` | `api/v1/market/data/convertible-bond/szse/matching-trades` | `security_code`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `深交所可转债匹配成交.md` |
@@ -311,6 +315,7 @@
 | [`shareholders_meeting`](#api-shareholders-meeting) | 股东大会 | `GET` | `api/v1/market/data/corporate/meeting` | `page`, `page_size` | `股东大会.md` |
 | [`stock_announcements`](#api-stock-announcements) | 公告列表 | `GET` | `api/v2/market/data/announcements/stock-announcements` | `stock_code`, `start_date`, `end_date`, `type`, `page`, `page_size` | `公告列表.md` |
 | [`stock_reports`](#api-stock-reports) | 研报列表 | `GET` | `api/v2/market/data/report/stock-reports` | `stock_code`, `start_date`, `end_date`, `type`, `page`, `page_size` | `研报列表.md` |
+| [`stock_prospectuses`](#api-stock-prospectuses) | 招股书列表 | `GET` | `api/v2/market/data/announcements/stock-prospectuses` | `stock_code`, `start_date`, `end_date`, `page`, `page_size` | `招股书列表.md` |
 
 ### 现货数据
 
@@ -2439,6 +2444,37 @@ Returns:
     A pandas ``DataFrame`` by default, Python rows when
     ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
     payloads when multi-page fetching is used with ``raw=True``.
+```
+
+<h4 id="api-stock-intraday"><code>stock_intraday</code></h4>
+
+- 接口名称：股票跨日分时行情
+- HTTP：`GET`
+- Path：`api/v4/market/data/stock-intraday`
+- 参数：`symbol`, `range`, `days`, `ts_ms`
+- 来源文档：`股票跨日分时行情.md`
+- 原始接口：`stock_intraday`
+
+```text
+股票跨日分时行情.
+
+Endpoint: ``api/v4/market/data/stock-intraday``.
+Method: ``GET``.
+Documented endpoint: ``stock_intraday``.
+
+Args:
+    symbol: 股票代码，需带市场后缀，如 600000.SH、000001.SZ；不接受裸代码 (type: string; required: Y).
+    range: 预置时间区间：Today（当日）/ FiveDays（当日及此前 4 个交易日，默认），大小写敏感 (type: string; required: N).
+    days: 1～5；查询当日及此前 N-1 个交易日，1 表示当日 (type: int; required: N).
+    ts_ms: 当日过滤起点，Unix 毫秒时间戳，包含起点；不能通过它指定历史日期 (type: int(ms); required: N).
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, or raw JSON when ``raw=True``.
 ```
 
 <h4 id="api-stock-intraday-auction-volume"><code>stock_intraday_auction_volume</code></h4>
@@ -4873,28 +4909,28 @@ Returns:
 
 <h4 id="api-convertible-bond-candlesticks"><code>convertible_bond_candlesticks</code></h4>
 
-- 接口名称：可转债K线
+- 接口名称：可转债历史K线
 - HTTP：`GET`
 - Path：`api/v1/market/data/convertible-bond-candlesticks`
 - 参数：`symbol`, `interval_unit`, `interval_value`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit`
-- 来源文档：`可转债K线.md`
+- 来源文档：`可转债历史K线.md`
 - 原始接口：`convertible_bond_candlesticks`
 
 ```text
-可转债K线.
+可转债历史K线.
 
 Endpoint: ``api/v1/market/data/convertible-bond-candlesticks``.
 Method: ``GET``.
 Documented endpoint: ``convertible_bond_candlesticks``.
 
 Args:
-    symbol: 可转债代码，如 113027.XSHG、128048.XSHE；也接受 .SH、.SZ 短后缀 (type: string; required: Y).
-    interval_unit: 周期单位：Minute/Day/Week/Month/Year (type: enum; required: Y).
-    interval_value: 间隔数值，默认 1；例如 Minute+5 表示 5 分钟 K 线 (type: int; required: N).
+    symbol: 单只可转债代码，如 113042.SH；也接受 .XSHG、.XSHE 后缀 (type: string; required: Y).
+    interval_unit: 周期单位：Day/Week/Month/Year，大小写不敏感 (type: enum; required: Y).
+    interval_value: 可省略；周期查询无需设置 (type: int; required: N).
     adjust_kind: 复权：None（默认，不复权）/Forward（前复权）/Backward（后复权） (type: enum; required: N).
-    since_ts_millis: 开始时间戳，单位毫秒；分钟 K 线与 until 的跨度 ≤3 天 (type: int(ms); required: N).
+    since_ts_millis: 起始时间戳，单位毫秒；不得晚于 until，且与 until 相差不超过 12 个自然月 (type: int(ms); required: Y).
     until_ts_millis: 结束时间戳，单位毫秒 (type: int(ms); required: Y).
-    limit: 返回条数上限；未传 since 和 limit 时默认最多返回 50 根 K 线 (type: int; required: N).
+    limit: 保留最新 K 线条数上限；省略返回窗口内全部记录 (type: int; required: N).
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -4904,6 +4940,131 @@ Returns:
     A pandas ``DataFrame`` by default, Python rows when
     ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
     payloads when multi-page fetching is used with ``raw=True``.
+```
+
+<h4 id="api-convertible-bond-candlesticks-batch"><code>convertible_bond_candlesticks_batch</code></h4>
+
+- 接口名称：批量可转债历史K线
+- HTTP：`GET`
+- Path：`api/v2/market/data/convertible-bond-candlesticks/batch`
+- 参数：`symbols`, `interval_unit`, `interval_value`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit`
+- 来源文档：`批量可转债历史K线.md`
+- 原始接口：`convertible_bond_candlesticks_batch`
+
+```text
+批量可转债历史K线.
+
+Endpoint: ``api/v2/market/data/convertible-bond-candlesticks/batch``.
+Method: ``GET``.
+Documented endpoint: ``convertible_bond_candlesticks_batch``.
+
+Args:
+    symbols: 可转债代码列表，1～20 个；支持重复参数、逗号分隔或 JSON 字符串数组 (type: string[]; required: Y).
+    interval_unit: 周期单位：Day/Week/Month/Year，大小写不敏感 (type: enum; required: Y).
+    interval_value: 可省略；周期查询无需设置 (type: int; required: N).
+    adjust_kind: 复权：None（默认，不复权）/Forward（前复权）/Backward（后复权） (type: enum; required: N).
+    since_ts_millis: 起始时间戳，单位毫秒；不得晚于 until，且与 until 相差不超过 12 个自然月 (type: int(ms); required: Y).
+    until_ts_millis: 结束时间戳，单位毫秒 (type: int(ms); required: Y).
+    limit: 每个标的最新 K 线条数上限；省略返回窗口内全部记录 (type: int; required: N).
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
+```
+
+<h4 id="api-convertible-bond-minute-candlesticks"><code>convertible_bond_minute_candlesticks</code></h4>
+
+- 接口名称：可转债历史分钟K线
+- HTTP：`GET`
+- Path：`api/v2/market/data/convertible-bond-minute-candlesticks`
+- 参数：`symbol`, `symbols`, `interval_value`, `since_ts_millis`, `until_ts_millis`, `limit`
+- 来源文档：`可转债历史分钟K线.md`
+- 原始接口：`convertible_bond_minute_candlesticks`
+
+```text
+可转债历史分钟K线.
+
+Endpoint: ``api/v2/market/data/convertible-bond-minute-candlesticks``.
+Method: ``GET``.
+Documented endpoint: ``convertible_bond_minute_candlesticks``.
+
+Args:
+    symbol: 单只可转债代码（与 symbols 二选一，不能同时传） (type: string; required: N).
+    symbols: 1～20 个可转债代码；支持重复参数、逗号分隔或 JSON 字符串数组（与 symbol 二选一） (type: string[]; required: N).
+    interval_value: 分钟周期：仅支持 1、5、15，默认 1 (type: enum; required: N).
+    since_ts_millis: 起始时间戳，单位毫秒；单只、批量都必须提供 (type: int(ms); required: Y).
+    until_ts_millis: 结束时间戳，单位毫秒；不得早于 since，且单次跨度不超过 3 个自然日 (type: int(ms); required: Y).
+    limit: 每只标的聚合后最多返回条数，范围 1～1000；省略返回窗口内全部记录 (type: int; required: N).
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
+```
+
+<h4 id="api-convertible-bond-realtime-day-kline"><code>convertible_bond_realtime_day_kline</code></h4>
+
+- 接口名称：可转债实时日K线
+- HTTP：`GET`
+- Path：`api/v4/market/data/convertible-bond-realtime-day-kline`
+- 参数：`symbols`
+- 来源文档：`可转债实时日K线.md`
+- 原始接口：`convertible_bond_realtime_day_kline`
+
+```text
+可转债实时日K线.
+
+Endpoint: ``api/v4/market/data/convertible-bond-realtime-day-kline``.
+Method: ``GET``.
+Documented endpoint: ``convertible_bond_realtime_day_kline``.
+
+Args:
+    symbols: 1～20 个可转债代码的 JSON 字符串数组，如 ``["113042.SH","123107.SZ"]``；单只也必须传单元素数组 (type: string; required: Y).
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, or raw JSON when ``raw=True``.
+```
+
+<h4 id="api-convertible-bond-realtime-minute-kline"><code>convertible_bond_realtime_minute_kline</code></h4>
+
+- 接口名称：可转债实时分钟K线
+- HTTP：`GET`
+- Path：`api/v4/market/data/convertible-bond-realtime-minute-kline`
+- 参数：`symbols`
+- 来源文档：`可转债实时分钟K线.md`
+- 原始接口：`convertible_bond_realtime_minute_kline`
+
+```text
+可转债实时分钟K线.
+
+Endpoint: ``api/v4/market/data/convertible-bond-realtime-minute-kline``.
+Method: ``GET``.
+Documented endpoint: ``convertible_bond_realtime_minute_kline``.
+
+Args:
+    symbols: 1～20 个可转债代码的 JSON 字符串数组，如 ``["113042.SH","123107.SZ"]``；单只也必须传单元素数组 (type: string; required: Y).
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, or raw JSON when ``raw=True``.
 ```
 
 <h4 id="api-szse-convertible-bond-declaration-snapshots"><code>szse_convertible_bond_declaration_snapshots</code></h4>
@@ -5670,6 +5831,43 @@ Returns:
     A pandas ``DataFrame`` by default, Python rows when
     ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
     payloads when multi-page fetching is used with ``raw=True``.
+```
+
+<h4 id="api-stock-prospectuses"><code>stock_prospectuses</code></h4>
+
+- 接口名称：招股书列表
+- HTTP：`GET`
+- Path：`api/v2/market/data/announcements/stock-prospectuses`
+- 参数：`stock_code`, `start_date`, `end_date`, `page`, `page_size`
+- 来源文档：`招股书列表.md`
+- 原始接口：`stock_prospectuses`
+
+```text
+招股书列表.
+
+Endpoint: ``api/v2/market/data/announcements/stock-prospectuses``.
+Method: ``GET``.
+Documented endpoint: ``stock_prospectuses``.
+
+Args:
+    stock_code: 股票代码；按标的查询时必填，支持裸代码、短后缀和长后缀 (type: string; required: N).
+    start_date: 披露日期 YYYYMMDD；未提供 stock_code 时必填 (type: string; required: N).
+    end_date: 披露日期 YYYYMMDD；不填默认等于 start_date，传入时必须等于 start_date (type: string; required: N).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
+
 ```
 
 ### 现货数据

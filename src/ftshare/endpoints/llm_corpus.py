@@ -34,4 +34,12 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'original_api': 'stock_reports',
         'params': ('stock_code', 'start_date', 'end_date', 'type', 'page', 'page_size'),
     },
+    'stock_prospectuses': {
+        'path': 'api/v2/market/data/announcements/stock-prospectuses',
+        'title': '招股书列表',
+        'doc_file': '招股书列表.md',
+        'original_api': 'stock_prospectuses',
+        'params': ('stock_code', 'start_date', 'end_date', 'page', 'page_size'),
+        'max_page_size': 500,
+    },
 })

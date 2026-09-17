@@ -3708,6 +3708,48 @@ class StockApiMixin:
             **request_params,
         )
 
+    def stock_intraday(
+        self,
+        symbol: Any | None = None,
+        range: Any | None = None,
+        days: Any | None = None,
+        ts_ms: Any | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """股票跨日分时行情.
+
+        Endpoint: ``api/v4/market/data/stock-intraday``.
+        Method: ``GET``.
+        Documented endpoint: ``stock_intraday``.
+
+        Args:
+            symbol: 股票代码，需带市场后缀，如 600000.SH、000001.SZ；不接受裸代码 (type: string; required: Y).
+            range: 预置时间区间：Today（当日）/ FiveDays（当日及此前 4 个交易日，默认），大小写敏感 (type: string; required: N).
+            days: 1～5；查询当日及此前 N-1 个交易日，1 表示当日 (type: int; required: N).
+            ts_ms: 当日过滤起点，Unix 毫秒时间戳，包含起点；不能通过它指定历史日期 (type: int(ms); required: N).
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, or raw JSON when ``raw=True``.
+        """
+        request_params = {'symbol': symbol, 'range': range, 'days': days, 'ts_ms': ts_ms}
+        request_params.update(kwargs)
+        return self._call_endpoint(
+            'stock_intraday',
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
+
     def stock_intraday_prices(
         self,
         symbol: Any | None = None,

@@ -213,6 +213,7 @@ def test_requested_endpoint_api_versions():
     expected_paths = {
         "hk_candlesticks": "api/v2/market/data/hk/hk-candlesticks",
         "stock_announcements": "api/v2/market/data/announcements/stock-announcements",
+        "stock_prospectuses": "api/v2/market/data/announcements/stock-prospectuses",
         "stock_reports": "api/v2/market/data/report/stock-reports",
         "stock_minutes": "api/v2/market/data/stock_minutes",
         "futures_minutes": "api/v2/market/data/futures_minutes",
@@ -1016,6 +1017,104 @@ def test_convertible_bond_candlesticks_uses_get_query_params():
         "interval_unit": "Day",
         "until_ts_millis": 1756791000000,
     }
+
+
+def test_convertible_bond_kline_family_forwards_documented_parameters():
+    kline = [{"symbol": "113042.SH", "close": "116.8380"}]
+    grouped = [{"symbol": "113042.SH", "items": kline, "total": 1}]
+
+    cases = [
+        (
+            "convertible_bond_candlesticks",
+            "api/v1/market/data/convertible-bond-candlesticks",
+            kline,
+            {"symbol": "113042.SH", "interval_unit": "Day", "since_ts_millis": 1786291200000, "until_ts_millis": 1786377599999, "limit": 1},
+        ),
+        (
+            "convertible_bond_candlesticks_batch",
+            "api/v2/market/data/convertible-bond-candlesticks/batch",
+            kline,
+            {"symbols": ["113042.SH", "123107.SZ"], "interval_unit": "Day", "since_ts_millis": 1786291200000, "until_ts_millis": 1786377599999, "limit": 1},
+        ),
+        (
+            "convertible_bond_minute_candlesticks",
+            "api/v2/market/data/convertible-bond-minute-candlesticks",
+            kline,
+            {"symbol": "113042.SH", "interval_value": 1, "since_ts_millis": 1786291200000, "until_ts_millis": 1786377599999, "limit": 1},
+        ),
+    ]
+
+    for method_name, path, payload, kwargs in cases:
+        session = FakeSession([FakeResponse(payload=payload)])
+        client = FtshareClient(session=session)
+
+        getattr(client, method_name)(as_dataframe=False, **kwargs)
+
+        assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + path
+        assert session.calls[0]["params"] == kwargs
+
+    session = FakeSession([FakeResponse(payload=grouped)])
+    client = FtshareClient(session=session)
+
+    client.convertible_bond_minute_candlesticks(
+        symbols=["113042.SH", "123107.SZ"],
+        since_ts_millis=1786291200000,
+        until_ts_millis=1786377599999,
+        as_dataframe=False,
+    )
+
+    assert session.calls[0]["params"] == {
+        "symbols": ["113042.SH", "123107.SZ"],
+        "since_ts_millis": 1786291200000,
+        "until_ts_millis": 1786377599999,
+    }
+
+    for method_name in ("convertible_bond_realtime_day_kline", "convertible_bond_realtime_minute_kline"):
+        session = FakeSession([FakeResponse(payload={"code": 200, "message": "success", "data": grouped})])
+        client = FtshareClient(session=session)
+
+        getattr(client, method_name)(symbols=["113042.SH", "123107.SZ"], as_dataframe=False)
+
+        assert session.calls[0]["params"] == {"symbols": '["113042.SH", "123107.SZ"]'}
+
+
+def test_stock_intraday_forwards_range_days_and_ts_ms():
+    session = FakeSession([FakeResponse(payload=[{"ts_ms": 1789522200000, "price": 9.19}])] * 2)
+    client = FtshareClient(session=session)
+
+    client.stock_intraday(symbol="600000.SH", range="Today", as_dataframe=False)
+    client.stock_intraday(symbol="600000.SH", days=3, ts_ms=1789522200000, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v4/market/data/stock-intraday"
+    assert session.calls[0]["params"] == {"symbol": "600000.SH", "range": "Today"}
+    assert session.calls[1]["params"] == {"symbol": "600000.SH", "days": 3, "ts_ms": 1789522200000}
+
+
+def test_stock_prospectuses_supports_stock_and_date_modes():
+    session = FakeSession(
+        [
+            FakeResponse(payload=paginated_records([{"stock_code": "600000.SH"}])),
+            FakeResponse(payload=paginated_records([{"stock_code": "920002.BJ"}])),
+        ]
+    )
+    client = FtshareClient(session=session)
+
+    client.stock_prospectuses(stock_code="600000.SH", page=1, page_size=500, as_dataframe=False)
+    client.stock_prospectuses(start_date="20061114", end_date="20061114", page=1, page_size=500, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v2/market/data/announcements/stock-prospectuses"
+    assert session.calls[0]["params"] == {"stock_code": "600000.SH", "page": 1, "page_size": 500}
+    assert session.calls[1]["params"] == {"start_date": "20061114", "end_date": "20061114", "page": 1, "page_size": 500}
+
+
+def test_stock_prospectuses_rejects_page_size_above_documented_maximum():
+    session = FakeSession([])
+    client = FtshareClient(session=session)
+
+    with pytest.raises(ValueError, match="page_size must be between 1 and 500"):
+        client.stock_prospectuses(stock_code="600000.SH", page_size=501, as_dataframe=False)
+
+    assert session.calls == []
 
 
 def test_index_candlesticks_uses_get_query_params():
