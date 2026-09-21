@@ -1468,6 +1468,17 @@ def test_limit_event_timeline_3s_forwards_symbol_and_trade_date():
     assert session.calls[0]["params"] == {"symbol": "000504.XSHE", "trade_date": "20260713"}
 
 
+def test_supply_chain_industry_names_calls_route_without_params():
+    session = FakeSession([FakeResponse(payload={"code": 200, "message": "success", "data": ["3D打印", "3D打印材料"]})])
+    client = FtshareClient(session=session)
+
+    result = client.supply_chain_industry_names(as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v3/market/data/supply-chain/industry-names"
+    assert session.calls[0]["params"] == {}
+    assert result == ["3D打印", "3D打印材料"]
+
+
 def test_stock_filter_forwards_symbol_param():
     session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
     client = FtshareClient(session=session)

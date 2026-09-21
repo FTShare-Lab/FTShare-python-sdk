@@ -6,13 +6,13 @@
 
 | 指标 | 数量 |
 |---|---:|
-| SDK 方法总数 | 240 |
+| SDK 方法总数 | 241 |
 
 ## 专题分布
 
 | ftshare-doc 专题 | SDK 方法数 | API mixin 模块 | Endpoint 模块 |
 |---|---:|---|---|
-| 股票数据 | 126 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
+| 股票数据 | 127 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
 | 港股数据 | 3 | `ftshare.apis.hk` | `ftshare.endpoints.hk` |
 | 美股数据 | 2 | `ftshare.apis.us` | `ftshare.endpoints.us` |
 | 指数专题 | 15 | `ftshare.apis.index` | `ftshare.endpoints.index` |
@@ -140,6 +140,7 @@
 | [`stock_st_history`](#api-stock-st-history) | 股票历史ST状态 | `GET` | `api/v1/market/data/stock-st-history` | `symbol`, `st_type` | `股票历史ST状态.md` |
 | [`stock_unlock`](#api-stock-unlock) | 限售解禁 | `GET` | `api/v1/market/data/unlock/stock_unlock` | `stock_code`, `start_date`, `end_date`, `page`, `page_size` | `限售解禁.md` |
 | [`supply_chain_company_supply_chain_companies`](#api-supply-chain-company-supply-chain-companies) | 供应链公司候选 | `GET` | `api/v3/market/data/supply-chain/company-supply-chain-companies` | `trade_code`, `direction`, `page`, `page_size` | `供应链公司候选.md` |
+| [`supply_chain_industry_names`](#api-supply-chain-industry-names) | 供应链行业名称 | `GET` | `api/v3/market/data/supply-chain/industry-names` | - | `供应链行业名称.md` |
 | [`supply_chain_subindustry_subsubindustries`](#api-supply-chain-subindustry-subsubindustries) | 供应链子行业层级展开 | `GET` | `api/v3/market/data/supply-chain/subindustry-subsubindustries` | `industry_name` | `供应链子行业层级展开.md` |
 | [`supply_chain_subindustry_supply_chain`](#api-supply-chain-subindustry-supply-chain) | 供应链一跳关系 | `GET` | `api/v3/market/data/supply-chain/subindustry-supply-chain` | `industry_name`, `direction` | `供应链一跳关系.md` |
 | [`supply_chain_subsubindustry_companies`](#api-supply-chain-subsubindustry-companies) | 供应链子子行业公司映射 | `GET` | `api/v3/market/data/supply-chain/subsubindustry-companies` | `subindustry_name` | `供应链子子行业公司映射.md` |
@@ -2994,6 +2995,19 @@ Returns:
 
 ```text
 供应链公司候选.
+```
+
+<h4 id="api-supply-chain-industry-names"><code>supply_chain_industry_names</code></h4>
+
+- 接口名称：供应链行业名称
+- HTTP：`GET`
+- Path：`api/v3/market/data/supply-chain/industry-names`
+- 参数：`-`
+- 来源文档：`供应链行业名称.md`
+- 原始接口：`supply_chain_industry_names`
+
+```text
+供应链行业名称.
 ```
 
 <h4 id="api-supply-chain-subindustry-subsubindustries"><code>supply_chain_subindustry_subsubindustries</code></h4>

@@ -766,6 +766,13 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'params': ('industry_name',),
     },
 
+    'supply_chain_industry_names': {
+        'path': 'api/v3/market/data/supply-chain/industry-names',
+        'title': '供应链行业名称',
+        'doc_file': '供应链行业名称.md',
+        'original_api': 'supply_chain_industry_names',
+    },
+
     'exchange_margin_summaries': {
         'path': 'api/v1/market/data/exchange-margin-summaries',
         'title': '交易所融资融券汇总日度',

@@ -250,6 +250,7 @@ SPECIAL_CALLS: dict[str, dict[str, Any]] = {
     "stock_candlesticks_batch": {"symbols": "600519.SH", "interval_unit": "day", "interval_value": 1, "adjust_kind": "forward", "since_ts_millis": 1784048400000, "until_ts_millis": 1784050200000, "limit": 5},
     "stock_minutes_batch": {"symbols": "600519.SH", "interval_value": 1, "adjust_kind": "none", "since_ts_millis": 1784048400000, "until_ts_millis": 1784050200000, "limit": 5},
     "cb_lists": {},
+    "supply_chain_industry_names": {},
     "eastmoney_futures_strange": {"exchange": "DCE", "variety": "A", "contract": "A2609", "trade_date": "20260820"},
     "member_build_process": {"exchange": "DCE", "member_name": "永安期货", "instrument_id": "A2609", "start_date": "20260818", "end_date": "20260820", "contract_multiplier": 10, "page": 1, "page_size": 5},
     "member_position_ranking": {"exchange": "DCE", "instrument_id": "A2609", "trade_date": "20260820", "direction": "long", "page": 1, "page_size": 5},

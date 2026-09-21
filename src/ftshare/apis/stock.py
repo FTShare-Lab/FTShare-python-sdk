@@ -4197,6 +4197,13 @@ class StockApiMixin:
         return self._call_endpoint('supply_chain_subindustry_subsubindustries', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
 
 
+    def supply_chain_industry_names(self, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
+        """供应链行业名称."""
+        params = {}
+        params.update(kwargs)
+        return self._call_endpoint('supply_chain_industry_names', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+
+
     def exchange_margin_summaries(self, start_date: Any | None = None, end_date: Any | None = None, exchange: Any | None = None, page: int | None = None, page_size: int | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
         """交易所融资融券汇总日度."""
         params = {'start_date': start_date, 'end_date': end_date, 'exchange': exchange, 'page': page, 'page_size': page_size}
