@@ -2404,7 +2404,7 @@ class StockApiMixin:
     ) -> Any:
         """涨跌停事件时间线.
 
-        Endpoint: ``api/v1/market/data/limit-event-timeline-3s``.
+        Endpoint: ``api/v2/market/data/limit-event-timeline-3s``.
         Method: ``GET``.
         Documented endpoint: ``limit_event_timeline_3s``.
 
