@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 import re
 from collections.abc import Mapping, Sequence
+from pathlib import Path
 from typing import Any
 from urllib.parse import quote
 
@@ -188,6 +189,42 @@ class BaseClient:
         if endpoint.method != "GET":
             raise ValueError(f"Unsupported HTTP method for endpoint: {endpoint.method}")
         return self.get(path, raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+
+    def download(
+        self,
+        path: str,
+        *,
+        save_dir: str | os.PathLike[str] = ".",
+        filename: str | None = None,
+    ) -> str:
+        """Download a binary attachment and write it to ``save_dir``.
+
+        Args:
+            path: Endpoint path relative to ``base_url``. Absolute URLs are
+                also accepted. Path parameters must already be substituted.
+            save_dir: Destination directory. Created when missing.
+            filename: Destination file name. Defaults to the last path segment.
+
+        Returns:
+            The path of the written file, or an empty string when the server
+            answers 2xx with an empty body.
+
+        Raises:
+            FtshareHTTPError: If the server returns a non-2xx HTTP status.
+        """
+        url = self._url_for(path)
+        response = self.session.get(url, timeout=self.timeout, headers=self.headers or None)
+        if not 200 <= response.status_code < 300:
+            raise FtshareHTTPError(response.status_code, url, response.text)
+
+        content = response.content
+        if not content:
+            return ""
+
+        target = Path(save_dir) / (filename or Path(path).name)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(content)
+        return str(target)
 
     def get_paginated(
         self,

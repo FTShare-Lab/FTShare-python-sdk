@@ -10,11 +10,12 @@ from ftshare.endpoints import ENDPOINTS
 
 
 class FakeResponse:
-    def __init__(self, status_code=200, payload=None, text="{}", json_error=False):
+    def __init__(self, status_code=200, payload=None, text="{}", json_error=False, content=b""):
         self.status_code = status_code
         self._payload = payload
         self.text = text
         self._json_error = json_error
+        self.content = content
 
     def json(self):
         if self._json_error:
@@ -564,6 +565,57 @@ def test_new_etf_document_endpoints_forward_documented_parameters():
 
         assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + ENDPOINTS[method_name].path
         assert session.calls[0]["params"] == expected_params
+
+
+ANNOUNCEMENT_HASH = "3e179549deb8bbc62c60375080aaaea10913f3ad7eee88aa31bfb2a5a7befccb"
+
+
+def test_etf_announcements_download_writes_pdf_and_returns_path(tmp_path):
+    pdf = b"%PDF-1.4 fake announcement body"
+    session = FakeSession([FakeResponse(payload={}, content=pdf)])
+    client = FtshareClient(session=session)
+
+    saved = client.etf_announcements_download(ANNOUNCEMENT_HASH, save_dir=tmp_path)
+
+    expected = tmp_path / f"{ANNOUNCEMENT_HASH}.pdf"
+    assert saved == str(expected)
+    assert expected.read_bytes() == pdf
+    assert session.calls[0]["url"] == (
+        "https://market.ft.tech/gateway/api/v2/market/data/announcements/etf-announcements/" + ANNOUNCEMENT_HASH
+    )
+    assert session.calls[0]["params"] is None
+
+
+def test_stock_announcements_download_creates_missing_directory(tmp_path):
+    pdf = b"%PDF-1.7 fake announcement body"
+    session = FakeSession([FakeResponse(payload={}, content=pdf)])
+    client = FtshareClient(session=session)
+    save_dir = tmp_path / "announcements" / "2026"
+
+    saved = client.stock_announcements_download(ANNOUNCEMENT_HASH, save_dir=save_dir)
+
+    assert saved == str(save_dir / f"{ANNOUNCEMENT_HASH}.pdf")
+    assert (save_dir / f"{ANNOUNCEMENT_HASH}.pdf").read_bytes() == pdf
+    assert session.calls[0]["url"] == (
+        "https://market.ft.tech/gateway/api/v2/market/data/announcements/stock-announcements/" + ANNOUNCEMENT_HASH
+    )
+
+
+def test_announcements_download_returns_empty_path_for_empty_body(tmp_path):
+    session = FakeSession([FakeResponse(payload={}, content=b"")])
+    client = FtshareClient(session=session)
+
+    assert client.etf_announcements_download(ANNOUNCEMENT_HASH, save_dir=tmp_path) == ""
+    assert list(tmp_path.iterdir()) == []
+
+
+def test_announcements_download_raises_on_http_error(tmp_path):
+    session = FakeSession([FakeResponse(status_code=500, text='{"code":500,"message":"boom"}')])
+    client = FtshareClient(session=session)
+
+    with pytest.raises(FtshareHTTPError):
+        client.stock_announcements_download(ANNOUNCEMENT_HASH, save_dir=tmp_path)
+    assert list(tmp_path.iterdir()) == []
 
 
 def test_etf_share_and_net_value_reject_page_size_above_200():

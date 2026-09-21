@@ -2,11 +2,12 @@ from __future__ import annotations
 
 
 class FakeResponse:
-    def __init__(self, status_code=200, payload=None, text="{}", json_error=False):
+    def __init__(self, status_code=200, payload=None, text="{}", json_error=False, content=b""):
         self.status_code = status_code
         self._payload = payload
         self.text = text
         self._json_error = json_error
+        self.content = content
 
     def json(self):
         if self._json_error:

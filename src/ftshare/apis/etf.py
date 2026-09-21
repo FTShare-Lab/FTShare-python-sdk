@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from collections.abc import Sequence
 from typing import Any
 
@@ -391,6 +392,29 @@ class EtfApiMixin:
             as_dataframe=as_dataframe,
             **request_params,
         )
+
+    def etf_announcements_download(
+        self,
+        url_hash: Any,
+        save_dir: str | os.PathLike[str] = ".",
+    ) -> str:
+        """下载ETF公告正文.
+
+        Endpoint: ``api/v2/market/data/announcements/etf-announcements/{url_hash}``.
+        Method: ``GET``.
+
+        Args:
+            url_hash: 公告文件 URL 哈希，取自 ``etf_announcements`` 列表响应的 `url_hash` 字段 (type: string; required: Y).
+            save_dir: 保存目录（默认为当前目录），目录不存在时自动创建；文件名固定为 `{url_hash}.pdf`。
+
+        Returns:
+            落盘后的文件路径；服务端返回 2xx 但正文为空时返回空字符串。
+
+        Raises:
+            FtshareHTTPError: If the server returns a non-2xx HTTP status.
+        """
+        path = self._format_path(ENDPOINTS['etf_announcements'].path + '/{url_hash}', {'url_hash': url_hash})
+        return self.download(path, save_dir=save_dir, filename=f"{url_hash}.pdf")
 
     def etf_candlesticks_batch(self, symbols: Any | None = None, interval_unit: Any | None = None, adjust_kind: Any | None = None, since_ts_millis: Any | None = None, until_ts_millis: Any | None = None, limit: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
         """批量ETFK线."""

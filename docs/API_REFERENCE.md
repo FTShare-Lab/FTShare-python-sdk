@@ -6,7 +6,7 @@
 
 | 指标 | 数量 |
 |---|---:|
-| SDK 方法总数 | 236 |
+| SDK 方法总数 | 238 |
 
 ## 专题分布
 
@@ -16,12 +16,12 @@
 | 港股数据 | 3 | `ftshare.apis.hk` | `ftshare.endpoints.hk` |
 | 美股数据 | 2 | `ftshare.apis.us` | `ftshare.endpoints.us` |
 | 指数专题 | 15 | `ftshare.apis.index` | `ftshare.endpoints.index` |
-| ETF专题 | 17 | `ftshare.apis.etf` | `ftshare.endpoints.etf` |
+| ETF专题 | 18 | `ftshare.apis.etf` | `ftshare.endpoints.etf` |
 | 公募基金 | 18 | `ftshare.apis.fund` | `ftshare.endpoints.fund` |
 | 期货数据 | 18 | `ftshare.apis.futures` | `ftshare.endpoints.futures` |
 | 债券专题 | 10 | `ftshare.apis.bond` | `ftshare.endpoints.bond` |
 | 宏观经济 | 23 | `ftshare.apis.economic` | `ftshare.endpoints.economic` |
-| 大模型语料 | 5 | `ftshare.apis.llm_corpus` | `ftshare.endpoints.llm_corpus` |
+| 大模型语料 | 6 | `ftshare.apis.llm_corpus` | `ftshare.endpoints.llm_corpus` |
 | 现货数据 | 1 | `ftshare.apis.spot` | `ftshare.endpoints.spot` |
 | 外汇数据 | 0 | `ftshare.apis.forex` | `ftshare.endpoints.forex` |
 
@@ -198,6 +198,7 @@
 
 | [`etf_minutes_batch`](#api-etf-minutes-batch) | 批量ETF历史分钟行情 | `GET` | `api/v2/market/data/etf_minutes/batch` | `symbols`, `interval_value`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit` | `批量ETF历史分钟行情.md` |
 | [`etf_announcements`](#api-etf-announcements) | ETF公告列表 | `GET` | `api/v2/market/data/announcements/etf-announcements` | `etf_code`, `start_date`, `end_date`, `page`, `page_size` | `ETF公告列表.md` |
+| [`etf_announcements_download`](#api-etf-announcements-download) | ETF公告正文下载 | `GET` | `api/v2/market/data/announcements/etf-announcements/{url_hash}` | `url_hash`, `save_dir` | `ETF公告列表.md` |
 | [`etf_candlesticks_batch`](#api-etf-candlesticks-batch) | 批量ETFK线 | `GET` | `api/v2/market/data/etf-candlesticks/batch` | `symbols`, `interval_unit`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit` | `批量ETFK线.md` |
 | [`etf_component_details`](#api-etf-component-details) | ETF成分证券明细 | `GET` | `api/v2/market/data/etf-component-details` | `symbol`, `trade_date` | `ETF成分证券明细.md` |
 | [`etf_net_value`](#api-etf-net-value) | ETF净值 | `GET` | `api/v2/market/data/etf-net-value` | `etf_code`, `nav_date`, `start_date`, `end_date`, `page`, `page_size` | `ETF净值.md` |
@@ -314,6 +315,7 @@
 | [`semantic_search_news`](#api-semantic-search-news) | 新闻语义搜索 | `GET` | `api/v3/market/data/semantic-search-news` | `query`, `limit`, `year`, `start_time`, `end_time` | `新闻语义搜索.md` |
 | [`shareholders_meeting`](#api-shareholders-meeting) | 股东大会 | `GET` | `api/v1/market/data/corporate/meeting` | `page`, `page_size` | `股东大会.md` |
 | [`stock_announcements`](#api-stock-announcements) | 公告列表 | `GET` | `api/v2/market/data/announcements/stock-announcements` | `stock_code`, `start_date`, `end_date`, `type`, `page`, `page_size` | `公告列表.md` |
+| [`stock_announcements_download`](#api-stock-announcements-download) | 公告正文下载 | `GET` | `api/v2/market/data/announcements/stock-announcements/{url_hash}` | `url_hash`, `save_dir` | `公告列表.md` |
 | [`stock_reports`](#api-stock-reports) | 研报列表 | `GET` | `api/v2/market/data/report/stock-reports` | `stock_code`, `start_date`, `end_date`, `type`, `page`, `page_size` | `研报列表.md` |
 | [`stock_prospectuses`](#api-stock-prospectuses) | 招股书列表 | `GET` | `api/v2/market/data/announcements/stock-prospectuses` | `stock_code`, `start_date`, `end_date`, `page`, `page_size` | `招股书列表.md` |
 
@@ -5796,6 +5798,32 @@ Returns:
     payloads when multi-page fetching is used with ``raw=True``.
 ```
 
+<h4 id="api-stock-announcements-download"><code>stock_announcements_download</code></h4>
+
+- 接口名称：公告正文下载
+- HTTP：`GET`
+- Path：`api/v2/market/data/announcements/stock-announcements/{url_hash}`
+- 参数：`url_hash`, `save_dir`
+- 来源文档：`公告列表.md`
+- 说明：`stock_announcements` 的正文附件路由，下载 PDF 并落盘，返回文件路径；服务端返回 2xx 但正文为空时返回空字符串。
+
+```text
+下载公告正文.
+
+Endpoint: ``api/v2/market/data/announcements/stock-announcements/{url_hash}``.
+Method: ``GET``.
+
+Args:
+    url_hash: 公告文件 URL 哈希，取自 ``stock_announcements`` 列表响应的 `url_hash` 字段 (type: string; required: Y).
+    save_dir: 保存目录（默认为当前目录），目录不存在时自动创建；文件名固定为 `{url_hash}.pdf`。
+
+Returns:
+    落盘后的文件路径；服务端返回 2xx 但正文为空时返回空字符串。
+
+Raises:
+    FtshareHTTPError: If the server returns a non-2xx HTTP status.
+```
+
 <h4 id="api-stock-reports"><code>stock_reports</code></h4>
 
 - 接口名称：研报列表
@@ -6027,6 +6055,32 @@ Returns:
 - Path：`api/v2/market/data/announcements/etf-announcements`
 - 参数：`etf_code, start_date, end_date, page, page_size`
 - 来源文档：`ETF公告列表.md`
+
+<h4 id="api-etf-announcements-download"><code>etf_announcements_download</code></h4>
+
+- 接口名称：ETF公告正文下载
+- HTTP：`GET`
+- Path：`api/v2/market/data/announcements/etf-announcements/{url_hash}`
+- 参数：`url_hash`, `save_dir`
+- 来源文档：`ETF公告列表.md`
+- 说明：`etf_announcements` 的正文附件路由，下载 PDF 并落盘，返回文件路径；服务端返回 2xx 但正文为空时返回空字符串。
+
+```text
+下载ETF公告正文.
+
+Endpoint: ``api/v2/market/data/announcements/etf-announcements/{url_hash}``.
+Method: ``GET``.
+
+Args:
+    url_hash: 公告文件 URL 哈希，取自 ``etf_announcements`` 列表响应的 `url_hash` 字段 (type: string; required: Y).
+    save_dir: 保存目录（默认为当前目录），目录不存在时自动创建；文件名固定为 `{url_hash}.pdf`。
+
+Returns:
+    落盘后的文件路径；服务端返回 2xx 但正文为空时返回空字符串。
+
+Raises:
+    FtshareHTTPError: If the server returns a non-2xx HTTP status.
+```
 
 <h4 id="api-etf-candlesticks-batch"><code>etf_candlesticks_batch</code></h4>
 
