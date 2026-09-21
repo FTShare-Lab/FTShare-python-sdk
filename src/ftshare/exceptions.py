@@ -57,3 +57,29 @@ class FtshareAPIError(FtshareError):
         self.payload = payload
         detail = message or "API returned a non-zero business code"
         super().__init__(f"FTShare API error {code}: {detail}")
+
+
+class FtshareDownloadError(FtshareError):
+    """Raised when a file download cannot be completed or fails verification."""
+
+    def __init__(
+        self,
+        url: str,
+        reason: str,
+        *,
+        expected: Any | None = None,
+        actual: Any | None = None,
+    ) -> None:
+        """Initialize a download error.
+
+        Args:
+            url: Final request URL.
+            reason: Human-readable failure reason.
+            expected: Expected value, such as a sha256 digest or byte size.
+            actual: Value observed locally when the download failed.
+        """
+        self.url = url
+        self.reason = reason
+        self.expected = expected
+        self.actual = actual
+        super().__init__(f"Download failed for {url}: {reason}")

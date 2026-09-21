@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
-from collections.abc import Sequence
+import os
+import re
+from collections.abc import Mapping, Sequence
 from typing import Any
 
 from ..endpoints import ENDPOINTS
+from ..exceptions import FtshareDownloadError
 from ..params import symbols_to_json_string
 
 
@@ -4053,6 +4056,94 @@ class StockApiMixin:
         path = ENDPOINTS['ashare_news_sentiment_factors'].path
         return self.get_paginated(path, page=page, page_size=page_size, limit=limit, all_pages=all_pages, max_pages=max_pages, raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
 
+
+    def kline_archives(
+        self,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """年度分K归档包清单.
+
+        Endpoint: ``api/v2/market/data/kline-archives``.
+        Method: ``GET``.
+        Documented endpoint: ``kline_archives``.
+
+        Args:
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when ``as_dataframe=False``, or raw JSON when ``raw=True``. Rows carry `year`, `size_bytes`, `last_modified` and `sha256` for each downloadable archive package.
+        """
+        request_params = dict(kwargs)
+        return self._call_endpoint(
+            'kline_archives',
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
+
+    def kline_archives_download(
+        self,
+        year: Any,
+        save_dir: str | os.PathLike[str] = ".",
+        retries: int = 3,
+    ) -> str:
+        """下载年度分K归档包.
+
+        Endpoint: ``api/v2/market/data/kline-archives/{year}/download``.
+        Method: ``GET``.
+
+        归档包为按年打包的分钟 K 线（zstd 压缩 tar，4–5 GB），下载前先用 ``kline_archives`` 校验该年份是否在清单内，下载中支持 HTTP Range 断点续传（半成品写在 `{文件名}.part`，旁挂 `.part.meta` 记录 ETag；服务端 ETag 变化时丢弃半成品重下），支持网络失败重试，下载完成后按清单的 `sha256` 校验完整性。
+
+        Args:
+            year: 4 位年份，如 `2023`；须为 ``kline_archives`` 返回的年份之一 (type: int | string; required: Y).
+            save_dir: 保存目录，默认为当前目录；目录不存在时自动创建。
+            retries: 首次失败后的额外重试次数，默认 3（即最多尝试 4 次）。网络异常、429、5xx 与 416 会重试。
+
+        Returns:
+            落盘后的文件路径；目标文件已存在且 sha256 与清单一致时直接返回该路径，不重新下载。
+
+        Raises:
+            ValueError: 传入的 `year` 不是 4 位数字。
+            FtshareDownloadError: 该年份不在清单内，或下载完成后 size / sha256 校验不一致。
+            FtshareHTTPError: 下载接口返回不可重试的 HTTP 错误状态。
+        """
+        year_str = str(year)
+        if re.fullmatch(r"\d{4}", year_str) is None:
+            raise ValueError(f"year must be a 4-digit year; got {year!r}")
+
+        listing = self.kline_archives(as_dataframe=False)
+        rows = listing if isinstance(listing, list) else []
+        entry = next(
+            (
+                row
+                for row in rows
+                if isinstance(row, Mapping) and str(row.get('year')) == year_str
+            ),
+            None,
+        )
+        if entry is None:
+            raise FtshareDownloadError(
+                self._url_for(ENDPOINTS['kline_archives'].path),
+                f"no archive package is offered for year {year_str}",
+            )
+
+        path = self._format_path(ENDPOINTS['kline_archives'].path + '/{year}/download', {'year': year_str})
+        return self.download_resumable(
+            path,
+            expected_size=entry.get('size_bytes'),
+            expected_sha256=entry.get('sha256'),
+            save_dir=save_dir,
+            filename=f"ftshare_1m_{year_str}.tar.zst",
+            retries=retries,
+        )
 
     def kline_pattern_annotations(self, date: Any | None = None, symbol: Any | None = None, pattern: Any | None = None, page: Any | None = None, page_size: Any | None = None, limit: int | None = None, all_pages: bool = False, max_pages: int | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
         """K线形态标注."""

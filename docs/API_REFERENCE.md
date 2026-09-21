@@ -6,13 +6,13 @@
 
 | 指标 | 数量 |
 |---|---:|
-| SDK 方法总数 | 238 |
+| SDK 方法总数 | 240 |
 
 ## 专题分布
 
 | ftshare-doc 专题 | SDK 方法数 | API mixin 模块 | Endpoint 模块 |
 |---|---:|---|---|
-| 股票数据 | 124 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
+| 股票数据 | 126 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
 | 港股数据 | 3 | `ftshare.apis.hk` | `ftshare.endpoints.hk` |
 | 美股数据 | 2 | `ftshare.apis.us` | `ftshare.endpoints.us` |
 | 指数专题 | 15 | `ftshare.apis.index` | `ftshare.endpoints.index` |
@@ -71,6 +71,8 @@
 | [`goodwill_stock_detail`](#api-goodwill-stock-detail) | 商誉个股明细 | `GET` | `api/v1/market/data/goodwill/stock-detail` | `date`, `page`, `page_size` | `商誉个股明细.md` |
 | [`goodwill_stock_impairment`](#api-goodwill-stock-impairment) | 商誉减值 | `GET` | `api/v1/market/data/goodwill/stock-impairment` | `date`, `page`, `page_size` | `商誉减值.md` |
 | [`income`](#api-income) | A股利润表 | `GET` | `api/v1/market/data/finance/income` | `stock_code`, `year`, `report_type`, `page`, `page_size` | `A股利润表.md` |
+| [`kline_archives`](#api-kline-archives) | 年度分K归档包下载 | `GET` | `api/v2/market/data/kline-archives` | - | `年度分K归档包下载.md` |
+| [`kline_archives_download`](#api-kline-archives-download) | 年度分K归档包下载 | `GET` | `api/v2/market/data/kline-archives/{year}/download` | `year`, `save_dir`, `retries` | `年度分K归档包下载.md` |
 | [`kline_pattern_annotations`](#api-kline-pattern-annotations) | K线形态标注 | `GET` | `api/v3/market/data/kline-pattern-annotations` | `date`, `trade_code`, `pattern`, `page`, `page_size` | `K线形态标注.md` |
 | [`limit_event_timeline_3s`](#api-limit-event-timeline-3s) | 涨跌停事件时间线 | `GET` | `api/v2/market/data/limit-event-timeline-3s` | `symbol`, `trade_date` | `涨跌停事件时间线.md` |
 | [`limit_list`](#api-limit-list) | 涨跌停池 | `GET` | `api/v1/market/data/limit-list` | `limit_type`, `trade_date` | `涨跌停池.md` |
@@ -1214,6 +1216,63 @@ Returns:
     A pandas ``DataFrame`` by default, Python rows when
     ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
     payloads when multi-page fetching is used with ``raw=True``.
+```
+
+<h4 id="api-kline-archives"><code>kline_archives</code></h4>
+
+- 接口名称：年度分K归档包下载
+- HTTP：`GET`
+- Path：`api/v2/market/data/kline-archives`
+- 参数：`-`
+- 来源文档：`年度分K归档包下载.md`
+- 原始接口：`kline_archives`
+
+```text
+年度分K归档包清单.
+
+Endpoint: ``api/v2/market/data/kline-archives``.
+Method: ``GET``.
+Documented endpoint: ``kline_archives``.
+
+Args:
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when ``as_dataframe=False``, or raw JSON when ``raw=True``. Rows carry `year`, `size_bytes`, `last_modified` and `sha256` for each downloadable archive package.
+```
+
+<h4 id="api-kline-archives-download"><code>kline_archives_download</code></h4>
+
+- 接口名称：年度分K归档包下载
+- HTTP：`GET`
+- Path：`api/v2/market/data/kline-archives/{year}/download`
+- 参数：`year`, `save_dir`, `retries`
+- 来源文档：`年度分K归档包下载.md`
+- 说明：`kline_archives` 的二进制归档包路由，下载 zstd 压缩 tar 并落盘，返回文件路径；支持 HTTP Range 断点续传与网络失败重试，完成后按清单 `sha256` 校验。
+
+```text
+下载年度分K归档包.
+
+Endpoint: ``api/v2/market/data/kline-archives/{year}/download``.
+Method: ``GET``.
+
+归档包为按年打包的分钟 K 线（zstd 压缩 tar，4–5 GB），下载前先用 ``kline_archives`` 校验该年份是否在清单内，下载中支持 HTTP Range 断点续传（半成品写在 `{文件名}.part`，旁挂 `.part.meta` 记录 ETag；服务端 ETag 变化时丢弃半成品重下），支持网络失败重试，下载完成后按清单的 `sha256` 校验完整性。
+
+Args:
+    year: 4 位年份，如 `2023`；须为 ``kline_archives`` 返回的年份之一 (type: int | string; required: Y).
+    save_dir: 保存目录，默认为当前目录；目录不存在时自动创建。
+    retries: 首次失败后的额外重试次数，默认 3（即最多尝试 4 次）。网络异常、429、5xx 与 416 会重试。
+
+Returns:
+    落盘后的文件路径；目标文件已存在且 sha256 与清单一致时直接返回该路径，不重新下载。
+
+Raises:
+    ValueError: 传入的 `year` 不是 4 位数字。
+    FtshareDownloadError: 该年份不在清单内，或下载完成后 size / sha256 校验不一致。
+    FtshareHTTPError: 下载接口返回不可重试的 HTTP 错误状态。
 ```
 
 <h4 id="api-kline-pattern-annotations"><code>kline_pattern_annotations</code></h4>
