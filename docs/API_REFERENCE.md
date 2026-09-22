@@ -50,7 +50,7 @@
 | [`auction_results`](#api-auction-results) | 集合竞价结果 | `GET` | `api/v2/market/data/auction-results` | `ts_code`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `集合竞价结果.md` |
 | [`balance`](#api-balance) | A股资产负债表 | `GET` | `api/v1/market/data/finance/balance` | `stock_code`, `year`, `report_type`, `page`, `page_size` | `A股资产负债表.md` |
 | [`block_trades`](#api-block-trades) | 大宗交易 | `GET` | `api/v1/market/data/block-trades` | `date`, `page`, `page_size` | `大宗交易.md` |
-| [`bse_mapping`](#api-bse-mapping) | 北交所映射 | `GET` | `api/v1/market/data/bse-mapping` | `o_code`, `n_code` | `北交所映射.md` |
+| [`bse_mapping`](#api-bse-mapping) | 北交所映射 | `GET` | `api/v1/market/data/bse-mapping` | `o_code`, `n_code`, `page`, `page_size` | `北交所映射.md` |
 | [`cashflow`](#api-cashflow) | A股现金流量表 | `GET` | `api/v1/market/data/finance/cashflow` | `stock_code`, `year`, `report_type`, `page`, `page_size` | `A股现金流量表.md` |
 | [`cashflow_stock_code`](#api-cashflow-stock-code) | 现金流支持股票代码 | `GET` | `api/v2/market/data/finance/cashflow-stock-code` | - | `现金流支持股票代码.md` |
 | [`company_list`](#api-company-list) | 公司列表 | `GET` | `api/v1/market/data/company-list` | `stock_name`, `stock_code`, `page`, `page_size` | `公司列表.md` |
@@ -146,9 +146,9 @@
 | [`supply_chain_subsubindustry_companies`](#api-supply-chain-subsubindustry-companies) | 供应链子子行业公司映射 | `GET` | `api/v3/market/data/supply-chain/subsubindustry-companies` | `subindustry_name` | `供应链子子行业公司映射.md` |
 | [`supply_chain_subsubindustry_parent_subindustries`](#api-supply-chain-subsubindustry-parent-subindustries) | 供应链子子行业父行业反查 | `GET` | `api/v3/market/data/supply-chain/subsubindustry-parent-subindustries` | `subindustry_name` | `供应链子子行业父行业反查.md` |
 | [`suspension_list`](#api-suspension-list) | 停牌列表 | `GET` | `api/v1/market/data/suspension-list` | `trade_date`, `page`, `page_size` | `停牌列表.md` |
-| [`tdx_board_daily`](#api-tdx-board-daily) | 通达信板块日线 | `GET` | `api/v1/market/data/tdx-board-daily` | `start_date`, `end_date`, `ts_code`, `idx_name`, `idx_type`, `idx_type_code`, `market`, `page`, `page_size` | `通达信板块日线.md` |
-| [`tdx_board_index`](#api-tdx-board-index) | 通达信板块指数最新快照 | `GET` | `api/v1/market/data/tdx-board-index` | `ts_code`, `idx_name`, `idx_type`, `idx_type_code`, `market`, `page`, `page_size` | `通达信板块指数最新快照.md` |
-| [`tdx_board_members`](#api-tdx-board-members) | 通达信板块成分股最新快照 | `GET` | `api/v1/market/data/tdx-board-members` | `ts_code`, `idx_name`, `idx_type`, `idx_type_code`, `market`, `con_code`, `con_name`, `page`, `page_size` | `通达信板块成分股最新快照.md` |
+| [`tdx_board_daily`](#api-tdx-board-daily) | 通达信板块日线 | `GET` | `api/v1/market/data/tdx-board-daily` | `start_date`, `end_date`, `ts_code`, `board_name`, `board_type`, `board_type_code`, `market`, `page`, `page_size` | `通达信板块日线.md` |
+| [`tdx_board_index`](#api-tdx-board-index) | 通达信板块指数最新快照 | `GET` | `api/v1/market/data/tdx-board-index` | `ts_code`, `board_name`, `board_type`, `board_type_code`, `market`, `page`, `page_size` | `通达信板块指数最新快照.md` |
+| [`tdx_board_members`](#api-tdx-board-members) | 通达信板块成分股最新快照 | `GET` | `api/v1/market/data/tdx-board-members` | `ts_code`, `board_name`, `board_type`, `board_type_code`, `con_code`, `con_name`, `market`, `page`, `page_size` | `通达信板块成分股最新快照.md` |
 | [`ths_board_kline`](#api-ths-board-kline) | 同花顺板块K线 | `GET` | `api/v1/market/data/ths-board-kline` | `board_code`, `page`, `page_size` | `同花顺板块K线.md` |
 | [`stock_signal_latest_snapshot`](#api-stock-signal-latest-snapshot) | 信号最新快照 | `GET` | `api/v3/market/data/stock-signal-latest-snapshot` | `signal_type`, `page`, `page_size` | `信号最新快照.md` |
 | [`ths_stock_daily_flow`](#api-ths-stock-daily-flow) | 同花顺个股资金流日度 | `GET` | `api/v1/market/data/ths-stock-daily-flow` | `start_date`, `end_date`, `code`, `name`, `page`, `page_size` | `同花顺个股资金流日度.md` |
@@ -536,7 +536,7 @@ Returns:
 - 接口名称：北交所映射
 - HTTP：`GET`
 - Path：`api/v1/market/data/bse-mapping`
-- 参数：`o_code`, `n_code`
+- 参数：`o_code`, `n_code`, `page`, `page_size`
 - 来源文档：`北交所映射.md`
 - 原始接口：`get_bse_mapping`
 
@@ -1017,6 +1017,29 @@ Returns:
 
 ```text
 交易所融资融券汇总日度.
+
+Endpoint: ``api/v1/market/data/exchange-margin-summaries``.
+Method: ``GET``.
+Documented endpoint: ``exchange_margin_summaries``.
+
+Args:
+    start_date: 开始日期，格式 YYYYMMDD (type: string; required: Y).
+    end_date: 结束日期，格式 YYYYMMDD，不能早于 start_date (type: string; required: Y).
+    exchange: 交易所代码，精确匹配，不能是空白字符串 (type: string; required: N).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
 ```
 
 <h4 id="api-goodwill-industry"><code>goodwill_industry</code></h4>
@@ -1873,8 +1896,11 @@ Args:
     trade_date: 交易日期 YYYYMMDD；空则默认当天，非交易日回退前一交易日 (type: string; required: N).
     start_date: 区间起始日期 YYYYMMDD；区间扫描必填且需配 symbol (type: string; required: N).
     end_date: 区间结束日期 YYYYMMDD；区间扫描必填且需配 symbol (type: string; required: N).
-    page: 页码，从 1 开始。
-    page_size: 每页条数，最大 2000。
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -2117,6 +2143,28 @@ Returns:
 
 ```text
 互联互通成份.
+
+Endpoint: ``api/v1/market/data/stock-connect-members``.
+Method: ``GET``.
+Documented endpoint: ``stock_connect_members``.
+
+Args:
+    direction: 互联互通方向：`north` 北向或 `south` 南向，大小写不敏感 (type: string; required: Y).
+    channel: 交易通道：`SH` 上交所通道或 `SZ` 深交所通道，大小写不敏感 (type: string; required: Y).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
 ```
 
 <h4 id="api-stock-daec-stocks"><code>stock_daec_stocks</code></h4>
@@ -2179,6 +2227,29 @@ Returns:
 
 ```text
 股票分红记录.
+
+Endpoint: ``api/v1/market/data/stock-dividends``.
+Method: ``GET``.
+Documented endpoint: ``stock_dividends``.
+
+Args:
+    symbol: 标的代码，支持带交易所后缀的股票代码 (type: string; required: N).
+    since_date: 开始公告日期，格式 `YYYY-MM-DD`；与 `until_date` 成对传入 (type: string; required: N).
+    until_date: 结束公告日期，格式 `YYYY-MM-DD`；与 `since_date` 成对传入且不得早于开始日期 (type: string; required: N).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
 ```
 
 <h4 id="api-stock-filter"><code>stock_filter</code></h4>
@@ -2331,6 +2402,28 @@ Returns:
 
 ```text
 股票历史列表.
+
+Endpoint: ``api/v1/market/data/stock-history-list``.
+Method: ``GET``.
+Documented endpoint: ``stock_history_list``.
+
+Args:
+    trade_date: 查询交易日，格式 YYYYMMDD (type: integer; required: Y).
+    code: 股票代码，支持 600000.SH、600000.XSHG 或纯 6 位数字；不传返回当日全部主板股票 (type: string; required: N).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
 ```
 
 <h4 id="api-stock-holders"><code>stock_holders</code></h4>
@@ -2654,12 +2747,20 @@ Method: ``GET``.
 Documented endpoint: ``get_stock_list``.
 
 Args:
-    page: Page number, starting from 1.
-    page_size: Rows per page, up to the endpoint-specific maximum.
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
     **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
 ```
 
 <h4 id="api-stock-market"><code>stock_market</code></h4>
@@ -3101,12 +3202,39 @@ Returns:
 - 接口名称：通达信板块日线
 - HTTP：`GET`
 - Path：`api/v1/market/data/tdx-board-daily`
-- 参数：`start_date`, `end_date`, `ts_code`, `idx_name`, `idx_type`, `idx_type_code`, `market`, `page`, `page_size`
+- 参数：`start_date`, `end_date`, `ts_code`, `board_name`, `board_type`, `board_type_code`, `market`, `page`, `page_size`
 - 来源文档：`通达信板块日线.md`
 - 原始接口：`tdx_board_daily`
 
 ```text
 通达信板块日线.
+
+Endpoint: ``api/v1/market/data/tdx-board-daily``.
+Method: ``GET``.
+Documented endpoint: ``tdx_board_daily``.
+
+Args:
+    start_date: 开始日期，格式 YYYYMMDD (type: string; required: Y).
+    end_date: 结束日期，格式 YYYYMMDD，不能早于 start_date (type: string; required: Y).
+    ts_code: TDX 板块代码，精确匹配 (type: string; required: N).
+    board_name: 板块名称，精确匹配 (type: string; required: N).
+    board_type: 板块类型，精确匹配，常见值：`HY`、`HY2`、`GN`、`FG`、`DQ` (type: string; required: N).
+    board_type_code: 板块类型枚举原始值，精确匹配，范围 0–255 (type: integer; required: N).
+    market: TDX K 线市场代码原始值，精确匹配，范围 0–255；板块日线当前通常为 1 (type: integer; required: N).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
 ```
 
 <h4 id="api-tdx-board-index"><code>tdx_board_index</code></h4>
@@ -3114,12 +3242,37 @@ Returns:
 - 接口名称：通达信板块指数最新快照
 - HTTP：`GET`
 - Path：`api/v1/market/data/tdx-board-index`
-- 参数：`ts_code`, `idx_name`, `idx_type`, `idx_type_code`, `market`, `page`, `page_size`
+- 参数：`ts_code`, `board_name`, `board_type`, `board_type_code`, `market`, `page`, `page_size`
 - 来源文档：`通达信板块指数最新快照.md`
 - 原始接口：`tdx_board_index`
 
 ```text
 通达信板块指数最新快照.
+
+Endpoint: ``api/v1/market/data/tdx-board-index``.
+Method: ``GET``.
+Documented endpoint: ``tdx_board_index``.
+
+Args:
+    ts_code: TDX 板块代码，精确匹配 (type: string; required: N).
+    board_name: 板块名称，精确匹配 (type: string; required: N).
+    board_type: 板块类型，精确匹配，常见值：`HY`、`HY2`、`GN`、`FG`、`DQ` (type: string; required: N).
+    board_type_code: 板块类型枚举原始值，精确匹配，范围 0–255 (type: integer; required: N).
+    market: TDX 市场代码原始值，精确匹配，范围 0–255 (type: integer; required: N).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
 ```
 
 <h4 id="api-tdx-board-members"><code>tdx_board_members</code></h4>
@@ -3127,12 +3280,39 @@ Returns:
 - 接口名称：通达信板块成分股最新快照
 - HTTP：`GET`
 - Path：`api/v1/market/data/tdx-board-members`
-- 参数：`ts_code`, `idx_name`, `idx_type`, `idx_type_code`, `market`, `con_code`, `con_name`, `page`, `page_size`
+- 参数：`ts_code`, `board_name`, `board_type`, `board_type_code`, `con_code`, `con_name`, `market`, `page`, `page_size`
 - 来源文档：`通达信板块成分股最新快照.md`
 - 原始接口：`tdx_board_members`
 
 ```text
 通达信板块成分股最新快照.
+
+Endpoint: ``api/v1/market/data/tdx-board-members``.
+Method: ``GET``.
+Documented endpoint: ``tdx_board_members``.
+
+Args:
+    ts_code: TDX 板块代码，精确匹配 (type: string; required: N).
+    board_name: 板块名称，精确匹配 (type: string; required: N).
+    board_type: 板块类型，精确匹配，常见值：`HY`、`HY2`、`GN`、`FG`、`DQ` (type: string; required: N).
+    board_type_code: 板块类型枚举原始值，精确匹配，范围 0–255 (type: integer; required: N).
+    con_code: 成分证券代码，精确匹配 (type: string; required: N).
+    con_name: 成分证券名称，精确匹配 (type: string; required: N).
+    market: 成分证券市场，精确匹配：0=深交所、1=上交所、2=北交所 (type: integer; required: N).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
 ```
 
 <h4 id="api-stock-signal-latest-snapshot"><code>stock_signal_latest_snapshot</code></h4>
@@ -3772,8 +3952,11 @@ Args:
     trade_date: 交易日期 YYYYMMDD；空则默认当天，非交易日回退前一交易日 (type: string; required: N).
     start_date: 区间起始日期 YYYYMMDD；区间扫描必填且需配 symbol (type: string; required: N).
     end_date: 区间结束日期 YYYYMMDD；区间扫描必填且需配 symbol (type: string; required: N).
-    page: 页码，从 1 开始。
-    page_size: 每页条数，最大 2000。
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -4737,6 +4920,32 @@ Returns:
 
 ```text
 期货合约涨跌停价.
+
+Endpoint: ``api/v1/market/data/futures/ft-limit``.
+Method: ``GET``.
+Documented endpoint: ``ft_limit``.
+
+Args:
+    ts_code: 合约代码，例如 `A2609.DCE`、`CU2608.SHF`。 (type: string; required: N).
+    trade_date: 单个交易日，格式 `YYYYMMDD`；不能与日期区间同时使用。`trade_date` 与 `start_date`+`end_date` 至少提供一组。 (type: integer; required: N).
+    start_date: 开始交易日，格式 `YYYYMMDD`；须与 `end_date` 同时提供。 (type: integer; required: N).
+    end_date: 结束交易日，格式 `YYYYMMDD`；须与 `start_date` 同时提供。 (type: integer; required: N).
+    cont: 品种代码，例如 `CU`、`A`。 (type: string; required: N).
+    exchange: 交易所代码：`SHFE`、`INE`、`CZCE`、`CFFEX`、`DCE`、`GFEX`。 (type: string; required: Y).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
 ```
 
 <h4 id="api-fut-settle"><code>fut_settle</code></h4>
@@ -4750,6 +4959,31 @@ Returns:
 
 ```text
 期货每日结算参数.
+
+Endpoint: ``api/v1/market/data/futures/fut-settle``.
+Method: ``GET``.
+Documented endpoint: ``fut_settle``.
+
+Args:
+    ts_code: 合约代码。 (type: string; required: N).
+    trade_date: 单个交易日，格式 `YYYYMMDD`；不能与日期区间同时使用。 (type: integer; required: N).
+    start_date: 开始交易日，格式 `YYYYMMDD`；必须与 `end_date` 同时传入，且日期区间跨度不超过 31 天。 (type: integer; required: N).
+    end_date: 结束交易日，格式 `YYYYMMDD`；必须与 `start_date` 同时传入。 (type: integer; required: N).
+    exchange: 交易所代码：`SHFE`、`INE`、`CZCE`、`CFFEX`、`DCE`、`GFEX`。 (type: string; required: Y).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
 ```
 
 <h4 id="api-fut-weekly-detail"><code>fut_weekly_detail</code></h4>
@@ -4763,6 +4997,31 @@ Returns:
 
 ```text
 期货主要品种交易周报.
+
+Endpoint: ``api/v1/market/data/futures/fut-weekly-detail``.
+Method: ``GET``.
+Documented endpoint: ``fut_weekly_detail``.
+
+Args:
+    week: 单个统计周期，格式 `YYYYWW`，例如 `202601`。 (type: string; required: N).
+    prd: 期货品种代码；支持逗号分隔，例如 `CU,AL`。 (type: string; required: N).
+    start_week: 开始统计周期，格式 `YYYYWW`。 (type: string; required: N).
+    end_week: 结束统计周期，格式 `YYYYWW`。 (type: string; required: N).
+    exchange: 交易所代码：`SHFE`、`INE`、`CZCE`、`CFFEX`、`DCE`、`GFEX`。 (type: string; required: N).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
 ```
 
 <h4 id="api-fut-wsr"><code>fut_wsr</code></h4>
@@ -4776,6 +5035,31 @@ Returns:
 
 ```text
 期货仓单日报.
+
+Endpoint: ``api/v1/market/data/futures/fut-wsr``.
+Method: ``GET``.
+Documented endpoint: ``fut_wsr``.
+
+Args:
+    trade_date: 单个交易日，格式 `YYYYMMDD`；不能与日期区间同时使用。 (type: integer; required: N).
+    start_date: 开始交易日，格式 `YYYYMMDD`。 (type: integer; required: N).
+    end_date: 结束交易日，格式 `YYYYMMDD`。 (type: integer; required: N).
+    symbol: 品种代码，例如 `CU`、`A`、`SR`。 (type: string; required: N).
+    exchange: 交易所代码：`SHFE`、`INE`、`CZCE`、`DCE`、`GFEX`。 (type: string; required: N).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
 ```
 
 <h4 id="api-futures-contract-kline"><code>futures_contract_kline</code></h4>
@@ -4881,6 +5165,30 @@ Returns:
 
 ```text
 南华期货指数日K线.
+
+Endpoint: ``api/v1/market/data/futures/nanhua-index-kline``.
+Method: ``GET``.
+Documented endpoint: ``futures_nanhua_index_kline``.
+
+Args:
+    code: 指数代码，如 AD_NH、AG_NH；与 trade_date 至少传一个 (type: string; required: N).
+    trade_date: 交易日期（YYYYMMDD）；传入时为单日截面模式，忽略 start_date/end_date (type: string; required: N).
+    start_date: 起始日期（YYYYMMDD），区间模式下界 (type: string; required: N).
+    end_date: 结束日期（YYYYMMDD），区间模式上界；不得早于 start_date (type: string; required: N).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
 ```
 
 <h4 id="api-major-contract"><code>major_contract</code></h4>
@@ -5153,6 +5461,30 @@ Returns:
 
 ```text
 深交所可转债申报快照.
+
+Endpoint: ``api/v1/market/data/convertible-bond/szse/declaration-snapshots``.
+Method: ``GET``.
+Documented endpoint: ``szse_convertible_bond_declaration_snapshots``.
+
+Args:
+    security_code: 六位可转债证券代码，例如 `123001`。 (type: string; required: N).
+    trade_date: 单个交易日，格式 `YYYYMMDD`；不能与 `start_date`、`end_date` 同时使用。 (type: integer; required: N).
+    start_date: 查询开始日期，格式 `YYYYMMDD`。 (type: integer; required: N).
+    end_date: 查询结束日期，格式 `YYYYMMDD`。 (type: integer; required: N).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
 ```
 
 <h4 id="api-szse-convertible-bond-directed-trades"><code>szse_convertible_bond_directed_trades</code></h4>
@@ -5166,6 +5498,30 @@ Returns:
 
 ```text
 深交所可转债定向成交.
+
+Endpoint: ``api/v1/market/data/convertible-bond/szse/directed-trades``.
+Method: ``GET``.
+Documented endpoint: ``szse_convertible_bond_directed_trades``.
+
+Args:
+    security_code: 六位可转债证券代码，例如 `123001`。 (type: string; required: N).
+    trade_date: 单个交易日，格式 `YYYYMMDD`；不能与 `start_date`、`end_date` 同时使用。 (type: integer; required: N).
+    start_date: 查询开始日期，格式 `YYYYMMDD`。 (type: integer; required: N).
+    end_date: 查询结束日期，格式 `YYYYMMDD`。 (type: integer; required: N).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
 ```
 
 <h4 id="api-szse-convertible-bond-matching-trades"><code>szse_convertible_bond_matching_trades</code></h4>
@@ -5179,6 +5535,30 @@ Returns:
 
 ```text
 深交所可转债匹配成交.
+
+Endpoint: ``api/v1/market/data/convertible-bond/szse/matching-trades``.
+Method: ``GET``.
+Documented endpoint: ``szse_convertible_bond_matching_trades``.
+
+Args:
+    security_code: 六位可转债证券代码，例如 `123001`。 (type: string; required: N).
+    trade_date: 单个交易日，格式 `YYYYMMDD`；不能与 `start_date`、`end_date` 同时使用。 (type: integer; required: N).
+    start_date: 查询开始日期，格式 `YYYYMMDD`。 (type: integer; required: N).
+    end_date: 查询结束日期，格式 `YYYYMMDD`。 (type: integer; required: N).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
 ```
 
 <h4 id="api-szse-convertible-bond-negotiated-trades"><code>szse_convertible_bond_negotiated_trades</code></h4>
@@ -5192,6 +5572,30 @@ Returns:
 
 ```text
 深交所可转债协议成交.
+
+Endpoint: ``api/v1/market/data/convertible-bond/szse/negotiated-trades``.
+Method: ``GET``.
+Documented endpoint: ``szse_convertible_bond_negotiated_trades``.
+
+Args:
+    security_code: 六位可转债证券代码，例如 `123001`。 (type: string; required: N).
+    trade_date: 单个交易日，格式 `YYYYMMDD`；不能与 `start_date`、`end_date` 同时使用。 (type: integer; required: N).
+    start_date: 查询开始日期，格式 `YYYYMMDD`。 (type: integer; required: N).
+    end_date: 查询结束日期，格式 `YYYYMMDD`。 (type: integer; required: N).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
 ```
 
 ### 宏观经济
@@ -5243,6 +5647,29 @@ Returns:
 
 ```text
 中债收益率曲线日度.
+
+Endpoint: ``api/v1/market/data/chinabond-yield-daily``.
+Method: ``GET``.
+Documented endpoint: ``chinabond_yield_daily``.
+
+Args:
+    start_date: 开始日期，格式 YYYYMMDD (type: string; required: Y).
+    end_date: 结束日期，格式 YYYYMMDD，不能早于 start_date (type: string; required: Y).
+    curve_name: 收益率曲线名称，精确匹配，不能是空白字符串 (type: string; required: N).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
 ```
 
 <h4 id="api-consumer-credit-monthly"><code>consumer_credit_monthly</code></h4>
@@ -5564,6 +5991,28 @@ Returns:
 
 ```text
 HIBOR日度利率.
+
+Endpoint: ``api/v1/market/data/hibor-daily``.
+Method: ``GET``.
+Documented endpoint: ``hibor_daily``.
+
+Args:
+    start_date: 开始日期，格式 YYYYMMDD (type: string; required: Y).
+    end_date: 结束日期，格式 YYYYMMDD，不能早于 start_date (type: string; required: Y).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
 ```
 
 <h4 id="api-libor-daily"><code>libor_daily</code></h4>
@@ -5577,6 +6026,30 @@ HIBOR日度利率.
 
 ```text
 国际基准利率日度.
+
+Endpoint: ``api/v1/market/data/libor-daily``.
+Method: ``GET``.
+Documented endpoint: ``libor_daily``.
+
+Args:
+    start_date: 开始日期，格式 YYYYMMDD (type: string; required: Y).
+    end_date: 结束日期，格式 YYYYMMDD，不能早于 start_date (type: string; required: Y).
+    currency: 币种代码，精确匹配、大小写不敏感，例如 USD，不能是空白字符串 (type: string; required: N).
+    tenor: 期限，精确匹配、大小写不敏感，例如 3M（等价 3m），不能是空白字符串 (type: string; required: N).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
 ```
 
 <h4 id="api-lpr-monthly"><code>lpr_monthly</code></h4>
@@ -5646,6 +6119,28 @@ Returns:
 
 ```text
 SHIBOR日度利率.
+
+Endpoint: ``api/v1/market/data/shibor-daily``.
+Method: ``GET``.
+Documented endpoint: ``shibor_daily``.
+
+Args:
+    start_date: 开始日期，格式 YYYYMMDD (type: string; required: Y).
+    end_date: 结束日期，格式 YYYYMMDD，不能早于 start_date (type: string; required: Y).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
 ```
 
 <h4 id="api-shibor-quote-daily"><code>shibor_quote_daily</code></h4>
@@ -5659,6 +6154,29 @@ SHIBOR日度利率.
 
 ```text
 SHIBOR报价日度.
+
+Endpoint: ``api/v1/market/data/shibor-quote-daily``.
+Method: ``GET``.
+Documented endpoint: ``shibor_quote_daily``.
+
+Args:
+    start_date: 开始日期，格式 YYYYMMDD (type: string; required: Y).
+    end_date: 结束日期，格式 YYYYMMDD，不能早于 start_date (type: string; required: Y).
+    bank: 报价行名称，精确匹配，不能是空白字符串 (type: string; required: N).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
 ```
 
 <h4 id="api-tax-revenue-monthly"><code>tax_revenue_monthly</code></h4>
@@ -5764,6 +6282,28 @@ Returns:
 
 ```text
 温州民间融资综合利率指数日度.
+
+Endpoint: ``api/v1/market/data/wz-index-daily``.
+Method: ``GET``.
+Documented endpoint: ``wz_index_daily``.
+
+Args:
+    start_date: 开始日期，格式 YYYYMMDD (type: string; required: Y).
+    end_date: 结束日期，格式 YYYYMMDD，不能早于 start_date (type: string; required: Y).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
 ```
 
 ### 大模型语料

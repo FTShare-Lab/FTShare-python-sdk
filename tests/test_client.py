@@ -1228,6 +1228,35 @@ def test_all_pages_combines_paginated_endpoint_rows():
     assert session.calls[1]["params"]["page_size"] == 2
 
 
+def test_shibor_daily_combines_all_pages():
+    session = FakeSession(
+        [
+            FakeResponse(payload=paginated_records([{"id": 1}, {"id": 2}], page=1, pages=2)),
+            FakeResponse(payload=paginated_records([{"id": 3}], page=2, pages=2)),
+        ]
+    )
+    client = FtshareClient(session=session)
+
+    df = client.shibor_daily(start_date="2026-05-01", end_date="2026-05-02", page_size=2, all_pages=True)
+
+    assert isinstance(df, pd.DataFrame)
+    assert df.to_dict("records") == [{"id": 1}, {"id": 2}, {"id": 3}]
+    assert session.calls[0]["params"]["page"] == 1
+    assert session.calls[1]["params"]["page"] == 2
+
+
+def test_documented_page_size_cap_is_accepted_and_enforced():
+    session = FakeSession([FakeResponse(payload=paginated_records([{"id": 1}]))])
+    client = FtshareClient(session=session)
+
+    client.fut_settle(ts_code="A2609.DCE", trade_date="20260717", page_size=4000)
+
+    assert session.calls[0]["params"]["page_size"] == 4000
+
+    with pytest.raises(ValueError, match="page_size must be between 1 and 4000"):
+        FtshareClient(session=FakeSession([])).fut_settle(page_size=4001)
+
+
 def test_all_pages_raw_true_returns_page_payloads():
     first = paginated_records([{"id": 1}], page=1, pages=2)
     second = paginated_records([{"id": 2}], page=2, pages=2)

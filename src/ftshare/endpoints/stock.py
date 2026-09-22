@@ -47,7 +47,8 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'title': '北交所映射',
         'doc_file': '北交所映射.md',
         'original_api': 'get_bse_mapping',
-        'params': ('o_code', 'n_code'),
+        'params': ('o_code', 'n_code', 'page', 'page_size'),
+        'max_page_size': 500,
     },
     'cashflow': {
         'path': 'api/v1/market/data/finance/cashflow',
@@ -303,6 +304,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'doc_file': '股票复权因子.md',
         'original_api': 'stock_adjust_factor',
         'params': ('symbol', 'trade_date', 'start_date', 'end_date', 'page', 'page_size'),
+        'max_page_size': 2000,
     },
     'stock_candlesticks': {
         'path': 'api/v1/market/data/stock-candlesticks',
@@ -603,7 +605,8 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'title': '通达信板块指数最新快照',
         'doc_file': '通达信板块指数最新快照.md',
         'original_api': 'tdx_board_index',
-        'params': ('ts_code', 'idx_name', 'idx_type', 'idx_type_code', 'market', 'page', 'page_size'),
+        'params': ('ts_code', 'board_name', 'board_type', 'board_type_code', 'market', 'page', 'page_size'),
+        'max_page_size': 1000,
     },
 
     'tdx_board_daily': {
@@ -611,7 +614,8 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'title': '通达信板块日线',
         'doc_file': '通达信板块日线.md',
         'original_api': 'tdx_board_daily',
-        'params': ('start_date', 'end_date', 'ts_code', 'idx_name', 'idx_type', 'idx_type_code', 'market', 'page', 'page_size'),
+        'params': ('start_date', 'end_date', 'ts_code', 'board_name', 'board_type', 'board_type_code', 'market', 'page', 'page_size'),
+        'max_page_size': 1000,
     },
 
     'tdx_board_members': {
@@ -619,7 +623,8 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'title': '通达信板块成分股最新快照',
         'doc_file': '通达信板块成分股最新快照.md',
         'original_api': 'tdx_board_members',
-        'params': ('ts_code', 'idx_name', 'idx_type', 'idx_type_code', 'market', 'con_code', 'con_name', 'page', 'page_size'),
+        'params': ('ts_code', 'board_name', 'board_type', 'board_type_code', 'con_code', 'con_name', 'market', 'page', 'page_size'),
+        'max_page_size': 1000,
     },
 
     'stock_dividends': {

@@ -12,6 +12,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'doc_file': 'ETF复权因子.md',
         'original_api': 'etf_adjust_factor',
         'params': ('symbol', 'trade_date', 'start_date', 'end_date', 'page', 'page_size'),
+        'max_page_size': 2000,
     },
     'etf_candlesticks': {
         'path': 'api/v1/market/data/etf-candlesticks',

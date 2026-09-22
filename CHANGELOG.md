@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- 24 paginated endpoints exposed only `page`/`page_size`; they now also accept `limit`, `all_pages`, and `max_pages`.
+- `bse_mapping` endpoint metadata now records its `page`/`page_size` parameters and documented 500-row page cap.
+- Documented per-endpoint `page_size` caps (up to 4000) are now validated client-side.
+- `tdx_board_daily`/`tdx_board_index`/`tdx_board_members` exposed the dead parameters `idx_name`/`idx_type`/`idx_type_code`; they are now `board_name`/`board_type`/`board_type_code`, which the service actually honors. The three endpoints also document their full parameter set and enforce the documented 1000-row page cap.
+
 ## [0.1.1] - 2026-06-29
 
 ### Changed

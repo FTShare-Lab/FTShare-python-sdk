@@ -710,48 +710,345 @@ class EconomicApiMixin:
         end_date: Any | None = None,
         page: int | None = None,
         page_size: int | None = None,
+        limit: int | None = None,
+        all_pages: bool = False,
+        max_pages: int | None = None,
         *,
         raw: bool = False,
         fields: Sequence[str] | str | None = None,
         as_dataframe: bool = True,
         **kwargs: Any,
     ) -> Any:
-        """HIBOR日度利率."""
-        params = {'start_date': start_date, 'end_date': end_date, 'page': page, 'page_size': page_size}
-        params.update(kwargs)
-        return self._call_endpoint('hibor_daily', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+        """HIBOR日度利率.
+
+        Endpoint: ``api/v1/market/data/hibor-daily``.
+        Method: ``GET``.
+        Documented endpoint: ``hibor_daily``.
+
+        Args:
+            start_date: 开始日期，格式 YYYYMMDD (type: string; required: Y).
+            end_date: 结束日期，格式 YYYYMMDD，不能早于 start_date (type: string; required: Y).
+            page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+            page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+            limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+            all_pages: Fetch and combine pages until the server reports the last page.
+            max_pages: Optional safety cap for ``all_pages``.
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``.
+        """
+        request_params = {'start_date': start_date, 'end_date': end_date}
+        request_params.update(kwargs)
+        path = ENDPOINTS['hibor_daily'].path
+        return self.get_paginated(
+            path,
+            page=page,
+            page_size=page_size,
+            limit=limit,
+            all_pages=all_pages,
+            max_pages=max_pages,
+            max_page_size=ENDPOINTS['hibor_daily'].max_page_size,
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
 
 
-    def shibor_quote_daily(self, start_date: Any | None = None, end_date: Any | None = None, bank: Any | None = None, page: int | None = None, page_size: int | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
-        """SHIBOR报价日度."""
-        params = {'start_date': start_date, 'end_date': end_date, 'bank': bank, 'page': page, 'page_size': page_size}
-        params.update(kwargs)
-        return self._call_endpoint('shibor_quote_daily', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+    def shibor_quote_daily(
+        self,
+        start_date: Any | None = None,
+        end_date: Any | None = None,
+        bank: Any | None = None,
+        page: int | None = None,
+        page_size: int | None = None,
+        limit: int | None = None,
+        all_pages: bool = False,
+        max_pages: int | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """SHIBOR报价日度.
+
+        Endpoint: ``api/v1/market/data/shibor-quote-daily``.
+        Method: ``GET``.
+        Documented endpoint: ``shibor_quote_daily``.
+
+        Args:
+            start_date: 开始日期，格式 YYYYMMDD (type: string; required: Y).
+            end_date: 结束日期，格式 YYYYMMDD，不能早于 start_date (type: string; required: Y).
+            bank: 报价行名称，精确匹配，不能是空白字符串 (type: string; required: N).
+            page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+            page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+            limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+            all_pages: Fetch and combine pages until the server reports the last page.
+            max_pages: Optional safety cap for ``all_pages``.
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``.
+        """
+        request_params = {'start_date': start_date, 'end_date': end_date, 'bank': bank}
+        request_params.update(kwargs)
+        path = ENDPOINTS['shibor_quote_daily'].path
+        return self.get_paginated(
+            path,
+            page=page,
+            page_size=page_size,
+            limit=limit,
+            all_pages=all_pages,
+            max_pages=max_pages,
+            max_page_size=ENDPOINTS['shibor_quote_daily'].max_page_size,
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
 
 
-    def shibor_daily(self, start_date: Any | None = None, end_date: Any | None = None, page: int | None = None, page_size: int | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
-        """SHIBOR日度利率."""
-        params = {'start_date': start_date, 'end_date': end_date, 'page': page, 'page_size': page_size}
-        params.update(kwargs)
-        return self._call_endpoint('shibor_daily', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+    def shibor_daily(
+        self,
+        start_date: Any | None = None,
+        end_date: Any | None = None,
+        page: int | None = None,
+        page_size: int | None = None,
+        limit: int | None = None,
+        all_pages: bool = False,
+        max_pages: int | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """SHIBOR日度利率.
+
+        Endpoint: ``api/v1/market/data/shibor-daily``.
+        Method: ``GET``.
+        Documented endpoint: ``shibor_daily``.
+
+        Args:
+            start_date: 开始日期，格式 YYYYMMDD (type: string; required: Y).
+            end_date: 结束日期，格式 YYYYMMDD，不能早于 start_date (type: string; required: Y).
+            page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+            page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+            limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+            all_pages: Fetch and combine pages until the server reports the last page.
+            max_pages: Optional safety cap for ``all_pages``.
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``.
+        """
+        request_params = {'start_date': start_date, 'end_date': end_date}
+        request_params.update(kwargs)
+        path = ENDPOINTS['shibor_daily'].path
+        return self.get_paginated(
+            path,
+            page=page,
+            page_size=page_size,
+            limit=limit,
+            all_pages=all_pages,
+            max_pages=max_pages,
+            max_page_size=ENDPOINTS['shibor_daily'].max_page_size,
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
 
 
-    def chinabond_yield_daily(self, start_date: Any | None = None, end_date: Any | None = None, curve_name: Any | None = None, page: int | None = None, page_size: int | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
-        """中债收益率曲线日度."""
-        params = {'start_date': start_date, 'end_date': end_date, 'curve_name': curve_name, 'page': page, 'page_size': page_size}
-        params.update(kwargs)
-        return self._call_endpoint('chinabond_yield_daily', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+    def chinabond_yield_daily(
+        self,
+        start_date: Any | None = None,
+        end_date: Any | None = None,
+        curve_name: Any | None = None,
+        page: int | None = None,
+        page_size: int | None = None,
+        limit: int | None = None,
+        all_pages: bool = False,
+        max_pages: int | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """中债收益率曲线日度.
+
+        Endpoint: ``api/v1/market/data/chinabond-yield-daily``.
+        Method: ``GET``.
+        Documented endpoint: ``chinabond_yield_daily``.
+
+        Args:
+            start_date: 开始日期，格式 YYYYMMDD (type: string; required: Y).
+            end_date: 结束日期，格式 YYYYMMDD，不能早于 start_date (type: string; required: Y).
+            curve_name: 收益率曲线名称，精确匹配，不能是空白字符串 (type: string; required: N).
+            page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+            page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+            limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+            all_pages: Fetch and combine pages until the server reports the last page.
+            max_pages: Optional safety cap for ``all_pages``.
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``.
+        """
+        request_params = {'start_date': start_date, 'end_date': end_date, 'curve_name': curve_name}
+        request_params.update(kwargs)
+        path = ENDPOINTS['chinabond_yield_daily'].path
+        return self.get_paginated(
+            path,
+            page=page,
+            page_size=page_size,
+            limit=limit,
+            all_pages=all_pages,
+            max_pages=max_pages,
+            max_page_size=ENDPOINTS['chinabond_yield_daily'].max_page_size,
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
 
 
-    def libor_daily(self, start_date: Any | None = None, end_date: Any | None = None, currency: Any | None = None, tenor: Any | None = None, page: int | None = None, page_size: int | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
-        """国际基准利率日度."""
-        params = {'start_date': start_date, 'end_date': end_date, 'currency': currency, 'tenor': tenor, 'page': page, 'page_size': page_size}
-        params.update(kwargs)
-        return self._call_endpoint('libor_daily', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+    def libor_daily(
+        self,
+        start_date: Any | None = None,
+        end_date: Any | None = None,
+        currency: Any | None = None,
+        tenor: Any | None = None,
+        page: int | None = None,
+        page_size: int | None = None,
+        limit: int | None = None,
+        all_pages: bool = False,
+        max_pages: int | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """国际基准利率日度.
+
+        Endpoint: ``api/v1/market/data/libor-daily``.
+        Method: ``GET``.
+        Documented endpoint: ``libor_daily``.
+
+        Args:
+            start_date: 开始日期，格式 YYYYMMDD (type: string; required: Y).
+            end_date: 结束日期，格式 YYYYMMDD，不能早于 start_date (type: string; required: Y).
+            currency: 币种代码，精确匹配、大小写不敏感，例如 USD，不能是空白字符串 (type: string; required: N).
+            tenor: 期限，精确匹配、大小写不敏感，例如 3M（等价 3m），不能是空白字符串 (type: string; required: N).
+            page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+            page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+            limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+            all_pages: Fetch and combine pages until the server reports the last page.
+            max_pages: Optional safety cap for ``all_pages``.
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``.
+        """
+        request_params = {'start_date': start_date, 'end_date': end_date, 'currency': currency, 'tenor': tenor}
+        request_params.update(kwargs)
+        path = ENDPOINTS['libor_daily'].path
+        return self.get_paginated(
+            path,
+            page=page,
+            page_size=page_size,
+            limit=limit,
+            all_pages=all_pages,
+            max_pages=max_pages,
+            max_page_size=ENDPOINTS['libor_daily'].max_page_size,
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
 
 
-    def wz_index_daily(self, start_date: Any | None = None, end_date: Any | None = None, page: int | None = None, page_size: int | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
-        """温州民间融资综合利率指数日度."""
-        params = {'start_date': start_date, 'end_date': end_date, 'page': page, 'page_size': page_size}
-        params.update(kwargs)
-        return self._call_endpoint('wz_index_daily', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+    def wz_index_daily(
+        self,
+        start_date: Any | None = None,
+        end_date: Any | None = None,
+        page: int | None = None,
+        page_size: int | None = None,
+        limit: int | None = None,
+        all_pages: bool = False,
+        max_pages: int | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """温州民间融资综合利率指数日度.
+
+        Endpoint: ``api/v1/market/data/wz-index-daily``.
+        Method: ``GET``.
+        Documented endpoint: ``wz_index_daily``.
+
+        Args:
+            start_date: 开始日期，格式 YYYYMMDD (type: string; required: Y).
+            end_date: 结束日期，格式 YYYYMMDD，不能早于 start_date (type: string; required: Y).
+            page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+            page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+            limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+            all_pages: Fetch and combine pages until the server reports the last page.
+            max_pages: Optional safety cap for ``all_pages``.
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``.
+        """
+        request_params = {'start_date': start_date, 'end_date': end_date}
+        request_params.update(kwargs)
+        path = ENDPOINTS['wz_index_daily'].path
+        return self.get_paginated(
+            path,
+            page=page,
+            page_size=page_size,
+            limit=limit,
+            all_pages=all_pages,
+            max_pages=max_pages,
+            max_page_size=ENDPOINTS['wz_index_daily'].max_page_size,
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
