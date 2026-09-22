@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import hashlib
-import json
 import os
 import re
 from collections.abc import Mapping, Sequence
@@ -16,7 +14,7 @@ import requests
 from .config import DEFAULT_BASE_URL, DEFAULT_MAX_PAGE_SIZE, get_base_url, normalize_base_url, set_base_url
 from .dataframe import to_dataframe
 from .endpoints import ENDPOINTS
-from .exceptions import FtshareDecodeError, FtshareDownloadError, FtshareHTTPError
+from .exceptions import FtshareDecodeError, FtshareHTTPError
 from .fields import normalize_fields, select_fields
 from .pagination import validate_pagination
 from .response import extract_tabular, raise_for_api_error, total_pages as extract_total_pages
@@ -227,190 +225,6 @@ class BaseClient:
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes(content)
         return str(target)
-
-    def download_resumable(
-        self,
-        path: str,
-        *,
-        expected_size: int | None = None,
-        expected_sha256: str | None = None,
-        save_dir: str | os.PathLike[str] = ".",
-        filename: str | None = None,
-        retries: int = 3,
-        chunk_size: int = 1024 * 1024,
-    ) -> str:
-        """Download a large file with range resume, retries, and digest verification.
-
-        The body streams into ``<target>.part`` and only becomes ``<target>``
-        after size and sha256 verification, so a failed or interrupted
-        transfer never leaves a file that looks complete. A small
-        ``<target>.part.meta`` sidecar records the source URL and ``ETag`` so a
-        later call can safely resume: when the server's ``ETag`` changed, the
-        stale partial file is discarded and the transfer restarts.
-
-        Args:
-            path: Endpoint path relative to ``base_url``. Path parameters must
-                already be substituted.
-            expected_size: Expected final size in bytes, usually from the
-                listing endpoint.
-            expected_sha256: Expected lowercase hex sha256 of the final file.
-            save_dir: Destination directory. Created when missing.
-            filename: Destination file name. Defaults to the last path segment.
-            retries: Additional attempts after the first one, so at most
-                ``retries + 1`` transfers run. Network failures, 429, 5xx and
-                416 responses are retried; other HTTP failures are not.
-            chunk_size: Streaming read size in bytes.
-
-        Returns:
-            The path of the completed file.
-
-        Raises:
-            FtshareHTTPError: If the server returns a non-retryable HTTP status.
-            FtshareDownloadError: If the transfer completes but fails size or
-                sha256 verification.
-            requests.RequestException: If every attempt fails with a network
-                error.
-        """
-        url = self._url_for(path)
-        target = Path(save_dir) / (filename or Path(path).name)
-        part = target.with_name(target.name + ".part")
-        meta_path = part.with_name(part.name + ".meta")
-        target.parent.mkdir(parents=True, exist_ok=True)
-
-        if target.exists() and expected_sha256 and self._file_sha256(target, chunk_size) == expected_sha256:
-            return str(target)
-
-        last_error: Exception | None = None
-        for _ in range(retries + 1):
-            offset = 0
-            etag = ""
-            if part.exists():
-                sidecar = self._read_download_meta(meta_path)
-                if sidecar and sidecar.get("url") == url and sidecar.get("etag"):
-                    etag = str(sidecar["etag"])
-                    offset = part.stat().st_size
-                else:
-                    # Never resume from a prefix we cannot attribute to this URL.
-                    part.unlink(missing_ok=True)
-                    meta_path.unlink(missing_ok=True)
-
-            headers = dict(self.headers)
-            if offset > 0:
-                headers["Range"] = f"bytes={offset}-"
-                headers["If-Range"] = etag
-
-            try:
-                with self.session.get(url, headers=headers or None, timeout=self.timeout, stream=True) as response:
-                    status = response.status_code
-                    if status in (400, 404):
-                        raise FtshareHTTPError(status, url, response.text)
-                    if status == 416:
-                        # Server reports the resume offset is past EOF: restart.
-                        part.unlink(missing_ok=True)
-                        meta_path.unlink(missing_ok=True)
-                        last_error = FtshareHTTPError(status, url, response.text)
-                        continue
-                    if status not in (200, 206):
-                        if status == 429 or status >= 500:
-                            last_error = FtshareHTTPError(status, url, response.text)
-                            continue
-                        raise FtshareHTTPError(status, url, response.text)
-
-                    if status == 200:
-                        # Whole file: the server ignored the Range (fresh
-                        # download, or If-Range reported a newer version), so
-                        # truncate instead of appending to a stale prefix.
-                        offset = 0
-                        mode = "wb"
-                    else:
-                        start = self._content_range_start(response.headers.get("Content-Range"))
-                        if start != offset:
-                            part.unlink(missing_ok=True)
-                            meta_path.unlink(missing_ok=True)
-                            last_error = FtshareDownloadError(
-                                url,
-                                f"resumed at {start} while the partial file holds {offset} bytes",
-                            )
-                            continue
-                        mode = "ab"
-
-                    response_etag = response.headers.get("ETag") or ""
-                    if response_etag:
-                        etag = response_etag
-                        self._write_download_meta(meta_path, url, etag, offset)
-
-                    written = offset
-                    with part.open(mode) as handle:
-                        for chunk in response.iter_content(chunk_size=chunk_size):
-                            if not chunk:
-                                continue
-                            handle.write(chunk)
-                            written += len(chunk)
-                            if expected_size is not None and written > expected_size:
-                                raise FtshareDownloadError(
-                                    url,
-                                    "response exceeded the expected file size",
-                                    expected=expected_size,
-                                    actual=written,
-                                )
-            except requests.RequestException as error:
-                last_error = error
-                continue
-
-            size = part.stat().st_size
-            if expected_size is not None and size != expected_size:
-                part.unlink(missing_ok=True)
-                meta_path.unlink(missing_ok=True)
-                raise FtshareDownloadError(url, "size mismatch", expected=expected_size, actual=size)
-            if expected_sha256:
-                digest = self._file_sha256(part, chunk_size)
-                if digest != expected_sha256:
-                    # Drop the corrupt file: resuming from a known-bad prefix
-                    # would fail verification again on every later call.
-                    part.unlink(missing_ok=True)
-                    meta_path.unlink(missing_ok=True)
-                    raise FtshareDownloadError(url, "sha256 mismatch", expected=expected_sha256, actual=digest)
-
-            os.replace(part, target)
-            meta_path.unlink(missing_ok=True)
-            return str(target)
-
-        if last_error is not None:
-            raise last_error
-        raise FtshareDownloadError(url, f"download failed after {retries + 1} attempts")
-
-    @staticmethod
-    def _file_sha256(path: Path, chunk_size: int) -> str:
-        """Return the lowercase hex sha256 of an existing file."""
-        digest = hashlib.sha256()
-        with path.open("rb") as handle:
-            for block in iter(lambda: handle.read(chunk_size), b""):
-                digest.update(block)
-        return digest.hexdigest()
-
-    @staticmethod
-    def _content_range_start(value: str | None) -> int | None:
-        """Return the first byte offset of a ``Content-Range`` header value."""
-        if not value:
-            return None
-        match = re.match(r"bytes\s+(\d+)-", value.strip())
-        return int(match.group(1)) if match else None
-
-    @staticmethod
-    def _read_download_meta(path: Path) -> dict[str, Any] | None:
-        """Read a partial-download sidecar, tolerating missing or corrupt files."""
-        try:
-            payload = json.loads(path.read_text(encoding="utf-8"))
-        except (OSError, ValueError):
-            return None
-        return payload if isinstance(payload, dict) else None
-
-    @staticmethod
-    def _write_download_meta(path: Path, url: str, etag: str, size: int) -> None:
-        """Record the ETag a partial file was downloaded from, atomically."""
-        temporary = path.with_name(path.name + ".tmp")
-        temporary.write_text(json.dumps({"url": url, "etag": etag, "size": size}), encoding="utf-8")
-        os.replace(temporary, path)
 
     def get_paginated(
         self,

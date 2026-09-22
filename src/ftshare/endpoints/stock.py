@@ -462,13 +462,6 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'original_api': 'stock_market_distribution_intraday',
         'params': (),
     },
-    'kline_archives': {
-        'path': 'api/v2/market/data/kline-archives',
-        'title': '年度分K归档包下载',
-        'doc_file': '年度分K归档包下载.md',
-        'original_api': 'market_v2_kline_archives',
-        'params': (),
-    },
     'stock_daec_stocks': {
         'path': 'api/v1/market/data/daec/stocks/{board}',
         'title': 'A股行情列表',

@@ -23,7 +23,6 @@ from .client import DEFAULT_BASE_URL, FtshareClient
 from .exceptions import (
     FtshareAPIError,
     FtshareDecodeError,
-    FtshareDownloadError,
     FtshareError,
     FtshareHTTPError,
 )
@@ -91,7 +90,6 @@ __all__ = [
     "FtshareAPIError",
     "FtshareClient",
     "FtshareDecodeError",
-    "FtshareDownloadError",
     "FtshareError",
     "FtshareHTTPError",
     "get_base_url",
