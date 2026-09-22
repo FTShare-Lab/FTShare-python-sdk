@@ -65,7 +65,7 @@
 | [`eastmoney_stock_flow`](#api-eastmoney-stock-flow) | 东方财富个股资金流 | `GET` | `api/v1/market/data/eastmoney-stock-flow` | `symbol`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `东方财富个股资金流.md` |
 | [`eastmoney_stock_valuation`](#api-eastmoney-stock-valuation) | 东方财富个股估值 | `GET` | `api/v1/market/data/eastmoney-stock-valuation` | `symbol`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `东方财富个股估值.md` |
 | [`exchange_margin_summaries`](#api-exchange-margin-summaries) | 交易所融资融券汇总日度 | `GET` | `api/v1/market/data/exchange-margin-summaries` | `start_date`, `end_date`, `exchange`, `page`, `page_size` | `交易所融资融券汇总日度.md` |
-| [`goodwill_industry`](#api-goodwill-industry) | 商誉行业 | `GET` | `api/v1/market/data/goodwill/industry` | `date`, `page`, `page_size` | `商誉行业.md` |
+| [`goodwill_industry`](#api-goodwill-industry) | 商誉行业 | `GET` | `api/v1/market/data/goodwill/industry` | `date` | `商誉行业.md` |
 | [`goodwill_market_overview`](#api-goodwill-market-overview) | 商誉市场总览 | `GET` | `api/v1/market/data/goodwill/market-overview` | - | `商誉市场总览.md` |
 | [`goodwill_predict`](#api-goodwill-predict) | 商誉预测 | `GET` | `api/v1/market/data/goodwill/predict` | `date`, `page`, `page_size` | `商誉预测.md` |
 | [`goodwill_stock_detail`](#api-goodwill-stock-detail) | 商誉个股明细 | `GET` | `api/v1/market/data/goodwill/stock-detail` | `date`, `page`, `page_size` | `商誉个股明细.md` |
@@ -1047,7 +1047,7 @@ Returns:
 - 接口名称：商誉行业
 - HTTP：`GET`
 - Path：`api/v1/market/data/goodwill/industry`
-- 参数：`date`, `page`, `page_size`
+- 参数：`date`
 - 来源文档：`商誉行业.md`
 - 原始接口：`goodwill_industry`
 
@@ -1060,20 +1060,10 @@ Documented endpoint: ``goodwill_industry``.
 
 Args:
     date: 报告期，如 20250331 (type: string; required: Y).
-    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
-    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
-    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
-    all_pages: Fetch and combine pages until the server reports the last page.
-    max_pages: Optional safety cap for ``all_pages``.
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
     **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
-
-Returns:
-    A pandas ``DataFrame`` by default, Python rows when
-    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
-    payloads when multi-page fetching is used with ``raw=True``.
 ```
 
 <h4 id="api-goodwill-market-overview"><code>goodwill_market_overview</code></h4>

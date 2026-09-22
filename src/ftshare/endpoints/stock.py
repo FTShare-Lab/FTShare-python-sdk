@@ -146,7 +146,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'title': '商誉行业',
         'doc_file': '商誉行业.md',
         'original_api': 'goodwill_industry',
-        'params': ('date', 'page', 'page_size'),
+        'params': ('date',),
     },
     'goodwill_market_overview': {
         'path': 'api/v1/market/data/goodwill/market-overview',

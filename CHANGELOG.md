@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `limit_event_timeline_3s` exposed only `symbol`/`trade_date`; it now records its documented `page`/`page_size` parameters and accepts `limit`, `all_pages`, and `max_pages`, with the documented 200-row page cap.
 - `etf_pcf_infos` referenced the non-existent doc `ETF-PCF信息.md`; corrected to `ETF申赎清单.md`.
 - `ashare_rating_factor_snapshot` referenced the non-existent doc `A股相关性Top-K.md`; corrected to `A股相关性 Top-K.md`.
+- `goodwill_industry` declared `page`/`page_size` although the service ignores both and returns every industry in one response, which made `all_pages=True` re-fetch the same rows forever. The endpoint now exposes only its documented `date` parameter.
 
 ## [0.1.1] - 2026-06-29
 

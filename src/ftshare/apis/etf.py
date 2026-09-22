@@ -97,9 +97,9 @@ class EtfApiMixin:
             symbol: ETF 代码，如 510300.XSHG、159915.XSHE；也接受 .SH、.SZ 短后缀 (type: string; required: Y).
             interval_unit: 周期单位：Day/Week/Month/Year，大小写不敏感 (type: enum; required: Y).
             adjust_kind: 复权：None（默认，不复权）/Forward（前复权）/Backward（后复权） (type: enum; required: N).
-            since_ts_millis: 开始时间戳，单位毫秒；与 until 的跨度不得超过 12 个自然月 (type: int(ms); required: N).
+            since_ts_millis: 开始时间戳，单位毫秒；与 until 的跨度不得超过 12 个自然月 (type: int(ms); required: Y).
             until_ts_millis: 结束时间戳，单位毫秒 (type: int(ms); required: Y).
-            limit: 返回条数上限；未传 since 和 limit 时默认最多返回 50 根 K 线 (type: int; required: N).
+            limit: 返回条数上限；不传时返回请求时间范围内的全部数据 (type: int; required: N).
             raw: Return the decoded JSON payload without tabular extraction.
             fields: Optional field list or comma-separated field string applied after extraction.
             as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.

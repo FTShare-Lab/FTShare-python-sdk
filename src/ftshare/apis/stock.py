@@ -347,11 +347,6 @@ class StockApiMixin:
     def goodwill_industry(
         self,
         date: Any | None = None,
-        page: int | None = None,
-        page_size: int | None = None,
-        limit: int | None = None,
-        all_pages: bool = False,
-        max_pages: int | None = None,
         *,
         raw: bool = False,
         fields: Sequence[str] | str | None = None,
@@ -366,36 +361,14 @@ class StockApiMixin:
 
         Args:
             date: 报告期，如 20250331 (type: string; required: Y).
-            page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
-            page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
-            limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
-            all_pages: Fetch and combine pages until the server reports the last page.
-            max_pages: Optional safety cap for ``all_pages``.
             raw: Return the decoded JSON payload without tabular extraction.
             fields: Optional field list or comma-separated field string applied after extraction.
             as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
             **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
-
-        Returns:
-            A pandas ``DataFrame`` by default, Python rows when
-            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
-            payloads when multi-page fetching is used with ``raw=True``.
         """
         request_params = {'date': date}
         request_params.update(kwargs)
-        path = ENDPOINTS['goodwill_industry'].path
-        return self.get_paginated(
-            path,
-            page=page,
-            page_size=page_size,
-            limit=limit,
-            all_pages=all_pages,
-            max_pages=max_pages,
-            raw=raw,
-            fields=fields,
-            as_dataframe=as_dataframe,
-            **request_params,
-        )
+        return self._call_endpoint('goodwill_industry', raw=raw, fields=fields, as_dataframe=as_dataframe, **request_params)
 
     def goodwill_market_overview(
         self,
@@ -2887,9 +2860,9 @@ class StockApiMixin:
             symbol: 标的代码，如 000001.SZ、600519.XSHG；长短市场后缀均支持 (type: SymbolKey; required: Y).
             interval_unit: 周期单位：Day/Week/Month/Year，大小写不敏感 (type: enum; required: Y).
             adjust_kind: 复权：None（默认，不复权）/Forward（前复权）/Backward（后复权） (type: enum; required: N).
-            since_ts_millis: 开始时间戳，单位毫秒；与 until 的跨度不得超过 12 个自然月 (type: DateTime(ms); required: N).
+            since_ts_millis: 开始时间戳，单位毫秒；与 limit 至少填一个；与 until 的跨度不得超过 12 个自然月 (type: DateTime(ms); required: N).
             until_ts_millis: 结束时间戳，单位毫秒 (type: DateTime(ms); required: Y).
-            limit: 返回条数上限；未传 since 和 limit 时默认 50 (type: int; required: N).
+            limit: 返回条数上限；不传时返回请求时间范围内的全部数据 (type: int; required: N).
             raw: Return the decoded JSON payload without tabular extraction.
             fields: Optional field list or comma-separated field string applied after extraction.
             as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
