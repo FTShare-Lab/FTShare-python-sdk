@@ -25,12 +25,14 @@ def extract_tabular(payload: Any, unwrap_bare_data: bool = False) -> Any:
     Supported envelopes:
         - ``{"data": {"records": [...]}}``
         - ``{"data": {"items": [...]}}``
+        - ``{"data": {"index_descriptions": [...]}}``
         - ``{"data": [...]}``
         - ``{"items": [...]}``
 
     When ``unwrap_bare_data`` is true and ``data`` is an object without
-    ``records``/``items`` rows (single-item query shapes), the ``data``
-    object itself is returned instead of the full envelope.
+    ``records``/``items``/``index_descriptions`` rows (single-item query
+    shapes), the ``data`` object itself is returned instead of the full
+    envelope.
 
     Any unsupported shape is returned unchanged so callers do not lose data.
     """
@@ -43,6 +45,8 @@ def extract_tabular(payload: Any, unwrap_bare_data: bool = False) -> Any:
                 return data["records"]
             if isinstance(data.get("items"), list):
                 return data["items"]
+            if isinstance(data.get("index_descriptions"), list):
+                return data["index_descriptions"]
             if unwrap_bare_data:
                 return data
         if isinstance(payload.get("items"), list):

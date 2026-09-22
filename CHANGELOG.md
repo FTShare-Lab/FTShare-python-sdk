@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `bse_mapping` endpoint metadata now records its `page`/`page_size` parameters and documented 500-row page cap.
 - Documented per-endpoint `page_size` caps (up to 4000) are now validated client-side.
 - `tdx_board_daily`/`tdx_board_index`/`tdx_board_members` exposed the dead parameters `idx_name`/`idx_type`/`idx_type_code`; they are now `board_name`/`board_type`/`board_type_code`, which the service actually honors. The three endpoints also document their full parameter set and enforce the documented 1000-row page cap.
+- `limit_event_timeline_3s` exposed only `symbol`/`trade_date`; it now records its documented `page`/`page_size` parameters and accepts `limit`, `all_pages`, and `max_pages`, with the documented 200-row page cap.
+- `etf_pcf_infos` referenced the non-existent doc `ETF-PCF信息.md`; corrected to `ETF申赎清单.md`.
+- `ashare_rating_factor_snapshot` referenced the non-existent doc `A股相关性Top-K.md`; corrected to `A股相关性 Top-K.md`.
 
 ## [0.1.1] - 2026-06-29
 

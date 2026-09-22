@@ -238,6 +238,58 @@ def test_get_raw_true_returns_full_payload():
     assert client.get("api/v1/market/data/demo", raw=True) == payload
 
 
+def test_index_description_list_extracts_index_descriptions_rows():
+    payload = {
+        "code": 200,
+        "message": "success",
+        "data": {
+            "index_descriptions": [
+                {"index_code": "000001", "index_orig": "中证指数"},
+                {"index_code": "000002", "index_orig": "中证指数"},
+            ],
+            "page": 1,
+            "page_size": 2,
+            "total": 2,
+        },
+    }
+    session = FakeSession([FakeResponse(payload=payload)])
+    client = FtshareClient(session=session)
+
+    df = client.index_description_list(page=1, page_size=2)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/index/index_description"
+    assert session.calls[0]["params"] == {"page": 1, "page_size": 2}
+    assert df.to_dict("records") == [
+        {"index_code": "000001", "index_orig": "中证指数"},
+        {"index_code": "000002", "index_orig": "中证指数"},
+    ]
+
+
+def test_index_description_list_all_pages_stops_on_short_page():
+    def page(rows, number):
+        return {
+            "code": 200,
+            "message": "success",
+            "data": {
+                "index_descriptions": rows,
+                "page": number,
+                "page_size": 2,
+                "total": 3,
+            },
+        }
+
+    session = FakeSession([
+        FakeResponse(payload=page([{"index_code": "000001"}, {"index_code": "000002"}], 1)),
+        FakeResponse(payload=page([{"index_code": "000003"}], 2)),
+    ])
+    client = FtshareClient(session=session)
+
+    df = client.index_description_list(all_pages=True, page_size=2)
+
+    assert len(session.calls) == 2
+    assert df["index_code"].tolist() == ["000001", "000002", "000003"]
+
+
 def test_requested_endpoint_api_versions():
     expected_paths = {
         "hk_candlesticks": "api/v2/market/data/hk/hk-candlesticks",
@@ -309,7 +361,6 @@ def test_new_batch_endpoints_forward_symbols_and_documented_parameters():
             {
                 "symbols": '["600519.SH"]',
                 "interval_unit": "day",
-                "interval_value": 1,
                 "adjust_kind": "forward",
                 "since_ts_millis": 1784048400000,
                 "until_ts_millis": 1784050200000,

@@ -188,7 +188,8 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'title': '涨跌停事件时间线',
         'doc_file': '涨跌停事件时间线.md',
         'original_api': 'limit_event_timeline_3s',
-        'params': ('symbol', 'trade_date'),
+        'params': ('symbol', 'trade_date', 'page', 'page_size'),
+        'max_page_size': 200,
     },
     'limit_up_briefs': {
         'path': 'api/v3/market/data/limit-up-reports/briefs',
@@ -312,7 +313,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'doc_file': '股票K线.md',
         'original_api': 'stock_candlesticks',
         'method': 'GET',
-        'params': ('symbol', 'interval_unit', 'interval_value', 'adjust_kind', 'since_ts_millis', 'until_ts_millis', 'limit'),
+        'params': ('symbol', 'interval_unit', 'adjust_kind', 'since_ts_millis', 'until_ts_millis', 'limit'),
     },
     'stock_capital_flows': {
         'path': 'api/v1/market/data/stock-capital-flows',
@@ -790,7 +791,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
     'ashare_rating_factor_snapshot': {
         'path': 'api/v3/market/data/ashare-rating-factor-snapshot',
         'title': 'A股相关性 Top-K',
-        'doc_file': 'A股相关性Top-K.md',
+        'doc_file': 'A股相关性 Top-K.md',
         'original_api': 'ashare_rating_factor_snapshot',
         'params': ('trade_code', 'date', 'top_k'),
     },
@@ -917,7 +918,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'title': '批量股票K线',
         'doc_file': '批量股票K线.md',
         'original_api': 'stock_candlesticks_batch',
-        'params': ('symbols', 'interval_unit', 'interval_value', 'adjust_kind', 'since_ts_millis', 'until_ts_millis', 'limit'),
+        'params': ('symbols', 'interval_unit', 'adjust_kind', 'since_ts_millis', 'until_ts_millis', 'limit'),
     },
     'stock_minutes_batch': {
         'path': 'api/v2/market/data/stock_minutes/batch',

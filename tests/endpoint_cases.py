@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 
@@ -161,12 +162,12 @@ SPECIAL_CALLS: dict[str, dict[str, Any]] = {
     "eastmoney_board_daily_kline": {"board_code": "BK1024", "start_date": "20260818", "end_date": "20260820", "page": 1, "page_size": 5},
     "eastmoney_us_stock_list": {"refresh": False, "page": 1, "page_size": 5},
     "eastmoney_us_stock_daily_ohlc": {"stock_code": "AAPL", "start_date": "20260818", "end_date": "20260820", "page": 1, "page_size": 10},
-    "convertible_bond_candlesticks": {"symbol": "113027.SH", "interval_unit": "Day", "interval_value": 1, "adjust_kind": "forward", "since_ts_millis": 1716000000000, "until_ts_millis": 1718000000000, "limit": 5},
-    "convertible_bond_candlesticks_batch": {"symbols": "113042.SH", "interval_unit": "Day", "interval_value": 1, "adjust_kind": "forward", "since_ts_millis": 1784048400000, "until_ts_millis": 1784050200000, "limit": 5},
+    "convertible_bond_candlesticks": {"symbol": "113027.SH", "interval_unit": "Day", "adjust_kind": "forward", "since_ts_millis": 1716000000000, "until_ts_millis": 1718000000000, "limit": 5},
+    "convertible_bond_candlesticks_batch": {"symbols": "113042.SH", "interval_unit": "Day", "adjust_kind": "forward", "since_ts_millis": 1784048400000, "until_ts_millis": 1784050200000, "limit": 5},
     "convertible_bond_minute_candlesticks": {"symbol": "113042.SH", "symbols": None, "interval_value": 1, "since_ts_millis": 1784048400000, "until_ts_millis": 1784050200000, "limit": 5},
     "convertible_bond_realtime_day_kline": {"symbols": '["113042.SH"]'},
     "convertible_bond_realtime_minute_kline": {"symbols": '["113042.SH"]'},
-    "etf_candlesticks": {"symbol": "510300.SH", "interval_unit": "day", "interval_value": 1, "adjust_kind": "forward", "since_ts_millis": 1716000000000, "until_ts_millis": 1718000000000, "limit": 5},
+    "etf_candlesticks": {"symbol": "510300.SH", "interval_unit": "day", "adjust_kind": "forward", "since_ts_millis": 1716000000000, "until_ts_millis": 1718000000000, "limit": 5},
     "etf_components_all": {"symbol": "510300.SH"},
     "etf_minutes": {"symbol": "510300.SH", "interval_value": 1, "adjust_kind": "none", "since_ts_millis": 1784048400000, "until_ts_millis": 1784050200000, "limit": 5},
     "etf_realtime_day_kline": {"symbols": '["510300.SH"]'},
@@ -192,7 +193,7 @@ SPECIAL_CALLS: dict[str, dict[str, Any]] = {
     "futures_minutes": {"symbol": "A2609.DCE", "interval": "1min", "start": 1784048400000, "end": 1784050200000, "limit": 5},
     "futures_minutes_realtime": {"symbols": "A2609.DCE"},
     "hk_candlesticks": {"trade_code": "00700.HK", "interval_unit": "day", "until_date": "20260717", "since_date": "20260715", "interval_value": 1, "limit": 5, "adjust_kind": "forward"},
-    "index_candlesticks": {"symbol": "000300.SH", "interval_unit": "day", "interval_value": 1, "adjust_kind": "forward", "since_ts_millis": 1784048400000, "until_ts_millis": 1784050200000, "limit": 5},
+    "index_candlesticks": {"symbol": "000300.SH", "interval_unit": "day", "adjust_kind": "forward", "since_ts_millis": 1784048400000, "until_ts_millis": 1784050200000, "limit": 5},
     "index_candlesticks_batch": {"symbols": "000300.SH", "interval_unit": "day", "adjust_kind": "forward", "since_ts_millis": 1784048400000, "until_ts_millis": 1784050200000, "limit": 5},
     "index_minutes": {"symbol": "000300.SH", "interval_value": 1, "since_ts_millis": 1784048400000, "until_ts_millis": 1784050200000, "limit": 5},
     "index_realtime_day_kline": {"symbols": '["000300.SH"]'},
@@ -214,7 +215,7 @@ SPECIAL_CALLS: dict[str, dict[str, Any]] = {
     "stock_announcements": {"stock_code": "000001.SZ", "start_date": None, "end_date": None, "type": "stock", "page": 1, "page_size": 5},
     "stock_reports": {"stock_code": "000001.SZ", "start_date": None, "end_date": None, "type": "StockReport", "page": 1, "page_size": 5},
     "stock_prospectuses": {"stock_code": "600000.SH", "start_date": None, "end_date": None, "page": 1, "page_size": 5},
-    "stock_candlesticks": {"symbol": "600519.SH", "interval_unit": "day", "interval_value": 1, "adjust_kind": "forward", "since_ts_millis": 1784048400000, "until_ts_millis": 1784050200000, "limit": 5},
+    "stock_candlesticks": {"symbol": "600519.SH", "interval_unit": "day", "adjust_kind": "forward", "since_ts_millis": 1784048400000, "until_ts_millis": 1784050200000, "limit": 5},
     "stock_connect_members": {"direction": "north", "channel": "SH", "page": 1, "page_size": 5},
     "stock_dividends": {"symbol": "600519.SH", "since_date": "2026-07-01", "until_date": "2026-07-17", "page": 1, "page_size": 5},
     "stock_dividends_effective": {"symbol": "600519.SH", "since_date": "2026-07-01", "until_date": "2026-07-17", "page": 1, "page_size": 5},
@@ -245,7 +246,7 @@ SPECIAL_CALLS: dict[str, dict[str, Any]] = {
     "report_announcement_summary": {"announcement_id": "announcement-1"},
     "stock_intraday_auction_volume_symbol": {"symbol": "600000.SH", "trade_date": "20260820", "page": 1, "page_size": 5},
     "ths_all_board_kline": {"start_date": "20260818", "end_date": "20260820", "page": 1, "page_size": 5},
-    "stock_candlesticks_batch": {"symbols": "600519.SH", "interval_unit": "day", "interval_value": 1, "adjust_kind": "forward", "since_ts_millis": 1784048400000, "until_ts_millis": 1784050200000, "limit": 5},
+    "stock_candlesticks_batch": {"symbols": "600519.SH", "interval_unit": "day", "adjust_kind": "forward", "since_ts_millis": 1784048400000, "until_ts_millis": 1784050200000, "limit": 5},
     "stock_minutes_batch": {"symbols": "600519.SH", "interval_value": 1, "adjust_kind": "none", "since_ts_millis": 1784048400000, "until_ts_millis": 1784050200000, "limit": 5},
     "cb_lists": {},
     "supply_chain_industry_names": {},
@@ -265,3 +266,92 @@ SPECIAL_CALLS: dict[str, dict[str, Any]] = {
 WIRE_ALIASES: dict[str, dict[str, str]] = {
     "search": {"query": "q"},
 }
+
+
+_CST = timezone(timedelta(hours=8))
+
+
+def _millis(day: str, time: str = "00:00:00") -> int:
+    """Return a Beijing-time wall clock instant as epoch milliseconds."""
+    return int(
+        datetime.strptime(f"{day} {time}", "%Y-%m-%d %H:%M:%S")
+        .replace(tzinfo=_CST)
+        .timestamp()
+        * 1000
+    )
+
+
+# Placeholder values in SAMPLE_VALUES are shared across endpoints, so endpoints
+# that need a specific valid symbol, enum, or date window pin their own params
+# here. Each entry must still list every documented parameter of its endpoint.
+SPECIAL_CALLS.update({
+    "ashare_interactions": {"start_date": "20260701", "end_date": "20260717", "trade_code": None, "company_name": None, "industry_code": None, "industry_name": None, "data_source": None, "page": 1, "page_size": 5},
+    "ashare_news_sentiment_factors": {"trade_code": "600000.SH", "start_date": "20260801", "end_date": "20260811", "page": 1, "page_size": 5},
+    "bse_mapping": {"o_code": None, "n_code": None, "page": 1, "page_size": 5},
+    "bullion_price": {"symbol": "XAUUSD", "start_date": 20260101, "end_date": 20260918, "page": 1, "page_size": 5},
+    "china_futures_base_data": {"trade_date": None, "symbol": None},
+    "company_list": {"stock_name": None, "stock_code": None, "page": 1, "page_size": 5},
+    "eastmoney_futures_position": {"exchange": None, "variety_code": None, "contract_code": None, "trade_date": None, "start_date": None, "end_date": None, "member_name_abbr": None, "page": 1, "page_size": 5},
+    "eastmoney_rank": {"rank_group": "hot", "market": "A", "trade_date": None},
+    "eastmoney_sector_flow": {"board_code": None, "board_type": None, "board_level": None, "trade_date": None, "start_date": None, "end_date": None, "page": 1, "page_size": 5},
+    "eastmoney_stock_valuation": {"symbol": None, "trade_date": None, "start_date": None, "end_date": None, "page": 1, "page_size": 5},
+    "exchange_margin_summaries": {"start_date": "20260101", "end_date": "20260918", "exchange": None, "page": 1, "page_size": 5},
+    "fund_fee": {"fund_code": "000001", "charge_type": None, "client_type": None, "page": 1, "page_size": 5},
+    "fund_list": {"fund_code": None, "fund_type": None, "page": 1, "page_size": 5},
+    "fund_share": {"fund_code": "000001", "stati_perd": None, "start_date": None, "end_date": None, "page": 1, "page_size": 5},
+    "fut_weekly_detail": {"week": "202629", "prd": None, "start_week": None, "end_week": None, "exchange": None, "page": 1, "page_size": 5},
+    "fut_wsr": {"trade_date": "20260717", "start_date": None, "end_date": None, "symbol": None, "exchange": None, "page": 1, "page_size": 5},
+    "futures_contract_kline": {"symbol": "A2609.DCE", "interval": "daily", "start": _millis("2026-05-01"), "end": _millis("2026-07-17", "15:00:00"), "limit": 5},
+    "futures_minutes": {"symbol": "A2609.DCE", "interval": "1min", "start": _millis("2026-07-17", "09:30:00"), "end": _millis("2026-07-17", "10:00:00"), "limit": 5},
+    "futures_minutes_batch": {"symbols": "A2609.DCE", "interval": "1min", "start": _millis("2026-07-17", "09:30:00"), "end": _millis("2026-07-17", "10:00:00"), "limit": 5},
+    "futures_nanhua_index_kline": {"code": "AG_NH", "trade_date": None, "start_date": None, "end_date": None, "page": 1, "page_size": 5},
+    "global_index_daily_kline": {"secid": "100.HSI", "start_date": "20260701", "end_date": "20260717", "limit": 5},
+    "kline_pattern_annotations": {"date": "20260918", "symbol": None, "pattern": None, "page": 1, "page_size": 5},
+    "major_contract_by_symbol": {"symbol": "601668", "page": 1, "page_size": 5},
+    "report_announcement_list": {"date": "20260918", "sec_code": None, "page": 1, "page_size": 5},
+    "report_announcement_summary": {"announcement_id": "1225521898"},
+    "shibor_quote_daily": {"start_date": "20260701", "end_date": "20260717", "bank": None, "page": 1, "page_size": 5},
+    "stk_ah_comparison": {"hk_code": None, "ts_code": None, "trade_date": "20260918", "start_date": None, "end_date": None, "page": 1, "page_size": 5},
+    "stk_alert_broker": {"ts_code": None, "start_date": None, "end_date": None, "page": 1, "page_size": 5},
+    "stk_shock": {"ts_code": None, "trade_date": None, "start_date": None, "end_date": None, "page": 1, "page_size": 5},
+    "stk_surv": {"ts_code": None, "trade_date": None, "start_date": None, "end_date": None, "page": 1, "page_size": 5},
+    "stock_dividends": {"symbol": "600519.SH", "since_date": None, "until_date": None, "page": 1, "page_size": 5},
+    "stock_dividends_effective": {"symbol": "600519.SH", "since_date": None, "until_date": None, "page": 1, "page_size": 5},
+    "stock_ggmx": {"stock_code": None, "change_direction": None, "start_date": None, "end_date": None, "page": 1, "page_size": 5},
+    "sw_industry_constituent_history": {"industry_code": "801010.SI"},
+    "sw_industry_daily_metrics": {"level": None, "start_date": "20260901", "end_date": "20260918", "industry_code": "801010.SI", "page": 1, "page_size": 5},
+    "szse_convertible_bond_declaration_snapshots": {"security_code": None, "trade_date": None, "start_date": None, "end_date": None, "page": 1, "page_size": 5},
+    "szse_convertible_bond_directed_trades": {"security_code": None, "trade_date": None, "start_date": None, "end_date": None, "page": 1, "page_size": 5},
+    "szse_convertible_bond_matching_trades": {"security_code": None, "trade_date": None, "start_date": None, "end_date": None, "page": 1, "page_size": 5},
+    "szse_convertible_bond_negotiated_trades": {"security_code": None, "trade_date": None, "start_date": None, "end_date": None, "page": 1, "page_size": 5},
+    "tdx_board_members": {"ts_code": None, "board_name": None, "board_type": None, "board_type_code": None, "con_code": None, "con_name": None, "market": None, "page": 1, "page_size": 5},
+    "ths_concept_daily_flow": {"start_date": "20260901", "end_date": "20260918", "board_name": None, "page": 1, "page_size": 5},
+    "ths_hot_list": {"list_type": "stock_day", "trade_date": None, "page": 1, "page_size": 5},
+    "ths_industry_constituents": {"industry_code": None, "industry_name": None, "stock_code": None, "stock_name": None, "page": 1, "page_size": 5},
+    "ths_industry_daily_flow": {"start_date": "20260901", "end_date": "20260918", "board_name": None, "page": 1, "page_size": 5},
+    "ths_stock_daily_flow": {"start_date": "20260901", "end_date": "20260918", "code": None, "name": None, "page": 1, "page_size": 5},
+    "yzxdr_detail": {"year": 2024, "quarter": 2, "stock_code": None, "page": 1, "page_size": 5},
+    "search": {"query": "平安银行", "limit": 5},
+    "xueqiu_rank": {"rank_group": "follow", "period": "7d", "trade_date": None, "page": 1, "page_size": 5},
+    "stock_candlesticks": {"symbol": "600519.SH", "interval_unit": "day", "adjust_kind": "forward", "since_ts_millis": _millis("2026-07-01"), "until_ts_millis": _millis("2026-07-17", "15:00:00"), "limit": 5},
+    "stock_candlesticks_batch": {"symbols": "600519.SH", "interval_unit": "day", "adjust_kind": "forward", "since_ts_millis": _millis("2026-07-01"), "until_ts_millis": _millis("2026-07-17", "15:00:00"), "limit": 5},
+    "index_candlesticks": {"symbol": "000300.SH", "interval_unit": "day", "adjust_kind": "forward", "since_ts_millis": _millis("2026-07-01"), "until_ts_millis": _millis("2026-07-17", "15:00:00"), "limit": 5},
+    "index_candlesticks_batch": {"symbols": "000300.SH", "interval_unit": "day", "adjust_kind": "forward", "since_ts_millis": _millis("2026-07-01"), "until_ts_millis": _millis("2026-07-17", "15:00:00"), "limit": 5},
+    "stock_minutes": {"symbol": "600519.SH", "interval_value": 1, "adjust_kind": "none", "since_ts_millis": _millis("2026-07-17", "09:30:00"), "until_ts_millis": _millis("2026-07-17", "10:00:00"), "limit": 5},
+    "stock_minutes_batch": {"symbols": "600519.SH", "interval_value": 1, "adjust_kind": "none", "since_ts_millis": _millis("2026-07-17", "09:30:00"), "until_ts_millis": _millis("2026-07-17", "10:00:00"), "limit": 5},
+    "index_minutes": {"symbol": "000300.SH", "interval_value": 1, "since_ts_millis": _millis("2026-07-17", "09:30:00"), "until_ts_millis": _millis("2026-07-17", "10:00:00"), "limit": 5},
+    "index_minutes_batch": {"symbols": "000300.SH", "interval_value": 1, "since_ts_millis": _millis("2026-07-17", "09:30:00"), "until_ts_millis": _millis("2026-07-17", "10:00:00"), "limit": 5},
+    "etf_minutes": {"symbol": "510300.SH", "interval_value": 1, "adjust_kind": "none", "since_ts_millis": _millis("2026-07-17", "09:30:00"), "until_ts_millis": _millis("2026-07-17", "10:00:00"), "limit": 5},
+    "etf_minutes_batch": {"symbols": "510300.SH", "interval_value": 1, "adjust_kind": "none", "since_ts_millis": _millis("2026-07-17", "09:30:00"), "until_ts_millis": _millis("2026-07-17", "10:00:00"), "limit": 5},
+    "convertible_bond_candlesticks": {"symbol": "113042.SH", "interval_unit": "day", "adjust_kind": "forward", "since_ts_millis": _millis("2026-07-01"), "until_ts_millis": _millis("2026-07-17", "15:00:00"), "limit": 5},
+    "convertible_bond_minute_candlesticks": {"symbol": "113042.SH", "symbols": None, "interval_value": 1, "since_ts_millis": _millis("2026-07-17", "09:30:00"), "until_ts_millis": _millis("2026-07-17", "10:00:00"), "limit": 5},
+    "stk_managers": {"trade_code": "000001.SZ", "candi_date": None, "begin_date": None, "end_date": None},
+    "stk_manager_hold": {"trade_code": "000001.SZ", "end_date": None},
+    "stk_manager_pay": {"trade_code": "000001.SZ", "end_date": None},
+    "namechange": {"trade_code": "000001.SZ", "start_date": None, "end_date": None},
+    "stk_code_change": {"trade_code": "001872.SZ", "start_date": None, "end_date": None},
+    "stock_st_history": {"symbol": "600735.SH", "st_type": None},
+    "limit_event_timeline_3s": {"symbol": "000019.SZ", "trade_date": "20260909", "page": 1, "page_size": 5},
+    "etf_pre_single": {"symbol": "510300.SH", "date": "20260717"},
+    "eastmoney_futures_strange": {"exchange": "gfex", "variety": "多晶硅", "contract": "ps2609", "trade_date": "20260721"},
+})

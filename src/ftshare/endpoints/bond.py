@@ -12,7 +12,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'doc_file': '可转债历史K线.md',
         'original_api': 'convertible_bond_candlesticks',
         'method': 'GET',
-        'params': ('symbol', 'interval_unit', 'interval_value', 'adjust_kind', 'since_ts_millis', 'until_ts_millis', 'limit'),
+        'params': ('symbol', 'interval_unit', 'adjust_kind', 'since_ts_millis', 'until_ts_millis', 'limit'),
     },
 
     'convertible_bond_candlesticks_batch': {
@@ -20,7 +20,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'title': '批量可转债历史K线',
         'doc_file': '批量可转债历史K线.md',
         'original_api': 'convertible_bond_candlesticks_batch',
-        'params': ('symbols', 'interval_unit', 'interval_value', 'adjust_kind', 'since_ts_millis', 'until_ts_millis', 'limit'),
+        'params': ('symbols', 'interval_unit', 'adjust_kind', 'since_ts_millis', 'until_ts_millis', 'limit'),
     },
 
     'convertible_bond_minute_candlesticks': {

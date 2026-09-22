@@ -20,7 +20,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'doc_file': 'ETFK线.md',
         'original_api': 'etf_candlesticks',
         'method': 'GET',
-        'params': ('symbol', 'interval_unit', 'interval_value', 'adjust_kind', 'since_ts_millis', 'until_ts_millis', 'limit'),
+        'params': ('symbol', 'interval_unit', 'adjust_kind', 'since_ts_millis', 'until_ts_millis', 'limit'),
     },
     'etf_components_all': {
         'path': 'api/v2/market/data/etf-components-all',
@@ -125,7 +125,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
     'etf_pcf_infos': {
         'path': 'api/v2/market/data/etf-pcf/etf-pcf-infos',
         'title': 'ETF申赎清单',
-        'doc_file': 'ETF-PCF信息.md',
+        'doc_file': 'ETF申赎清单.md',
         'original_api': 'etf_pcf_infos',
         'params': ('symbol', 'trade_date', 'start_date', 'end_date', 'page', 'page_size'),
         'max_page_size': 500,
