@@ -92,6 +92,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'doc_file': '期货每日结算参数.md',
         'original_api': 'fut_settle',
         'params': ('ts_code', 'trade_date', 'start_date', 'end_date', 'exchange', 'page', 'page_size'),
+        'max_page_size': 4000,
     },
 
     'ft_limit': {

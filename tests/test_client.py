@@ -10,16 +10,36 @@ from ftshare.endpoints import ENDPOINTS
 
 
 class FakeResponse:
-    def __init__(self, status_code=200, payload=None, text="{}", json_error=False):
+    def __init__(self, status_code=200, payload=None, text="{}", json_error=False, content=b"", headers=None, chunks=None):
         self.status_code = status_code
         self._payload = payload
         self.text = text
         self._json_error = json_error
+        self.content = content
+        self.headers = headers or {}
+        self._chunks = chunks
 
     def json(self):
         if self._json_error:
             raise ValueError("not json")
         return self._payload
+
+    def iter_content(self, chunk_size=1):
+        if self._chunks is not None:
+            yield from self._chunks
+            return
+        for start in range(0, len(self.content), chunk_size):
+            yield self.content[start : start + chunk_size]
+
+    def close(self):
+        pass
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, traceback):
+        self.close()
+        return False
 
 
 class FakeSession:
@@ -27,16 +47,20 @@ class FakeSession:
         self.responses = list(responses)
         self.calls = []
 
-    def get(self, url, params=None, timeout=None, headers=None):
+    def get(self, url, params=None, timeout=None, headers=None, stream=False):
         self.calls.append(
             {
                 "url": url,
                 "params": params,
                 "timeout": timeout,
                 "headers": headers,
+                "stream": stream,
             }
         )
-        return self.responses.pop(0)
+        response = self.responses.pop(0)
+        if isinstance(response, Exception):
+            raise response
+        return response
 
     def post(self, url, json=None, timeout=None, headers=None):
         self.calls.append(
@@ -209,6 +233,58 @@ def test_get_raw_true_returns_full_payload():
     assert client.get("api/v1/market/data/demo", raw=True) == payload
 
 
+def test_index_description_list_extracts_index_descriptions_rows():
+    payload = {
+        "code": 200,
+        "message": "success",
+        "data": {
+            "index_descriptions": [
+                {"index_code": "000001", "index_orig": "中证指数"},
+                {"index_code": "000002", "index_orig": "中证指数"},
+            ],
+            "page": 1,
+            "page_size": 2,
+            "total": 2,
+        },
+    }
+    session = FakeSession([FakeResponse(payload=payload)])
+    client = FtshareClient(session=session)
+
+    df = client.index_description_list(page=1, page_size=2)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/index/index_description"
+    assert session.calls[0]["params"] == {"page": 1, "page_size": 2}
+    assert df.to_dict("records") == [
+        {"index_code": "000001", "index_orig": "中证指数"},
+        {"index_code": "000002", "index_orig": "中证指数"},
+    ]
+
+
+def test_index_description_list_all_pages_stops_on_short_page():
+    def page(rows, number):
+        return {
+            "code": 200,
+            "message": "success",
+            "data": {
+                "index_descriptions": rows,
+                "page": number,
+                "page_size": 2,
+                "total": 3,
+            },
+        }
+
+    session = FakeSession([
+        FakeResponse(payload=page([{"index_code": "000001"}, {"index_code": "000002"}], 1)),
+        FakeResponse(payload=page([{"index_code": "000003"}], 2)),
+    ])
+    client = FtshareClient(session=session)
+
+    df = client.index_description_list(all_pages=True, page_size=2)
+
+    assert len(session.calls) == 2
+    assert df["index_code"].tolist() == ["000001", "000002", "000003"]
+
+
 def test_requested_endpoint_api_versions():
     expected_paths = {
         "hk_candlesticks": "api/v2/market/data/hk/hk-candlesticks",
@@ -280,7 +356,6 @@ def test_new_batch_endpoints_forward_symbols_and_documented_parameters():
             {
                 "symbols": '["600519.SH"]',
                 "interval_unit": "day",
-                "interval_value": 1,
                 "adjust_kind": "forward",
                 "since_ts_millis": 1784048400000,
                 "until_ts_millis": 1784050200000,
@@ -564,6 +639,57 @@ def test_new_etf_document_endpoints_forward_documented_parameters():
 
         assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + ENDPOINTS[method_name].path
         assert session.calls[0]["params"] == expected_params
+
+
+ANNOUNCEMENT_HASH = "3e179549deb8bbc62c60375080aaaea10913f3ad7eee88aa31bfb2a5a7befccb"
+
+
+def test_etf_announcements_download_writes_pdf_and_returns_path(tmp_path):
+    pdf = b"%PDF-1.4 fake announcement body"
+    session = FakeSession([FakeResponse(payload={}, content=pdf)])
+    client = FtshareClient(session=session)
+
+    saved = client.etf_announcements_download(ANNOUNCEMENT_HASH, save_dir=tmp_path)
+
+    expected = tmp_path / f"{ANNOUNCEMENT_HASH}.pdf"
+    assert saved == str(expected)
+    assert expected.read_bytes() == pdf
+    assert session.calls[0]["url"] == (
+        "https://market.ft.tech/gateway/api/v2/market/data/announcements/etf-announcements/" + ANNOUNCEMENT_HASH
+    )
+    assert session.calls[0]["params"] is None
+
+
+def test_stock_announcements_download_creates_missing_directory(tmp_path):
+    pdf = b"%PDF-1.7 fake announcement body"
+    session = FakeSession([FakeResponse(payload={}, content=pdf)])
+    client = FtshareClient(session=session)
+    save_dir = tmp_path / "announcements" / "2026"
+
+    saved = client.stock_announcements_download(ANNOUNCEMENT_HASH, save_dir=save_dir)
+
+    assert saved == str(save_dir / f"{ANNOUNCEMENT_HASH}.pdf")
+    assert (save_dir / f"{ANNOUNCEMENT_HASH}.pdf").read_bytes() == pdf
+    assert session.calls[0]["url"] == (
+        "https://market.ft.tech/gateway/api/v2/market/data/announcements/stock-announcements/" + ANNOUNCEMENT_HASH
+    )
+
+
+def test_announcements_download_returns_empty_path_for_empty_body(tmp_path):
+    session = FakeSession([FakeResponse(payload={}, content=b"")])
+    client = FtshareClient(session=session)
+
+    assert client.etf_announcements_download(ANNOUNCEMENT_HASH, save_dir=tmp_path) == ""
+    assert list(tmp_path.iterdir()) == []
+
+
+def test_announcements_download_raises_on_http_error(tmp_path):
+    session = FakeSession([FakeResponse(status_code=500, text='{"code":500,"message":"boom"}')])
+    client = FtshareClient(session=session)
+
+    with pytest.raises(FtshareHTTPError):
+        client.stock_announcements_download(ANNOUNCEMENT_HASH, save_dir=tmp_path)
+    assert list(tmp_path.iterdir()) == []
 
 
 def test_etf_share_and_net_value_reject_page_size_above_200():
@@ -906,6 +1032,35 @@ def test_all_pages_combines_paginated_endpoint_rows():
     assert session.calls[1]["params"]["page_size"] == 2
 
 
+def test_shibor_daily_combines_all_pages():
+    session = FakeSession(
+        [
+            FakeResponse(payload=paginated_records([{"id": 1}, {"id": 2}], page=1, pages=2)),
+            FakeResponse(payload=paginated_records([{"id": 3}], page=2, pages=2)),
+        ]
+    )
+    client = FtshareClient(session=session)
+
+    df = client.shibor_daily(start_date="2026-05-01", end_date="2026-05-02", page_size=2, all_pages=True)
+
+    assert isinstance(df, pd.DataFrame)
+    assert df.to_dict("records") == [{"id": 1}, {"id": 2}, {"id": 3}]
+    assert session.calls[0]["params"]["page"] == 1
+    assert session.calls[1]["params"]["page"] == 2
+
+
+def test_documented_page_size_cap_is_accepted_and_enforced():
+    session = FakeSession([FakeResponse(payload=paginated_records([{"id": 1}]))])
+    client = FtshareClient(session=session)
+
+    client.fut_settle(ts_code="A2609.DCE", trade_date="20260717", page_size=4000)
+
+    assert session.calls[0]["params"]["page_size"] == 4000
+
+    with pytest.raises(ValueError, match="page_size must be between 1 and 4000"):
+        FtshareClient(session=FakeSession([])).fut_settle(page_size=4001)
+
+
 def test_all_pages_raw_true_returns_page_payloads():
     first = paginated_records([{"id": 1}], page=1, pages=2)
     second = paginated_records([{"id": 2}], page=2, pages=2)
@@ -1144,6 +1299,17 @@ def test_limit_event_timeline_3s_forwards_symbol_and_trade_date():
 
     assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v2/market/data/limit-event-timeline-3s"
     assert session.calls[0]["params"] == {"symbol": "000504.XSHE", "trade_date": "20260713"}
+
+
+def test_supply_chain_industry_names_calls_route_without_params():
+    session = FakeSession([FakeResponse(payload={"code": 200, "message": "success", "data": ["3D打印", "3D打印材料"]})])
+    client = FtshareClient(session=session)
+
+    result = client.supply_chain_industry_names(as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v3/market/data/supply-chain/industry-names"
+    assert session.calls[0]["params"] == {}
+    assert result == ["3D打印", "3D打印材料"]
 
 
 def test_stock_filter_forwards_symbol_param():

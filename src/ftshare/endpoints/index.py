@@ -19,7 +19,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'doc_file': '指数K线.md',
         'original_api': 'index_candlesticks',
         'method': 'GET',
-        'params': ('symbol', 'interval_unit', 'interval_value', 'adjust_kind', 'since_ts_millis', 'until_ts_millis', 'limit'),
+        'params': ('symbol', 'interval_unit', 'adjust_kind', 'since_ts_millis', 'until_ts_millis', 'limit'),
     },
     'index_description_all': {
         'path': 'api/v1/market/data/index-description-all',

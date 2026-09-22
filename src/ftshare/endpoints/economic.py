@@ -127,6 +127,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'doc_file': 'HIBOR日度利率.md',
         'original_api': 'hibor_daily',
         'params': ('start_date', 'end_date', 'page', 'page_size'),
+        'max_page_size': 1000,
     },
 
     'shibor_quote_daily': {
@@ -135,6 +136,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'doc_file': 'SHIBOR报价日度.md',
         'original_api': 'shibor_quote_daily',
         'params': ('start_date', 'end_date', 'bank', 'page', 'page_size'),
+        'max_page_size': 1000,
     },
 
     'shibor_daily': {
@@ -143,6 +145,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'doc_file': 'SHIBOR日度利率.md',
         'original_api': 'shibor_daily',
         'params': ('start_date', 'end_date', 'page', 'page_size'),
+        'max_page_size': 1000,
     },
 
     'chinabond_yield_daily': {
@@ -151,6 +154,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'doc_file': '中债收益率曲线日度.md',
         'original_api': 'chinabond_yield_daily',
         'params': ('start_date', 'end_date', 'curve_name', 'page', 'page_size'),
+        'max_page_size': 1000,
     },
 
     'libor_daily': {
@@ -159,6 +163,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'doc_file': '国际基准利率日度.md',
         'original_api': 'libor_daily',
         'params': ('start_date', 'end_date', 'currency', 'tenor', 'page', 'page_size'),
+        'max_page_size': 1000,
     },
 
     'wz_index_daily': {
@@ -167,6 +172,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'doc_file': '温州民间融资综合利率指数日度.md',
         'original_api': 'wz_index_daily',
         'params': ('start_date', 'end_date', 'page', 'page_size'),
+        'max_page_size': 1000,
     },
 
 })

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from collections.abc import Sequence
 from typing import Any
 
@@ -20,6 +21,9 @@ class EtfApiMixin:
         end_date: Any | None = None,
         page: int | None = None,
         page_size: int | None = None,
+        limit: int | None = None,
+        all_pages: bool = False,
+        max_pages: int | None = None,
         *,
         raw: bool = False,
         fields: Sequence[str] | str | None = None,
@@ -37,8 +41,11 @@ class EtfApiMixin:
             trade_date: 交易日期 YYYYMMDD；空则默认当天，非交易日回退前一交易日 (type: string; required: N).
             start_date: 区间起始日期 YYYYMMDD；区间扫描必填且需配 symbol (type: string; required: N).
             end_date: 区间结束日期 YYYYMMDD；区间扫描必填且需配 symbol (type: string; required: N).
-            page: 页码，从 1 开始。
-            page_size: 每页条数，最大 2000。
+            page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+            page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+            limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+            all_pages: Fetch and combine pages until the server reports the last page.
+            max_pages: Optional safety cap for ``all_pages``.
             raw: Return the decoded JSON payload without tabular extraction.
             fields: Optional field list or comma-separated field string applied after extraction.
             as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -49,10 +56,17 @@ class EtfApiMixin:
             ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
             payloads when multi-page fetching is used with ``raw=True``.
         """
-        request_params = {'symbol': symbol, 'trade_date': trade_date, 'start_date': start_date, 'end_date': end_date, 'page': page, 'page_size': page_size}
+        request_params = {'symbol': symbol, 'trade_date': trade_date, 'start_date': start_date, 'end_date': end_date}
         request_params.update(kwargs)
-        return self._call_endpoint(
-            'etf_adjust_factor',
+        path = ENDPOINTS['etf_adjust_factor'].path
+        return self.get_paginated(
+            path,
+            page=page,
+            page_size=page_size,
+            limit=limit,
+            all_pages=all_pages,
+            max_pages=max_pages,
+            max_page_size=ENDPOINTS['etf_adjust_factor'].max_page_size,
             raw=raw,
             fields=fields,
             as_dataframe=as_dataframe,
@@ -63,7 +77,6 @@ class EtfApiMixin:
         self,
         symbol: Any | None = None,
         interval_unit: Any | None = None,
-        interval_value: Any | None = None,
         adjust_kind: Any | None = None,
         since_ts_millis: Any | None = None,
         until_ts_millis: Any | None = None,
@@ -82,12 +95,11 @@ class EtfApiMixin:
 
         Args:
             symbol: ETF 代码，如 510300.XSHG、159915.XSHE；也接受 .SH、.SZ 短后缀 (type: string; required: Y).
-            interval_unit: 周期单位：Minute/Day/Week/Month/Year (type: enum; required: Y).
-            interval_value: 间隔数值，默认 1；例如 Minute+5 表示 5 分钟 K 线 (type: int; required: N).
+            interval_unit: 周期单位：Day/Week/Month/Year，大小写不敏感 (type: enum; required: Y).
             adjust_kind: 复权：None（默认，不复权）/Forward（前复权）/Backward（后复权） (type: enum; required: N).
-            since_ts_millis: 开始时间戳，单位毫秒；分钟 K 线与 until 的跨度 ≤3 天 (type: int(ms); required: N).
+            since_ts_millis: 开始时间戳，单位毫秒；与 until 的跨度不得超过 12 个自然月 (type: int(ms); required: Y).
             until_ts_millis: 结束时间戳，单位毫秒 (type: int(ms); required: Y).
-            limit: 返回条数上限；未传 since 和 limit 时默认最多返回 50 根 K 线 (type: int; required: N).
+            limit: 返回条数上限；不传时返回请求时间范围内的全部数据 (type: int; required: N).
             raw: Return the decoded JSON payload without tabular extraction.
             fields: Optional field list or comma-separated field string applied after extraction.
             as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -98,7 +110,7 @@ class EtfApiMixin:
             ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
             payloads when multi-page fetching is used with ``raw=True``.
         """
-        request_params = {'symbol': symbol, 'interval_unit': interval_unit, 'interval_value': interval_value, 'adjust_kind': adjust_kind, 'since_ts_millis': since_ts_millis, 'until_ts_millis': until_ts_millis, 'limit': limit}
+        request_params = {'symbol': symbol, 'interval_unit': interval_unit, 'adjust_kind': adjust_kind, 'since_ts_millis': since_ts_millis, 'until_ts_millis': until_ts_millis, 'limit': limit}
         request_params.update(kwargs)
         return self._call_endpoint(
             'etf_candlesticks',
@@ -391,6 +403,29 @@ class EtfApiMixin:
             as_dataframe=as_dataframe,
             **request_params,
         )
+
+    def etf_announcements_download(
+        self,
+        url_hash: Any,
+        save_dir: str | os.PathLike[str] = ".",
+    ) -> str:
+        """下载ETF公告正文.
+
+        Endpoint: ``api/v2/market/data/announcements/etf-announcements/{url_hash}``.
+        Method: ``GET``.
+
+        Args:
+            url_hash: 公告文件 URL 哈希，取自 ``etf_announcements`` 列表响应的 `url_hash` 字段 (type: string; required: Y).
+            save_dir: 保存目录（默认为当前目录），目录不存在时自动创建；文件名固定为 `{url_hash}.pdf`。
+
+        Returns:
+            落盘后的文件路径；服务端返回 2xx 但正文为空时返回空字符串。
+
+        Raises:
+            FtshareHTTPError: If the server returns a non-2xx HTTP status.
+        """
+        path = self._format_path(ENDPOINTS['etf_announcements'].path + '/{url_hash}', {'url_hash': url_hash})
+        return self.download(path, save_dir=save_dir, filename=f"{url_hash}.pdf")
 
     def etf_candlesticks_batch(self, symbols: Any | None = None, interval_unit: Any | None = None, adjust_kind: Any | None = None, since_ts_millis: Any | None = None, until_ts_millis: Any | None = None, limit: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
         """批量ETFK线."""

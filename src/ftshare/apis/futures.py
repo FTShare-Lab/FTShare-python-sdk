@@ -430,39 +430,315 @@ class FuturesApiMixin:
             as_dataframe=as_dataframe,
             **request_params,
         )
-    def fut_wsr(self, trade_date: Any | None = None, start_date: Any | None = None, end_date: Any | None = None, symbol: Any | None = None, exchange: Any | None = None, page: int | None = None, page_size: int | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
-        """期货仓单日报."""
-        params = {'trade_date': trade_date, 'start_date': start_date, 'end_date': end_date, 'symbol': symbol, 'exchange': exchange, 'page': page, 'page_size': page_size}
-        params.update(kwargs)
-        return self._call_endpoint('fut_wsr', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+    def fut_wsr(
+        self,
+        trade_date: Any | None = None,
+        start_date: Any | None = None,
+        end_date: Any | None = None,
+        symbol: Any | None = None,
+        exchange: Any | None = None,
+        page: int | None = None,
+        page_size: int | None = None,
+        limit: int | None = None,
+        all_pages: bool = False,
+        max_pages: int | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """期货仓单日报.
+
+        Endpoint: ``api/v1/market/data/futures/fut-wsr``.
+        Method: ``GET``.
+        Documented endpoint: ``fut_wsr``.
+
+        Args:
+            trade_date: 单个交易日，格式 `YYYYMMDD`；不能与日期区间同时使用。 (type: integer; required: N).
+            start_date: 开始交易日，格式 `YYYYMMDD`。 (type: integer; required: N).
+            end_date: 结束交易日，格式 `YYYYMMDD`。 (type: integer; required: N).
+            symbol: 品种代码，例如 `CU`、`A`、`SR`。 (type: string; required: N).
+            exchange: 交易所代码：`SHFE`、`INE`、`CZCE`、`DCE`、`GFEX`。 (type: string; required: N).
+            page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+            page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+            limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+            all_pages: Fetch and combine pages until the server reports the last page.
+            max_pages: Optional safety cap for ``all_pages``.
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``.
+        """
+        request_params = {'trade_date': trade_date, 'start_date': start_date, 'end_date': end_date, 'symbol': symbol, 'exchange': exchange}
+        request_params.update(kwargs)
+        path = ENDPOINTS['fut_wsr'].path
+        return self.get_paginated(
+            path,
+            page=page,
+            page_size=page_size,
+            limit=limit,
+            all_pages=all_pages,
+            max_pages=max_pages,
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
 
 
-    def fut_weekly_detail(self, week: Any | None = None, prd: Any | None = None, start_week: Any | None = None, end_week: Any | None = None, exchange: Any | None = None, page: int | None = None, page_size: int | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
-        """期货主要品种交易周报."""
-        params = {'week': week, 'prd': prd, 'start_week': start_week, 'end_week': end_week, 'exchange': exchange, 'page': page, 'page_size': page_size}
-        params.update(kwargs)
-        return self._call_endpoint('fut_weekly_detail', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+    def fut_weekly_detail(
+        self,
+        week: Any | None = None,
+        prd: Any | None = None,
+        start_week: Any | None = None,
+        end_week: Any | None = None,
+        exchange: Any | None = None,
+        page: int | None = None,
+        page_size: int | None = None,
+        limit: int | None = None,
+        all_pages: bool = False,
+        max_pages: int | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """期货主要品种交易周报.
+
+        Endpoint: ``api/v1/market/data/futures/fut-weekly-detail``.
+        Method: ``GET``.
+        Documented endpoint: ``fut_weekly_detail``.
+
+        Args:
+            week: 单个统计周期，格式 `YYYYWW`，例如 `202601`。 (type: string; required: N).
+            prd: 期货品种代码；支持逗号分隔，例如 `CU,AL`。 (type: string; required: N).
+            start_week: 开始统计周期，格式 `YYYYWW`。 (type: string; required: N).
+            end_week: 结束统计周期，格式 `YYYYWW`。 (type: string; required: N).
+            exchange: 交易所代码：`SHFE`、`INE`、`CZCE`、`CFFEX`、`DCE`、`GFEX`。 (type: string; required: N).
+            page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+            page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+            limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+            all_pages: Fetch and combine pages until the server reports the last page.
+            max_pages: Optional safety cap for ``all_pages``.
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``.
+        """
+        request_params = {'week': week, 'prd': prd, 'start_week': start_week, 'end_week': end_week, 'exchange': exchange}
+        request_params.update(kwargs)
+        path = ENDPOINTS['fut_weekly_detail'].path
+        return self.get_paginated(
+            path,
+            page=page,
+            page_size=page_size,
+            limit=limit,
+            all_pages=all_pages,
+            max_pages=max_pages,
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
 
 
-    def fut_settle(self, ts_code: Any | None = None, trade_date: Any | None = None, start_date: Any | None = None, end_date: Any | None = None, exchange: Any | None = None, page: int | None = None, page_size: int | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
-        """期货每日结算参数."""
-        params = {'ts_code': ts_code, 'trade_date': trade_date, 'start_date': start_date, 'end_date': end_date, 'exchange': exchange, 'page': page, 'page_size': page_size}
-        params.update(kwargs)
-        return self._call_endpoint('fut_settle', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+    def fut_settle(
+        self,
+        ts_code: Any | None = None,
+        trade_date: Any | None = None,
+        start_date: Any | None = None,
+        end_date: Any | None = None,
+        exchange: Any | None = None,
+        page: int | None = None,
+        page_size: int | None = None,
+        limit: int | None = None,
+        all_pages: bool = False,
+        max_pages: int | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """期货每日结算参数.
+
+        Endpoint: ``api/v1/market/data/futures/fut-settle``.
+        Method: ``GET``.
+        Documented endpoint: ``fut_settle``.
+
+        Args:
+            ts_code: 合约代码。 (type: string; required: N).
+            trade_date: 单个交易日，格式 `YYYYMMDD`；不能与日期区间同时使用。 (type: integer; required: N).
+            start_date: 开始交易日，格式 `YYYYMMDD`；必须与 `end_date` 同时传入，且日期区间跨度不超过 31 天。 (type: integer; required: N).
+            end_date: 结束交易日，格式 `YYYYMMDD`；必须与 `start_date` 同时传入。 (type: integer; required: N).
+            exchange: 交易所代码：`SHFE`、`INE`、`CZCE`、`CFFEX`、`DCE`、`GFEX`。 (type: string; required: Y).
+            page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+            page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+            limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+            all_pages: Fetch and combine pages until the server reports the last page.
+            max_pages: Optional safety cap for ``all_pages``.
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``.
+        """
+        request_params = {'ts_code': ts_code, 'trade_date': trade_date, 'start_date': start_date, 'end_date': end_date, 'exchange': exchange}
+        request_params.update(kwargs)
+        path = ENDPOINTS['fut_settle'].path
+        return self.get_paginated(
+            path,
+            page=page,
+            page_size=page_size,
+            limit=limit,
+            all_pages=all_pages,
+            max_pages=max_pages,
+            max_page_size=ENDPOINTS['fut_settle'].max_page_size,
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
 
 
-    def ft_limit(self, ts_code: Any | None = None, trade_date: Any | None = None, start_date: Any | None = None, end_date: Any | None = None, cont: Any | None = None, exchange: Any | None = None, page: int | None = None, page_size: int | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
-        """期货合约涨跌停价."""
-        params = {'ts_code': ts_code, 'trade_date': trade_date, 'start_date': start_date, 'end_date': end_date, 'cont': cont, 'exchange': exchange, 'page': page, 'page_size': page_size}
-        params.update(kwargs)
-        return self._call_endpoint('ft_limit', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+    def ft_limit(
+        self,
+        ts_code: Any | None = None,
+        trade_date: Any | None = None,
+        start_date: Any | None = None,
+        end_date: Any | None = None,
+        cont: Any | None = None,
+        exchange: Any | None = None,
+        page: int | None = None,
+        page_size: int | None = None,
+        limit: int | None = None,
+        all_pages: bool = False,
+        max_pages: int | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """期货合约涨跌停价.
+
+        Endpoint: ``api/v1/market/data/futures/ft-limit``.
+        Method: ``GET``.
+        Documented endpoint: ``ft_limit``.
+
+        Args:
+            ts_code: 合约代码，例如 `A2609.DCE`、`CU2608.SHF`。 (type: string; required: N).
+            trade_date: 单个交易日，格式 `YYYYMMDD`；不能与日期区间同时使用。`trade_date` 与 `start_date`+`end_date` 至少提供一组。 (type: integer; required: N).
+            start_date: 开始交易日，格式 `YYYYMMDD`；须与 `end_date` 同时提供。 (type: integer; required: N).
+            end_date: 结束交易日，格式 `YYYYMMDD`；须与 `start_date` 同时提供。 (type: integer; required: N).
+            cont: 品种代码，例如 `CU`、`A`。 (type: string; required: N).
+            exchange: 交易所代码：`SHFE`、`INE`、`CZCE`、`CFFEX`、`DCE`、`GFEX`。 (type: string; required: Y).
+            page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+            page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+            limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+            all_pages: Fetch and combine pages until the server reports the last page.
+            max_pages: Optional safety cap for ``all_pages``.
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``.
+        """
+        request_params = {'ts_code': ts_code, 'trade_date': trade_date, 'start_date': start_date, 'end_date': end_date, 'cont': cont, 'exchange': exchange}
+        request_params.update(kwargs)
+        path = ENDPOINTS['ft_limit'].path
+        return self.get_paginated(
+            path,
+            page=page,
+            page_size=page_size,
+            limit=limit,
+            all_pages=all_pages,
+            max_pages=max_pages,
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
 
 
-    def futures_nanhua_index_kline(self, code: Any | None = None, trade_date: Any | None = None, start_date: Any | None = None, end_date: Any | None = None, page: int | None = None, page_size: int | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
-        """南华期货指数日K线."""
-        params = {'code': code, 'trade_date': trade_date, 'start_date': start_date, 'end_date': end_date, 'page': page, 'page_size': page_size}
-        params.update(kwargs)
-        return self._call_endpoint('futures_nanhua_index_kline', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+    def futures_nanhua_index_kline(
+        self,
+        code: Any | None = None,
+        trade_date: Any | None = None,
+        start_date: Any | None = None,
+        end_date: Any | None = None,
+        page: int | None = None,
+        page_size: int | None = None,
+        limit: int | None = None,
+        all_pages: bool = False,
+        max_pages: int | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """南华期货指数日K线.
+
+        Endpoint: ``api/v1/market/data/futures/nanhua-index-kline``.
+        Method: ``GET``.
+        Documented endpoint: ``futures_nanhua_index_kline``.
+
+        Args:
+            code: 指数代码，如 AD_NH、AG_NH；与 trade_date 至少传一个 (type: string; required: N).
+            trade_date: 交易日期（YYYYMMDD）；传入时为单日截面模式，忽略 start_date/end_date (type: string; required: N).
+            start_date: 起始日期（YYYYMMDD），区间模式下界 (type: string; required: N).
+            end_date: 结束日期（YYYYMMDD），区间模式上界；不得早于 start_date (type: string; required: N).
+            page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+            page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+            limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+            all_pages: Fetch and combine pages until the server reports the last page.
+            max_pages: Optional safety cap for ``all_pages``.
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``.
+        """
+        request_params = {'code': code, 'trade_date': trade_date, 'start_date': start_date, 'end_date': end_date}
+        request_params.update(kwargs)
+        path = ENDPOINTS['futures_nanhua_index_kline'].path
+        return self.get_paginated(
+            path,
+            page=page,
+            page_size=page_size,
+            limit=limit,
+            all_pages=all_pages,
+            max_pages=max_pages,
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
 
     def eastmoney_futures_strange(self, exchange: Any | None = None, variety: Any | None = None, contract: Any | None = None, trade_date: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
         """东方财富期货龙虎榜."""

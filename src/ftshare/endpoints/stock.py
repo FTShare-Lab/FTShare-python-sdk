@@ -47,7 +47,8 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'title': '北交所映射',
         'doc_file': '北交所映射.md',
         'original_api': 'get_bse_mapping',
-        'params': ('o_code', 'n_code'),
+        'params': ('o_code', 'n_code', 'page', 'page_size'),
+        'max_page_size': 500,
     },
     'cashflow': {
         'path': 'api/v1/market/data/finance/cashflow',
@@ -145,7 +146,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'title': '商誉行业',
         'doc_file': '商誉行业.md',
         'original_api': 'goodwill_industry',
-        'params': ('date', 'page', 'page_size'),
+        'params': ('date',),
     },
     'goodwill_market_overview': {
         'path': 'api/v1/market/data/goodwill/market-overview',
@@ -187,7 +188,8 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'title': '涨跌停事件时间线',
         'doc_file': '涨跌停事件时间线.md',
         'original_api': 'limit_event_timeline_3s',
-        'params': ('symbol', 'trade_date'),
+        'params': ('symbol', 'trade_date', 'page', 'page_size'),
+        'max_page_size': 200,
     },
     'limit_up_briefs': {
         'path': 'api/v3/market/data/limit-up-reports/briefs',
@@ -303,6 +305,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'doc_file': '股票复权因子.md',
         'original_api': 'stock_adjust_factor',
         'params': ('symbol', 'trade_date', 'start_date', 'end_date', 'page', 'page_size'),
+        'max_page_size': 2000,
     },
     'stock_candlesticks': {
         'path': 'api/v1/market/data/stock-candlesticks',
@@ -310,7 +313,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'doc_file': '股票K线.md',
         'original_api': 'stock_candlesticks',
         'method': 'GET',
-        'params': ('symbol', 'interval_unit', 'interval_value', 'adjust_kind', 'since_ts_millis', 'until_ts_millis', 'limit'),
+        'params': ('symbol', 'interval_unit', 'adjust_kind', 'since_ts_millis', 'until_ts_millis', 'limit'),
     },
     'stock_capital_flows': {
         'path': 'api/v1/market/data/stock-capital-flows',
@@ -596,7 +599,8 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'title': '通达信板块指数最新快照',
         'doc_file': '通达信板块指数最新快照.md',
         'original_api': 'tdx_board_index',
-        'params': ('ts_code', 'idx_name', 'idx_type', 'idx_type_code', 'market', 'page', 'page_size'),
+        'params': ('ts_code', 'board_name', 'board_type', 'board_type_code', 'market', 'page', 'page_size'),
+        'max_page_size': 1000,
     },
 
     'tdx_board_daily': {
@@ -604,7 +608,8 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'title': '通达信板块日线',
         'doc_file': '通达信板块日线.md',
         'original_api': 'tdx_board_daily',
-        'params': ('start_date', 'end_date', 'ts_code', 'idx_name', 'idx_type', 'idx_type_code', 'market', 'page', 'page_size'),
+        'params': ('start_date', 'end_date', 'ts_code', 'board_name', 'board_type', 'board_type_code', 'market', 'page', 'page_size'),
+        'max_page_size': 1000,
     },
 
     'tdx_board_members': {
@@ -612,7 +617,8 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'title': '通达信板块成分股最新快照',
         'doc_file': '通达信板块成分股最新快照.md',
         'original_api': 'tdx_board_members',
-        'params': ('ts_code', 'idx_name', 'idx_type', 'idx_type_code', 'market', 'con_code', 'con_name', 'page', 'page_size'),
+        'params': ('ts_code', 'board_name', 'board_type', 'board_type_code', 'con_code', 'con_name', 'market', 'page', 'page_size'),
+        'max_page_size': 1000,
     },
 
     'stock_dividends': {
@@ -759,6 +765,13 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'params': ('industry_name',),
     },
 
+    'supply_chain_industry_names': {
+        'path': 'api/v3/market/data/supply-chain/industry-names',
+        'title': '供应链行业名称',
+        'doc_file': '供应链行业名称.md',
+        'original_api': 'supply_chain_industry_names',
+    },
+
     'exchange_margin_summaries': {
         'path': 'api/v1/market/data/exchange-margin-summaries',
         'title': '交易所融资融券汇总日度',
@@ -771,7 +784,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
     'ashare_rating_factor_snapshot': {
         'path': 'api/v3/market/data/ashare-rating-factor-snapshot',
         'title': 'A股相关性 Top-K',
-        'doc_file': 'A股相关性Top-K.md',
+        'doc_file': 'A股相关性 Top-K.md',
         'original_api': 'ashare_rating_factor_snapshot',
         'params': ('trade_code', 'date', 'top_k'),
     },
@@ -898,7 +911,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'title': '批量股票K线',
         'doc_file': '批量股票K线.md',
         'original_api': 'stock_candlesticks_batch',
-        'params': ('symbols', 'interval_unit', 'interval_value', 'adjust_kind', 'since_ts_millis', 'until_ts_millis', 'limit'),
+        'params': ('symbols', 'interval_unit', 'adjust_kind', 'since_ts_millis', 'until_ts_millis', 'limit'),
     },
     'stock_minutes_batch': {
         'path': 'api/v2/market/data/stock_minutes/batch',

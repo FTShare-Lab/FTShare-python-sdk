@@ -7,6 +7,7 @@ from typing import Any
 import pytest
 
 from ftshare.client import FtshareClient
+from ftshare.config import DEFAULT_MAX_PAGE_SIZE
 from ftshare.endpoints import ENDPOINTS
 
 from conftest import FakeResponse, FakeSession
@@ -121,3 +122,17 @@ def test_sample_values_cover_every_public_endpoint_parameter():
         for param in ENDPOINTS[name].params
     }
     assert public_params - special_params <= set(SAMPLE_VALUES)
+
+
+def test_paginated_endpoints_expose_all_pages():
+    for name, endpoint in ENDPOINTS.items():
+        if {"page", "page_size"} <= set(endpoint.params):
+            parameters = inspect.signature(getattr(FtshareClient, name)).parameters
+            assert {"limit", "all_pages", "max_pages"} <= set(parameters), name
+
+
+def test_non_default_page_size_cap_is_forwarded_by_the_method():
+    for name, endpoint in ENDPOINTS.items():
+        if {"page", "page_size"} <= set(endpoint.params) and endpoint.max_page_size != DEFAULT_MAX_PAGE_SIZE:
+            source = inspect.getsource(getattr(FtshareClient, name))
+            assert "max_page_size=" in source, name
