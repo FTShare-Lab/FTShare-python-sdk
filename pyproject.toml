@@ -35,7 +35,7 @@ test = ["pytest>=7.0"]
 dev = ["pytest>=7.0"]
 
 [project.urls]
-Homepage = "https://market.ft.tech/"
+Homepage = "https://ftai.chat/ftshare"
 Documentation = "https://market.ft.tech/"
 Source = "https://github.com/ftshare-lab/ftshare-python-sdk"
 Issues = "https://github.com/ftshare-lab/ftshare-python-sdk/issues"
