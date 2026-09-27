@@ -14,24 +14,24 @@
 </p>
 
 <p align="center">
-  <a href="https://ftai.chat/ftshare"><strong>FTShare 正式版</strong></a>
+  <a href="https://ftai.chat/ftshare"><strong>FTShare 官网</strong></a>
   · <a href="https://ftai.chat/me/profile">获取 API Key</a>
   · <a href="https://market.ft.tech/gateway/doc">数据接口文档</a>
   · <a href="https://github.com/FTShare-Lab/FTShare-python-sdk/issues">问题反馈</a>
 </p>
 
 > [!IMPORTANT]
-> FTShare 正式版已经发布。使用托管数据服务前，请先登录 FTShare 获取 API Key，并通过环境变量 `FTSHARE_API_KEY` 或 `market_api(api_key=...)` 配置鉴权。
+> 使用托管数据服务前，请先登录 FTShare 获取 API Key，并通过环境变量 `FTSHARE_API_KEY` 或 `market_api(api_key=...)` 配置鉴权。
 
 ## 先看它能做什么
 
 `FTShare-python-sdk` 是 FTShare 的 Python 数据接入层。它将基础金融数据和 FTShare 特色因子统一成 Python 调用方式，默认返回 pandas `DataFrame`，可以直接进入分析、研究和应用开发流程。
 
 <p align="center">
-  <a href="https://ftai.chat/ftshare"><img src="./docs/assets/readme/ftshare-website.png" width="100%" alt="FTShare 正式版官网横幅，展示金融数据服务及 SDK、MCP、Skills 接入入口"></a>
+  <a href="https://ftai.chat/ftshare"><img src="./docs/assets/readme/ftshare-website.png" width="100%" alt="FTShare 官网横幅，展示金融数据服务及 SDK、MCP、Skills 接入入口"></a>
 </p>
 
-<p align="center"><sub>FTShare 正式版公开页面。点击图片进入产品与套餐页面。</sub></p>
+<p align="center"><sub>FTShare 官网。点击图片进入产品与套餐页面。</sub></p>
 
 ## 三步跑通第一次调用
 
