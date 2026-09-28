@@ -41,7 +41,19 @@
 
 ### 2. 安装 SDK
 
-当前从 GitHub 源码安装：
+推荐通过 [PyPI](https://pypi.org/project/ftshare/) 安装（需要 Python 3.9 及以上）：
+
+```bash
+pip install ftshare
+```
+
+升级到最新版本：
+
+```bash
+pip install --upgrade ftshare
+```
+
+`pandas` 和 `requests` 等运行依赖会自动安装。如需本地开发，也可以从 GitHub 源码安装：
 
 ```bash
 git clone https://github.com/FTShare-Lab/FTShare-python-sdk.git
