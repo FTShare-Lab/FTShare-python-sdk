@@ -29,10 +29,16 @@ FTShare-python-sdk        # Python data access layer
 
 ## Installation
 
-Install from PyPI:
+Install from [PyPI](https://pypi.org/project/ftshare/) (Python 3.9 or later required):
 
 ```bash
 pip install ftshare
+```
+
+Upgrade to the latest version:
+
+```bash
+pip install --upgrade ftshare
 ```
 
 For local development, clone this repository and install it in editable mode with test dependencies:
@@ -69,7 +75,7 @@ The output is a pandas `DataFrame`. For example, the financial calendar endpoint
 Install the SDK first:
 
 ```bash
-pip install -e .
+pip install ftshare
 ```
 
 Then use it from any Python project:
