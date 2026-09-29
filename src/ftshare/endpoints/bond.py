@@ -71,14 +71,6 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'params': ('security_code', 'trade_date', 'start_date', 'end_date', 'page', 'page_size'),
     },
 
-    'szse_convertible_bond_declaration_snapshots': {
-        'path': 'api/v1/market/data/convertible-bond/szse/declaration-snapshots',
-        'title': '深交所可转债申报快照',
-        'doc_file': '深交所可转债申报快照.md',
-        'original_api': 'szse_convertible_bond_declaration_snapshots',
-        'params': ('security_code', 'trade_date', 'start_date', 'end_date', 'page', 'page_size'),
-    },
-
     'cb_lists': {
         'path': 'api/v1/market/data/cb/cb-lists',
         'title': '可转债列表',

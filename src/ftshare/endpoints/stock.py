@@ -106,6 +106,14 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'original_api': 'get_eastmoney_dapan_flow',
         'params': ('trade_date', 'start_date', 'end_date', 'page', 'page_size'),
     },
+    'eastmoney_etf_flow': {
+        'path': 'api/v1/market/data/eastmoney-etf-flow',
+        'title': '东方财富ETF资金流',
+        'doc_file': '东方财富ETF资金流.md',
+        'original_api': 'get_eastmoney_etf_flow',
+        'params': ('symbol', 'trade_date', 'start_date', 'end_date', 'page', 'page_size'),
+        'max_page_size': 1000,
+    },
     'eastmoney_market_valuation': {
         'path': 'api/v1/market/data/eastmoney-market-valuation',
         'title': '东方财富市场估值',
@@ -787,6 +795,14 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'doc_file': 'A股相关性 Top-K.md',
         'original_api': 'ashare_rating_factor_snapshot',
         'params': ('trade_code', 'date', 'top_k'),
+    },
+
+    'stock_minute_seal': {
+        'path': 'api/v2/market/data/stock-minute-seal',
+        'title': '股票分钟封单金额',
+        'doc_file': '股票分钟封单金额.md',
+        'original_api': 'stock_minute_seal',
+        'params': ('trade_date', 'symbol'),
     },
 
     'stock_minutes': {
