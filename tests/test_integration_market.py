@@ -20,7 +20,6 @@ pytestmark = pytest.mark.integration
 KNOWN_SERVER_ISSUES: dict[str, str] = {
     "ashare_news_sentiment_factors": "HTTP 502 下游服务请求失败 for every parameter combination",
     "futures_minutes_batch": "HTTP 404 请求的资源不存在 — route absent on the test server",
-    "szse_convertible_bond_declaration_snapshots": "HTTP 200 but empty for every date range, while sibling exchange tables return rows",
 }
 
 

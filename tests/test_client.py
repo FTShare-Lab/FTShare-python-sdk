@@ -292,6 +292,7 @@ def test_requested_endpoint_api_versions():
         "stock_prospectuses": "api/v2/market/data/announcements/stock-prospectuses",
         "stock_reports": "api/v2/market/data/report/stock-reports",
         "stock_minutes": "api/v2/market/data/stock_minutes",
+        "stock_minute_seal": "api/v2/market/data/stock-minute-seal",
         "futures_minutes": "api/v2/market/data/futures_minutes",
         "etf_minutes": "api/v2/market/data/etf_minutes",
         "index_minutes": "api/v2/market/data/index_minutes",
@@ -344,6 +345,7 @@ def test_requested_endpoint_api_versions():
         "ths_stock_daily_flow": "api/v1/market/data/ths-stock-daily-flow",
         "ths_concept_daily_flow": "api/v1/market/data/ths-concept-daily-flow",
         "ths_industry_daily_flow": "api/v1/market/data/ths-industry-daily-flow",
+        "eastmoney_etf_flow": "api/v1/market/data/eastmoney-etf-flow",
     }
 
     assert {name: ENDPOINTS[name].path for name in expected_paths} == expected_paths
@@ -436,6 +438,36 @@ def test_new_batch_endpoints_forward_symbols_and_documented_parameters():
 
         assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + ENDPOINTS[method_name].path
         assert session.calls[0]["params"] == kwargs
+
+
+def test_eastmoney_etf_flow_allows_page_size_up_to_1000():
+    session = FakeSession([FakeResponse(payload=paginated_records([]))])
+    client = FtshareClient(session=session)
+
+    client.eastmoney_etf_flow(page=1, page_size=1000, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/eastmoney-etf-flow"
+    assert session.calls[0]["params"] == {"page": 1, "page_size": 1000}
+
+    with pytest.raises(ValueError, match="page_size must be between 1 and 1000"):
+        client.eastmoney_etf_flow(page_size=1001)
+
+
+def test_stock_minute_seal_forwards_documented_parameters():
+    session = FakeSession([
+        FakeResponse(payload={"code": 200, "message": "success", "data": []}),
+        FakeResponse(payload={"code": 200, "message": "success", "data": []}),
+    ])
+    client = FtshareClient(session=session)
+
+    client.stock_minute_seal(trade_date="20260923", symbol="600825.SH", as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v2/market/data/stock-minute-seal"
+    assert session.calls[0]["params"] == {"trade_date": "20260923", "symbol": "600825.SH"}
+
+    client.stock_minute_seal(trade_date="20260923", as_dataframe=False)
+
+    assert session.calls[1]["params"] == {"trade_date": "20260923"}
 
 
 def test_stock_description_uses_paginated_route_and_filters():

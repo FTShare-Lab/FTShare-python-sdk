@@ -6,22 +6,22 @@
 
 | 指标 | 数量 |
 |---|---:|
-| SDK 方法总数 | 239 |
+| SDK 方法总数 | 238 |
 
 ## 专题分布
 
 | ftshare-doc 专题 | SDK 方法数 | API mixin 模块 | Endpoint 模块 |
 |---|---:|---|---|
-| 股票数据 | 125 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
+| 股票数据 | 127 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
 | 港股数据 | 3 | `ftshare.apis.hk` | `ftshare.endpoints.hk` |
 | 美股数据 | 2 | `ftshare.apis.us` | `ftshare.endpoints.us` |
 | 指数专题 | 15 | `ftshare.apis.index` | `ftshare.endpoints.index` |
-| ETF专题 | 18 | `ftshare.apis.etf` | `ftshare.endpoints.etf` |
+| ETF专题 | 17 | `ftshare.apis.etf` | `ftshare.endpoints.etf` |
 | 公募基金 | 18 | `ftshare.apis.fund` | `ftshare.endpoints.fund` |
 | 期货数据 | 18 | `ftshare.apis.futures` | `ftshare.endpoints.futures` |
-| 债券专题 | 10 | `ftshare.apis.bond` | `ftshare.endpoints.bond` |
+| 债券专题 | 9 | `ftshare.apis.bond` | `ftshare.endpoints.bond` |
 | 宏观经济 | 23 | `ftshare.apis.economic` | `ftshare.endpoints.economic` |
-| 大模型语料 | 6 | `ftshare.apis.llm_corpus` | `ftshare.endpoints.llm_corpus` |
+| 大模型语料 | 5 | `ftshare.apis.llm_corpus` | `ftshare.endpoints.llm_corpus` |
 | 现货数据 | 1 | `ftshare.apis.spot` | `ftshare.endpoints.spot` |
 | 外汇数据 | 0 | `ftshare.apis.forex` | `ftshare.endpoints.forex` |
 
@@ -59,6 +59,7 @@
 | [`eastmoney_board_daily_kline`](#api-eastmoney-board-daily-kline) | 东方财富板块日线OHLC | `GET` | `api/v1/market/data/eastmoney-board-daily-ohlc` | `board_code`, `start_date`, `end_date`, `page`, `page_size` | `东方财富板块日线OHLC.md` |
 | [`eastmoney_concept_boards`](#api-eastmoney-concept-boards) | 东方财富概念板块 | `GET` | `api/v1/market/data/eastmoney-concept-boards` | - | `东方财富概念板块.md` |
 | [`eastmoney_dapan_flow`](#api-eastmoney-dapan-flow) | 东方财富大盘资金流 | `GET` | `api/v1/market/data/eastmoney-dapan-flow` | `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `东方财富大盘资金流.md` |
+| [`eastmoney_etf_flow`](#api-eastmoney-etf-flow) | 东方财富ETF资金流 | `GET` | `api/v1/market/data/eastmoney-etf-flow` | `symbol`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `东方财富ETF资金流.md` |
 | [`eastmoney_market_valuation`](#api-eastmoney-market-valuation) | 东方财富市场估值 | `GET` | `api/v1/market/data/eastmoney-market-valuation` | `market_code`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `东方财富市场估值.md` |
 | [`eastmoney_rank`](#api-eastmoney-rank) | 东方财富股票排名 | `GET` | `api/v1/market/data/eastmoney-rank` | `rank_group`, `market`, `trade_date` | `东方财富股票排名.md` |
 | [`eastmoney_sector_flow`](#api-eastmoney-sector-flow) | 东方财富板块资金流 | `GET` | `api/v1/market/data/eastmoney-sector-flow` | `board_code`, `board_type`, `board_level`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `东方财富板块资金流.md` |
@@ -127,6 +128,7 @@
 | [`stock_list`](#api-stock-list) | 股票列表 | `GET` | `api/v1/market/data/stock-list` | `page`, `page_size` | `股票列表.md` |
 | [`stock_market`](#api-stock-market) | 市场行情快照 | `GET` | `api/v1/market/data/daec/market/snapshot` | `scope` | `市场行情快照.md` |
 | [`stock_market_distribution_intraday`](#api-stock-market-distribution-intraday) | 市场涨跌分布分时 | `GET` | `api/v2/market/data/market-distribution-intraday` | - | `市场涨跌分布分时.md` |
+| [`stock_minute_seal`](#api-stock-minute-seal) | 股票分钟封单金额 | `GET` | `api/v2/market/data/stock-minute-seal` | `trade_date`, `symbol` | `股票分钟封单金额.md` |
 | [`stock_minutes`](#api-stock-minutes) | 股票历史分钟行情 | `GET` | `api/v2/market/data/stock_minutes` | `symbol`, `interval_value`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit` | `股票历史分钟行情.md` |
 | [`stock_pledge_detail`](#api-stock-pledge-detail) | 股权质押明细 | `GET` | `api/v1/market/data/pledge/pledge-detail` | `stock_code`, `is_last`, `page`, `page_size` | `股权质押明细.md` |
 | [`stock_prev_close`](#api-stock-prev-close) | 标的昨收价 | `GET` | `api/v1/market/data/daec/history/prev-closes` | `symbol`, `since`, `until` | `标的昨收价.md` |
@@ -276,7 +278,6 @@
 | [`convertible_bond_minute_candlesticks`](#api-convertible-bond-minute-candlesticks) | 可转债历史分钟K线 | `GET` | `api/v2/market/data/convertible-bond-minute-candlesticks` | `symbol`, `symbols`, `interval_value`, `since_ts_millis`, `until_ts_millis`, `limit` | `可转债历史分钟K线.md` |
 | [`convertible_bond_realtime_day_kline`](#api-convertible-bond-realtime-day-kline) | 可转债实时日K线 | `GET` | `api/v4/market/data/convertible-bond-realtime-day-kline` | `symbols` | `可转债实时日K线.md` |
 | [`convertible_bond_realtime_minute_kline`](#api-convertible-bond-realtime-minute-kline) | 可转债实时分钟K线 | `GET` | `api/v4/market/data/convertible-bond-realtime-minute-kline` | `symbols` | `可转债实时分钟K线.md` |
-| [`szse_convertible_bond_declaration_snapshots`](#api-szse-convertible-bond-declaration-snapshots) | 深交所可转债申报快照 | `GET` | `api/v1/market/data/convertible-bond/szse/declaration-snapshots` | `security_code`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `深交所可转债申报快照.md` |
 | [`szse_convertible_bond_directed_trades`](#api-szse-convertible-bond-directed-trades) | 深交所可转债定向成交 | `GET` | `api/v1/market/data/convertible-bond/szse/directed-trades` | `security_code`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `深交所可转债定向成交.md` |
 | [`szse_convertible_bond_matching_trades`](#api-szse-convertible-bond-matching-trades) | 深交所可转债匹配成交 | `GET` | `api/v1/market/data/convertible-bond/szse/matching-trades` | `security_code`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `深交所可转债匹配成交.md` |
 | [`szse_convertible_bond_negotiated_trades`](#api-szse-convertible-bond-negotiated-trades) | 深交所可转债协议成交 | `GET` | `api/v1/market/data/convertible-bond/szse/negotiated-trades` | `security_code`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `深交所可转债协议成交.md` |
@@ -822,6 +823,16 @@ Returns:
     ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
     payloads when multi-page fetching is used with ``raw=True``.
 ```
+
+<h4 id="api-eastmoney-etf-flow"><code>eastmoney_etf_flow</code></h4>
+
+- 接口名称：东方财富ETF资金流
+- HTTP：`GET`
+- Path：`api/v1/market/data/eastmoney-etf-flow`
+- 参数：`symbol`, `trade_date`, `start_date`, `end_date`, `page`, `page_size`
+- 来源文档：`东方财富ETF资金流.md`
+- 原始接口：`get_eastmoney_etf_flow`
+- 说明：返回 `code/message/data` 分页信封，记录位于 `data.records`；`page_size` 上限 1000，`trade_date`、`start_date`、`end_date` 按 AND 组合过滤。
 
 <h4 id="api-eastmoney-market-valuation"><code>eastmoney_market_valuation</code></h4>
 
@@ -2751,6 +2762,20 @@ Args:
 
 Returns:
     A pandas ``DataFrame`` by default, Python rows when ``as_dataframe=False``, or raw JSON when ``raw=True``.
+```
+
+<h4 id="api-stock-minute-seal"><code>stock_minute_seal</code></h4>
+
+- 接口名称：股票分钟封单金额
+- HTTP：`GET`
+- Path：`api/v2/market/data/stock-minute-seal`
+- 参数：`trade_date`, `symbol`
+- 来源文档：`股票分钟封单金额.md`
+- 原始接口：`stock_minute_seal`
+- 说明：返回 `code/message/data`（非分页）。`trade_date` 必填，八位 `YYYYMMDD` 且须为真实日历日，不接受 `YYYY-MM-DD`；`symbol` 可省略，省略时返回该日全部有封单记录的股票。`data` 含 `trade_date`、`sampling`（固定 `last_accepted_quote_per_minute`）与 `stocks`，`stocks[]` 含 `symbol`、`market_id`（3553 沪市 / 3554 深市）与 `minutes`，`minutes[]` 含 `minute`（北京时间 `HH:MM`）、`direction`（`up` 涨停封单 / `down` 跌停封单）、`seal_amount_yuan`（元，十进制字符串）。无匹配数据时成功返回 `stocks: []`。
+
+```text
+股票分钟封单金额.
 ```
 
 <h4 id="api-stock-minutes"><code>stock_minutes</code></h4>
@@ -5379,43 +5404,6 @@ Args:
 Returns:
     A pandas ``DataFrame`` by default, Python rows when
     ``as_dataframe=False``, or raw JSON when ``raw=True``.
-```
-
-<h4 id="api-szse-convertible-bond-declaration-snapshots"><code>szse_convertible_bond_declaration_snapshots</code></h4>
-
-- 接口名称：深交所可转债申报快照
-- HTTP：`GET`
-- Path：`api/v1/market/data/convertible-bond/szse/declaration-snapshots`
-- 参数：`security_code`, `trade_date`, `start_date`, `end_date`, `page`, `page_size`
-- 来源文档：`深交所可转债申报快照.md`
-- 原始接口：`szse_convertible_bond_declaration_snapshots`
-
-```text
-深交所可转债申报快照.
-
-Endpoint: ``api/v1/market/data/convertible-bond/szse/declaration-snapshots``.
-Method: ``GET``.
-Documented endpoint: ``szse_convertible_bond_declaration_snapshots``.
-
-Args:
-    security_code: 六位可转债证券代码，例如 `123001`。 (type: string; required: N).
-    trade_date: 单个交易日，格式 `YYYYMMDD`；不能与 `start_date`、`end_date` 同时使用。 (type: integer; required: N).
-    start_date: 查询开始日期，格式 `YYYYMMDD`。 (type: integer; required: N).
-    end_date: 查询结束日期，格式 `YYYYMMDD`。 (type: integer; required: N).
-    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
-    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
-    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
-    all_pages: Fetch and combine pages until the server reports the last page.
-    max_pages: Optional safety cap for ``all_pages``.
-    raw: Return the decoded JSON payload without tabular extraction.
-    fields: Optional field list or comma-separated field string applied after extraction.
-    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
-    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
-
-Returns:
-    A pandas ``DataFrame`` by default, Python rows when
-    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
-    payloads when multi-page fetching is used with ``raw=True``.
 ```
 
 <h4 id="api-szse-convertible-bond-directed-trades"><code>szse_convertible_bond_directed_trades</code></h4>

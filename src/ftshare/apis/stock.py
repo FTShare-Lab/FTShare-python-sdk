@@ -1287,6 +1287,66 @@ class StockApiMixin:
             **request_params,
         )
 
+    def eastmoney_etf_flow(
+        self,
+        symbol: Any | None = None,
+        trade_date: Any | None = None,
+        start_date: Any | None = None,
+        end_date: Any | None = None,
+        page: int | None = None,
+        page_size: int | None = None,
+        limit: int | None = None,
+        all_pages: bool = False,
+        max_pages: int | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """东方财富ETF资金流.
+
+        Endpoint: ``api/v1/market/data/eastmoney-etf-flow``.
+        Method: ``GET``.
+        Documented endpoint: ``get_eastmoney_etf_flow``.
+
+        Args:
+            symbol: ETF 代码，如 159231；也支持带交易所后缀的代码，如 159231.SZ (type: string; required: N).
+            trade_date: 交易日 YYYYMMDD (type: string; required: N).
+            start_date: 区间起始日 YYYYMMDD；需与 end_date 同时提供 (type: string; required: N).
+            end_date: 区间结束日 YYYYMMDD；需与 start_date 同时提供 (type: string; required: N).
+            page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+            page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+            limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+            all_pages: Fetch and combine pages until the server reports the last page.
+            max_pages: Optional safety cap for ``all_pages``.
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``.
+        """
+        request_params = {'symbol': symbol, 'trade_date': trade_date, 'start_date': start_date, 'end_date': end_date}
+        request_params.update(kwargs)
+        path = ENDPOINTS['eastmoney_etf_flow'].path
+        return self.get_paginated(
+            path,
+            page=page,
+            page_size=page_size,
+            limit=limit,
+            all_pages=all_pages,
+            max_pages=max_pages,
+            max_page_size=ENDPOINTS['eastmoney_etf_flow'].max_page_size,
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
+
     def eastmoney_market_valuation(
         self,
         market_code: Any | None = None,
@@ -4508,6 +4568,13 @@ class StockApiMixin:
         params = {'trade_code': trade_code, 'date': date, 'top_k': top_k}
         params.update(kwargs)
         return self._call_endpoint('ashare_rating_factor_snapshot', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+
+
+    def stock_minute_seal(self, trade_date: Any | None = None, symbol: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
+        """股票分钟封单金额."""
+        params = {'trade_date': trade_date, 'symbol': symbol}
+        params.update(kwargs)
+        return self._call_endpoint('stock_minute_seal', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
 
 
     def stock_minutes(self, symbol: Any | None = None, interval_value: Any | None = None, adjust_kind: Any | None = None, since_ts_millis: Any | None = None, until_ts_millis: Any | None = None, limit: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
