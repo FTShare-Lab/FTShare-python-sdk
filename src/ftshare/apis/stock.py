@@ -1104,20 +1104,32 @@ class StockApiMixin:
     def eastmoney_board_constituents(
         self,
         board_code: Any | None = None,
+        date: Any | None = None,
+        page: int | None = None,
+        page_size: int | None = None,
+        limit: int | None = None,
+        all_pages: bool = False,
+        max_pages: int | None = None,
         *,
         raw: bool = False,
         fields: Sequence[str] | str | None = None,
         as_dataframe: bool = True,
         **kwargs: Any,
     ) -> Any:
-        """东方财富板块成份股.
+        """东方财富板块成分股.
 
         Endpoint: ``api/v1/market/data/eastmoney-board-constituents``.
         Method: ``GET``.
         Documented endpoint: ``eastmoney_board_constituents``.
 
         Args:
-            board_code: 板块代码，如 BK1024 (type: string; required: Y).
+            board_code: 板块代码，取东方财富板块代码（BK 开头），如 BK0475、BK0490、BK0153 (type: string; required: Y).
+            date: 查询日期，格式 YYYYMMDD；不传返回当前仍在板块内的成分股 (type: string; required: N).
+            page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+            page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+            limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+            all_pages: Fetch and combine pages until the server reports the last page.
+            max_pages: Optional safety cap for ``all_pages``.
             raw: Return the decoded JSON payload without tabular extraction.
             fields: Optional field list or comma-separated field string applied after extraction.
             as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -1128,10 +1140,17 @@ class StockApiMixin:
             ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
             payloads when multi-page fetching is used with ``raw=True``.
         """
-        request_params = {'board_code': board_code}
+        request_params = {'board_code': board_code, 'date': date}
         request_params.update(kwargs)
-        return self._call_endpoint(
-            'eastmoney_board_constituents',
+        path = ENDPOINTS['eastmoney_board_constituents'].path
+        return self.get_paginated(
+            path,
+            page=page,
+            page_size=page_size,
+            limit=limit,
+            all_pages=all_pages,
+            max_pages=max_pages,
+            max_page_size=ENDPOINTS['eastmoney_board_constituents'].max_page_size,
             raw=raw,
             fields=fields,
             as_dataframe=as_dataframe,
@@ -4738,3 +4757,15 @@ class StockApiMixin:
         params.update(kwargs)
         path = ENDPOINTS['news_reaction_snapshot'].path
         return self.get_paginated(path, page=page, page_size=page_size, limit=limit, all_pages=all_pages, max_pages=max_pages, max_page_size=200, raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+
+    def stock_candlesticks_daily(self, trade_date: Any | None = None, page: int | None = None, page_size: int | None = None, limit: int | None = None, all_pages: bool = False, max_pages: int | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
+        """股票日K快照."""
+        params = {'trade_date': trade_date}
+        params.update(kwargs)
+        return self.get_paginated(ENDPOINTS['stock_candlesticks_daily'].path, page=page, page_size=page_size, limit=limit, all_pages=all_pages, max_pages=max_pages, max_page_size=500, raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+
+    def ths_board_constituents(self, board_code: Any | None = None, board_name: Any | None = None, board_type: Any | None = None, date: Any | None = None, page: int | None = None, page_size: int | None = None, limit: int | None = None, all_pages: bool = False, max_pages: int | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
+        """同花顺板块成分股."""
+        params = {'board_code': board_code, 'board_name': board_name, 'board_type': board_type, 'date': date}
+        params.update(kwargs)
+        return self.get_paginated(ENDPOINTS['ths_board_constituents'].path, page=page, page_size=page_size, limit=limit, all_pages=all_pages, max_pages=max_pages, max_page_size=1000, raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
