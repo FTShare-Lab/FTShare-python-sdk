@@ -6,13 +6,13 @@
 
 | 指标 | 数量 |
 |---|---:|
-| SDK 方法总数 | 238 |
+| SDK 方法总数 | 240 |
 
 ## 专题分布
 
 | ftshare-doc 专题 | SDK 方法数 | API mixin 模块 | Endpoint 模块 |
 |---|---:|---|---|
-| 股票数据 | 127 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
+| 股票数据 | 129 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
 | 港股数据 | 3 | `ftshare.apis.hk` | `ftshare.endpoints.hk` |
 | 美股数据 | 2 | `ftshare.apis.us` | `ftshare.endpoints.us` |
 | 指数专题 | 15 | `ftshare.apis.index` | `ftshare.endpoints.index` |
@@ -55,7 +55,7 @@
 | [`cashflow_stock_code`](#api-cashflow-stock-code) | 现金流支持股票代码 | `GET` | `api/v2/market/data/finance/cashflow-stock-code` | - | `现金流支持股票代码.md` |
 | [`company_list`](#api-company-list) | 公司列表 | `GET` | `api/v1/market/data/company-list` | `stock_name`, `stock_code`, `page`, `page_size` | `公司列表.md` |
 | [`earnings_reports_paginated`](#api-earnings-reports-paginated) | 业绩快报 | `GET` | `api/v1/market/data/finance/stock-performance-express` | `stock_code`, `year`, `report_type`, `page`, `page_size` | `业绩快报.md` |
-| [`eastmoney_board_constituents`](#api-eastmoney-board-constituents) | 东方财富板块成份股 | `GET` | `api/v1/market/data/eastmoney-board-constituents` | `board_code` | `东方财富板块成份股.md` |
+| [`eastmoney_board_constituents`](#api-eastmoney-board-constituents) | 东方财富板块成分股 | `GET` | `api/v1/market/data/eastmoney-board-constituents` | `board_code`, `date`, `page`, `page_size` | `东方财富板块成分股.md` |
 | [`eastmoney_board_daily_kline`](#api-eastmoney-board-daily-kline) | 东方财富板块日线OHLC | `GET` | `api/v1/market/data/eastmoney-board-daily-ohlc` | `board_code`, `start_date`, `end_date`, `page`, `page_size` | `东方财富板块日线OHLC.md` |
 | [`eastmoney_concept_boards`](#api-eastmoney-concept-boards) | 东方财富概念板块 | `GET` | `api/v1/market/data/eastmoney-concept-boards` | - | `东方财富概念板块.md` |
 | [`eastmoney_dapan_flow`](#api-eastmoney-dapan-flow) | 东方财富大盘资金流 | `GET` | `api/v1/market/data/eastmoney-dapan-flow` | `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `东方财富大盘资金流.md` |
@@ -100,6 +100,7 @@
 | [`stk_surv`](#api-stk-surv) | 个股严重异常波动 | `GET` | `api/v2/market/data/stk-surv` | `ts_code`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `个股严重异常波动.md` |
 | [`stock_adjust_factor`](#api-stock-adjust-factor) | 股票复权因子 | `GET` | `api/v1/market/data/stock-adjust-factor` | `symbol`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `股票复权因子.md` |
 | [`stock_candlesticks`](#api-stock-candlesticks) | 股票K线 | `GET` | `api/v1/market/data/stock-candlesticks` | `symbol`, `interval_unit`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit` | `股票K线.md` |
+| [`stock_candlesticks_daily`](#api-stock-candlesticks-daily) | 股票日K快照 | `GET` | `api/v1/market/data/stock-candlesticks-daily` | `trade_date`, `page`, `page_size` | `股票日K快照.md` |
 | [`stock_capital_flows`](#api-stock-capital-flows) | 股票资金流向 | `GET` | `api/v1/market/data/stock-capital-flows` | `date`, `time`, `symbol`, `page`, `page_size` | `股票资金流向.md` |
 | [`stock_comment_desire_em`](#api-stock-comment-desire-em) | 千股千评意愿度 | `GET` | `api/v1/market/data/stock-comment/desire` | `symbol` | `千股千评意愿度.md` |
 | [`stock_comment_em`](#api-stock-comment-em) | 千股千评 | `GET` | `api/v1/market/data/stock-comment/index` | `page`, `page_size` | `千股千评.md` |
@@ -150,6 +151,7 @@
 | [`tdx_board_index`](#api-tdx-board-index) | 通达信板块指数最新快照 | `GET` | `api/v1/market/data/tdx-board-index` | `ts_code`, `board_name`, `board_type`, `board_type_code`, `market`, `page`, `page_size` | `通达信板块指数最新快照.md` |
 | [`tdx_board_members`](#api-tdx-board-members) | 通达信板块成分股最新快照 | `GET` | `api/v1/market/data/tdx-board-members` | `ts_code`, `board_name`, `board_type`, `board_type_code`, `con_code`, `con_name`, `market`, `page`, `page_size` | `通达信板块成分股最新快照.md` |
 | [`ths_board_kline`](#api-ths-board-kline) | 同花顺板块K线 | `GET` | `api/v1/market/data/ths-board-kline` | `board_code`, `page`, `page_size` | `同花顺板块K线.md` |
+| [`ths_board_constituents`](#api-ths-board-constituents) | 同花顺板块成分股 | `GET` | `api/v1/market/data/ths-board-constituents` | `board_code`, `board_name`, `board_type`, `date`, `page`, `page_size` | `同花顺板块成分股.md` |
 | [`stock_signal_latest_snapshot`](#api-stock-signal-latest-snapshot) | 信号最新快照 | `GET` | `api/v3/market/data/stock-signal-latest-snapshot` | `signal_type`, `page`, `page_size` | `信号最新快照.md` |
 | [`ths_stock_daily_flow`](#api-ths-stock-daily-flow) | 同花顺个股资金流日度 | `GET` | `api/v1/market/data/ths-stock-daily-flow` | `start_date`, `end_date`, `code`, `name`, `page`, `page_size` | `同花顺个股资金流日度.md` |
 | [`ths_concept_daily_flow`](#api-ths-concept-daily-flow) | 同花顺概念板块资金流日度 | `GET` | `api/v1/market/data/ths-concept-daily-flow` | `start_date`, `end_date`, `board_name`, `page`, `page_size` | `同花顺概念板块资金流日度.md` |
@@ -697,22 +699,28 @@ Returns:
 
 <h4 id="api-eastmoney-board-constituents"><code>eastmoney_board_constituents</code></h4>
 
-- 接口名称：东方财富板块成份股
+- 接口名称：东方财富板块成分股
 - HTTP：`GET`
 - Path：`api/v1/market/data/eastmoney-board-constituents`
-- 参数：`board_code`
-- 来源文档：`东方财富板块成份股.md`
+- 参数：`board_code`, `date`, `page`, `page_size`
+- 来源文档：`东方财富板块成分股.md`
 - 原始接口：`eastmoney_board_constituents`
 
 ```text
-东方财富板块成份股.
+东方财富板块成分股.
 
 Endpoint: ``api/v1/market/data/eastmoney-board-constituents``.
 Method: ``GET``.
 Documented endpoint: ``eastmoney_board_constituents``.
 
 Args:
-    board_code: 板块代码，如 BK1024 (type: string; required: Y).
+    board_code: 板块代码，取东方财富板块代码（BK 开头），如 BK0475、BK0490、BK0153 (type: string; required: Y).
+    date: 查询日期，格式 YYYYMMDD；不传返回当前仍在板块内的成分股 (type: string; required: N).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -1891,6 +1899,19 @@ Returns:
     A pandas ``DataFrame`` by default, Python rows when
     ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
     payloads when multi-page fetching is used with ``raw=True``.
+```
+
+<h4 id="api-stock-candlesticks-daily"><code>stock_candlesticks_daily</code></h4>
+
+- 接口名称：股票日K快照
+- HTTP：`GET`
+- Path：`api/v1/market/data/stock-candlesticks-daily`
+- 参数：`trade_date`, `page`, `page_size`
+- 来源文档：`股票日K快照.md`
+- 原始接口：`stock_candlesticks_daily`
+
+```text
+股票日K快照.
 ```
 
 <h4 id="api-stock-capital-flows"><code>stock_capital_flows</code></h4>
@@ -3401,6 +3422,19 @@ Returns:
     A pandas ``DataFrame`` by default, Python rows when
     ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
     payloads when multi-page fetching is used with ``raw=True``.
+```
+
+<h4 id="api-ths-board-constituents"><code>ths_board_constituents</code></h4>
+
+- 接口名称：同花顺板块成分股
+- HTTP：`GET`
+- Path：`api/v1/market/data/ths-board-constituents`
+- 参数：`board_code`, `board_name`, `board_type`, `date`, `page`, `page_size`
+- 来源文档：`同花顺板块成分股.md`
+- 原始接口：`ths_board_constituents`
+
+```text
+同花顺板块成分股.
 ```
 
 <h4 id="api-xueqiu-rank"><code>xueqiu_rank</code></h4>

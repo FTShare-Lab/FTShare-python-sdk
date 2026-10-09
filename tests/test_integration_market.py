@@ -16,7 +16,8 @@ pytestmark = pytest.mark.integration
 
 # Endpoints that return HTTP 200 with an empty payload on the test server for
 # every parameter combination, or fail before reaching the data layer. Verified
-# against http://xz09:10103 on 2026-09-22; re-check these when the server moves.
+# against the integration test server on 2026-09-22; re-check these when the
+# server moves.
 KNOWN_SERVER_ISSUES: dict[str, str] = {
     "ashare_news_sentiment_factors": "HTTP 502 下游服务请求失败 for every parameter combination",
     "futures_minutes_batch": "HTTP 404 请求的资源不存在 — route absent on the test server",
