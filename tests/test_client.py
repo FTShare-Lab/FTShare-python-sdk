@@ -550,7 +550,7 @@ def test_stock_description_rejects_page_size_above_200():
         ("stock_unlock", {"stock_code": "000001"}),
         ("yzxdr_detail", {"year": 2026, "quarter": 2}),
         ("futures_minutes", {"symbol": "A2605.DCE", "interval": "1min", "limit": 5}),
-        ("futures_contract_kline", {"symbol": "A2605.DCE", "interval": "daily", "limit": 5}),
+        ("futures_kline", {"symbol": "A2605.DCE", "interval": "daily", "limit": 5}),
         ("company_list", {}),
         ("wallstreetcn_financial_calendar", {"start_date": "2026-05-01", "end_date": "2026-05-07"}),
         ("stk_limit", {}),
@@ -789,6 +789,60 @@ def test_realtime_kline_methods_serialize_symbols_list_to_json():
     client.stock_realtime_day_kline(symbols='["600519.SH"]', as_dataframe=False)
 
     assert session.calls[0]["params"] == {"symbols": '["600519.SH"]'}
+
+
+def test_futures_kline_batch_and_realtime_day_kline_forward_symbols_list():
+    session = FakeSession([FakeResponse(payload=[])])
+    client = FtshareClient(session=session)
+
+    client.futures_kline_batch(
+        symbols=["A2611.DCE", "M2611.DCE"],
+        interval="daily",
+        start=1790784000000,
+        end=1791647999000,
+        limit=5,
+        as_dataframe=False,
+    )
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v2/market/data/futures/kline/batch"
+    assert session.calls[0]["params"] == {
+        "symbols": ["A2611.DCE", "M2611.DCE"],
+        "interval": "daily",
+        "start": 1790784000000,
+        "end": 1791647999000,
+        "limit": 5,
+    }
+
+    session = FakeSession([FakeResponse(payload=[])])
+    client = FtshareClient(session=session)
+
+    client.futures_realtime_day_kline(symbols=["A2611.DCE", "CU2611.SHF"], as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v4/market/data/futures-realtime-day-kline"
+    assert session.calls[0]["params"] == {"symbols": ["A2611.DCE", "CU2611.SHF"]}
+
+
+def test_futures_minutes_forwards_symbols_for_batch_queries():
+    session = FakeSession([FakeResponse(payload=[])])
+    client = FtshareClient(session=session)
+
+    client.futures_minutes(
+        symbols=["A2611.DCE", "CU2611.SHF"],
+        interval="5min",
+        start=1791475200000,
+        end=1791647999000,
+        limit=5,
+        as_dataframe=False,
+    )
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v2/market/data/futures_minutes"
+    assert session.calls[0]["params"] == {
+        "symbols": ["A2611.DCE", "CU2611.SHF"],
+        "interval": "5min",
+        "start": 1791475200000,
+        "end": 1791647999000,
+        "limit": 5,
+    }
 
 
 def test_etf_pcf_infos_unwraps_bare_object_data():

@@ -6,7 +6,7 @@
 
 | 指标 | 数量 |
 |---|---:|
-| SDK 方法总数 | 240 |
+| SDK 方法总数 | 242 |
 
 ## 专题分布
 
@@ -18,7 +18,7 @@
 | 指数专题 | 15 | `ftshare.apis.index` | `ftshare.endpoints.index` |
 | ETF专题 | 17 | `ftshare.apis.etf` | `ftshare.endpoints.etf` |
 | 公募基金 | 18 | `ftshare.apis.fund` | `ftshare.endpoints.fund` |
-| 期货数据 | 18 | `ftshare.apis.futures` | `ftshare.endpoints.futures` |
+| 期货数据 | 20 | `ftshare.apis.futures` | `ftshare.endpoints.futures` |
 | 债券专题 | 9 | `ftshare.apis.bond` | `ftshare.endpoints.bond` |
 | 宏观经济 | 23 | `ftshare.apis.economic` | `ftshare.endpoints.economic` |
 | 大模型语料 | 5 | `ftshare.apis.llm_corpus` | `ftshare.endpoints.llm_corpus` |
@@ -262,9 +262,11 @@
 | [`fut_settle`](#api-fut-settle) | 期货每日结算参数 | `GET` | `api/v1/market/data/futures/fut-settle` | `ts_code`, `trade_date`, `start_date`, `end_date`, `exchange`, `page`, `page_size` | `期货每日结算参数.md` |
 | [`fut_weekly_detail`](#api-fut-weekly-detail) | 期货主要品种交易周报 | `GET` | `api/v1/market/data/futures/fut-weekly-detail` | `week`, `prd`, `start_week`, `end_week`, `exchange`, `page`, `page_size` | `期货主要品种交易周报.md` |
 | [`fut_wsr`](#api-fut-wsr) | 期货仓单日报 | `GET` | `api/v1/market/data/futures/fut-wsr` | `trade_date`, `start_date`, `end_date`, `symbol`, `exchange`, `page`, `page_size` | `期货仓单日报.md` |
-| [`futures_contract_kline`](#api-futures-contract-kline) | 期货行情 | `GET` | `api/v1/market/data/futures/kline` | `symbol`, `interval`, `start`, `end`, `limit` | `期货行情.md` |
-| [`futures_minutes`](#api-futures-minutes) | 期货历史分钟行情 | `GET` | `api/v2/market/data/futures_minutes` | `symbol`, `interval`, `start`, `end`, `limit` | `期货历史分钟行情.md` |
+| [`futures_kline`](#api-futures-kline) | 期货合约历史K线 | `GET` | `api/v1/market/data/futures/kline` | `symbol`, `interval`, `start`, `end`, `limit` | `期货合约历史K线.md` |
+| [`futures_kline_batch`](#api-futures-kline-batch) | 批量期货合约历史K线 | `GET` | `api/v2/market/data/futures/kline/batch` | `symbols`, `interval`, `start`, `end`, `limit` | `批量期货合约历史K线.md` |
+| [`futures_minutes`](#api-futures-minutes) | 期货历史分钟K线 | `GET` | `api/v2/market/data/futures_minutes` | `symbol`, `symbols`, `interval`, `start`, `end`, `limit` | `期货历史分钟K线.md` |
 | [`futures_minutes_realtime`](#api-futures-minutes-realtime) | 期货实时分钟K线 | `GET` | `api/v4/market/data/futures_minutes/realtime` | `symbols` | `期货实时分钟K线.md` |
+| [`futures_realtime_day_kline`](#api-futures-realtime-day-kline) | 期货实时日K线 | `GET` | `api/v4/market/data/futures-realtime-day-kline` | `symbols` | `期货实时日K线.md` |
 | [`futures_nanhua_index_kline`](#api-futures-nanhua-index-kline) | 南华期货指数日K线 | `GET` | `api/v1/market/data/futures/nanhua-index-kline` | `code`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `南华期货指数日K线.md` |
 | [`major_contract`](#api-major-contract) | 重大合同 | `GET` | `api/v1/market/data/corporate/contract` | `start_date`, `end_date` | `重大合同.md` |
 | [`major_contract_by_symbol`](#api-major-contract-by-symbol) | 重大合同按标的 | `GET` | `api/v1/market/data/corporate/contract/by-symbol` | `symbol`, `page`, `page_size` | `重大合同按标的.md` |
@@ -5054,21 +5056,21 @@ Returns:
     payloads when multi-page fetching is used with ``raw=True``.
 ```
 
-<h4 id="api-futures-contract-kline"><code>futures_contract_kline</code></h4>
+<h4 id="api-futures-kline"><code>futures_kline</code></h4>
 
-- 接口名称：期货行情
+- 接口名称：期货合约历史K线
 - HTTP：`GET`
 - Path：`api/v1/market/data/futures/kline`
 - 参数：`symbol`, `interval`, `start`, `end`, `limit`
-- 来源文档：`期货行情.md`
-- 原始接口：`futures_contract_kline`
+- 来源文档：`期货合约历史K线.md`
+- 原始接口：`futures_kline`
 
 ```text
-期货行情.
+期货合约历史K线.
 
 Endpoint: ``api/v1/market/data/futures/kline``.
 Method: ``GET``.
-Documented endpoint: ``futures_contract_kline``.
+Documented endpoint: ``futures_kline``.
 
 Args:
     symbol: 期货合约代码 (type: string; required: Y).
@@ -5086,27 +5088,60 @@ Returns:
     ``as_dataframe=False``, or raw JSON when ``raw=True``.
 ```
 
+<h4 id="api-futures-kline-batch"><code>futures_kline_batch</code></h4>
+
+- 接口名称：批量期货合约历史K线
+- HTTP：`GET`
+- Path：`api/v2/market/data/futures/kline/batch`
+- 参数：`symbols`, `interval`, `start`, `end`, `limit`
+- 来源文档：`批量期货合约历史K线.md`
+- 原始接口：`futures_kline_batch`
+
+```text
+批量期货合约历史K线.
+
+Endpoint: ``api/v2/market/data/futures/kline/batch``.
+Method: ``GET``.
+Documented endpoint: ``futures_kline_batch``.
+
+Args:
+    symbols: 1～20 个期货合约代码；支持重复参数、逗号分隔或列表 (type: string[]; required: Y).
+    interval: K 线周期，默认 ``daily`` (type: string; required: N).
+    start: 起始时间戳，单位毫秒 (type: integer; required: N).
+    end: 结束时间戳，单位毫秒，不能单独传 (type: integer; required: N).
+    limit: 每个合约返回条数上限，默认 500 (type: integer; required: N).
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, or raw JSON when ``raw=True``.
+```
+
 <h4 id="api-futures-minutes"><code>futures_minutes</code></h4>
 
-- 接口名称：期货历史分钟行情
+- 接口名称：期货历史分钟K线
 - HTTP：`GET`
 - Path：`api/v2/market/data/futures_minutes`
-- 参数：`symbol`, `interval`, `start`, `end`, `limit`
-- 来源文档：`期货历史分钟行情.md`
+- 参数：`symbol`, `symbols`, `interval`, `start`, `end`, `limit`
+- 来源文档：`期货历史分钟K线.md`
 - 原始接口：`futures_minutes`
 
 ```text
-期货历史分钟行情.
+期货历史分钟K线.
 
 Endpoint: ``api/v2/market/data/futures_minutes``.
 Method: ``GET``.
 Documented endpoint: ``futures_minutes``.
 
 Args:
-    symbol: 期货合约代码，带交易所短后缀 (type: string; required: Y).
+    symbol: 单个期货合约代码，带交易所短后缀；与 ``symbols`` 二选一 (type: string; required: N).
+    symbols: 1～20 个期货合约代码；支持重复参数、逗号分隔或列表；与 ``symbol`` 二选一 (type: string[]; required: N).
     interval: 分钟周期，默认 ``1min`` (type: string; required: N).
-    start: 起始时间戳，单位毫秒 (type: integer; required: N).
-    end: 结束时间戳，单位毫秒，不能单独传 (type: integer; required: N).
+    start: 起始时间戳，单位毫秒；必填 (type: integer; required: Y).
+    end: 结束时间戳，单位毫秒；必填，不能单独传 (type: integer; required: Y).
     limit: 返回条数上限，范围 1～1000 (type: integer; required: N).
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
@@ -5181,6 +5216,34 @@ Returns:
     A pandas ``DataFrame`` by default, Python rows when
     ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
     payloads when multi-page fetching is used with ``raw=True``.
+```
+
+<h4 id="api-futures-realtime-day-kline"><code>futures_realtime_day_kline</code></h4>
+
+- 接口名称：期货实时日K线
+- HTTP：`GET`
+- Path：`api/v4/market/data/futures-realtime-day-kline`
+- 参数：`symbols`
+- 来源文档：`期货实时日K线.md`
+- 原始接口：`futures_realtime_day_kline`
+
+```text
+期货实时日K线.
+
+Endpoint: ``api/v4/market/data/futures-realtime-day-kline``.
+Method: ``GET``.
+Documented endpoint: ``futures_realtime_day_kline``.
+
+Args:
+    symbols: 1～20 个期货合约代码；支持重复参数、逗号分隔或列表 (type: string[]; required: Y).
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, or raw JSON when ``raw=True``.
 ```
 
 <h4 id="api-major-contract"><code>major_contract</code></h4>
