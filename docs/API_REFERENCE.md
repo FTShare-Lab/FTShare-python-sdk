@@ -6,13 +6,13 @@
 
 | 指标 | 数量 |
 |---|---:|
-| SDK 方法总数 | 242 |
+| SDK 方法总数 | 244 |
 
 ## 专题分布
 
 | ftshare-doc 专题 | SDK 方法数 | API mixin 模块 | Endpoint 模块 |
 |---|---:|---|---|
-| 股票数据 | 129 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
+| 股票数据 | 131 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
 | 港股数据 | 3 | `ftshare.apis.hk` | `ftshare.endpoints.hk` |
 | 美股数据 | 2 | `ftshare.apis.us` | `ftshare.endpoints.us` |
 | 指数专题 | 15 | `ftshare.apis.index` | `ftshare.endpoints.index` |
@@ -90,6 +90,7 @@
 | [`southbound`](#api-southbound) | 南向资金交易 | `GET` | `api/v1/market/data/southbound` | `date` | `南向资金交易.md` |
 | [`stk_alert_broker`](#api-stk-alert-broker) | 交易所重点提示证券 | `GET` | `api/v2/market/data/stk-alert-broker` | `ts_code`, `start_date`, `end_date`, `page`, `page_size` | `交易所重点提示证券.md` |
 | [`stk_code_change`](#api-stk-code-change) | A股代码变更 | `GET` | `api/v1/market/data/stk-code-change` | `trade_code`, `start_date`, `end_date` | `A股代码变更.md` |
+| [`stk_code_change_timeline`](#api-stk-code-change-timeline) | A股代码变更时间线 | `GET` | `api/v1/market/data/stk_code_change_timeline` | - | `A股代码变更时间线.md` |
 | [`stk_status_change`](#api-stk-status-change) | A股状态变更 | `GET` | `api/v1/market/data/stk-status-change` | `trade_code`, `change_date`, `change_type` | `A股状态变更.md` |
 | [`stk_limit`](#api-stk-limit) | 涨跌停价 | `GET` | `api/v1/market/data/stk-limit` | `instrument_type`, `symbol`, `symbol_id`, `market_id`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `涨跌停价.md` |
 | [`stk_manager_hold`](#api-stk-manager-hold) | 上市公司管理层持股 | `GET` | `api/v1/market/data/stk-manager-hold` | `trade_code`, `end_date` | `上市公司管理层持股.md` |
@@ -111,6 +112,7 @@
 | [`stock_daec_stocks`](#api-stock-daec-stocks) | A股行情列表 | `GET` | `api/v1/market/data/daec/stocks/{board}` | `board`, `page`, `page_size`, `filter`, `order_by` | `A股行情列表.md` |
 | [`stock_description`](#api-stock-description) | 股票基础信息 | `GET` | `api/v1/market/data/stock-description` | `symbol_id`, `page`, `page_size` | `股票基础信息.md` |
 | [`stock_dividends`](#api-stock-dividends) | 股票分红记录 | `GET` | `api/v1/market/data/stock-dividends` | `symbol`, `since_date`, `until_date`, `page`, `page_size` | `股票分红记录.md` |
+| [`stock_factor`](#api-stock-factor) | 股票技术面因子 | `GET` | `api/v2/market/data/stock-factor` | `symbol`, `trade_date`, `category` | `股票技术面因子.md` |
 | [`stock_filter`](#api-stock-filter) | 股票筛选 | `GET` | `api/v2/market/data/stock-list/filter` | `symbol`, `board`, `listing_date_since`, `page`, `page_size` | `股票筛选.md` |
 | [`stock_float_holders`](#api-stock-float-holders) | 十大流通股东 | `GET` | `api/v1/market/data/holder/stock-holder-ften` | `stock_code`, `is_last`, `page`, `page_size` | `十大流通股东.md` |
 | [`stock_ggcg_em`](#api-stock-ggcg-em) | 东方财富股东增减持 | `GET` | `api/v1/market/data/holder/stock-ggcg-em` | `symbol`, `page`, `page_size` | `东方财富股东增减持.md` |
@@ -136,7 +138,7 @@
 | [`stock_realtime_day_kline`](#api-stock-realtime-day-kline) | 股票实时日K线 | `GET` | `api/v4/market/data/stock-realtime-day-kline` | `symbols` | `股票实时日K线.md` |
 | [`stock_realtime_list`](#api-stock-realtime-list) | A股行情列表 | `GET` | `api/v1/market/data/stock-list/{board}` | `board`, `page`, `page_size` | `A股行情列表.md` |
 | [`stock_realtime_minute_kline`](#api-stock-realtime-minute-kline) | 股票实时分钟K线 | `GET` | `api/v4/market/data/stock-realtime-minute-kline` | `symbols` | `股票实时分钟K线.md` |
-| [`stock_share`](#api-stock-share) | 股本 | `GET` | `api/v2/market/data/share/get-stock-share` | `stock_code`, `date` | `股本.md` |
+| [`stock_share`](#api-stock-share) | 股本 | `GET` | `api/v2/market/data/share/get-stock-share` | `stock_code`, `date`, `date_type`, `page`, `page_size` | `股本.md` |
 | [`stock_share_chg`](#api-stock-share-chg) | 股东增减持 | `GET` | `api/v1/market/data/holder/stock-share-chg` | `stock_code`, `is_last`, `page`, `page_size` | `股东增减持.md` |
 | [`stock_st_history`](#api-stock-st-history) | 股票历史ST状态 | `GET` | `api/v1/market/data/stock-st-history` | `symbol`, `st_type` | `股票历史ST状态.md` |
 | [`stock_unlock`](#api-stock-unlock) | 限售解禁 | `GET` | `api/v1/market/data/unlock/stock_unlock` | `stock_code`, `start_date`, `end_date`, `page`, `page_size` | `限售解禁.md` |
@@ -2221,6 +2223,38 @@ Returns:
     payloads when multi-page fetching is used with ``raw=True``.
 ```
 
+<h4 id="api-stock-factor"><code>stock_factor</code></h4>
+
+- 接口名称：股票技术面因子
+- HTTP：`GET`
+- Path：`api/v2/market/data/stock-factor`
+- 参数：`symbol`, `trade_date`, `category`
+- 来源文档：`股票技术面因子.md`
+- 原始接口：`market_stock_factor`
+
+```text
+股票技术面因子.
+
+Endpoint: ``api/v2/market/data/stock-factor``.
+Method: ``GET``.
+Documented endpoint: ``market_stock_factor``.
+
+Args:
+    symbol: 沪深北 A 股代码，必须带交易所后缀，如 ``000001.SZ`` (type: string; required: Y).
+    trade_date: 目标日期 YYYYMMDD；不传时以当前日期为目标日期 (type: string; required: N).
+    category: 返回字段分类：``quote``、``valuation``、``capital``、``trend``、``momentum``、``volatility``、``volume`` 或 ``sentiment``；不传时返回全部字段 (type: string; required: N).
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``。服务端把因子放在
+    ``data.values``，SDK 直接返回该对象（``as_dataframe=True`` 时为单行
+    ``DataFrame``）。
+```
+
 <h4 id="api-stock-filter"><code>stock_filter</code></h4>
 
 - 接口名称：股票筛选
@@ -2947,20 +2981,26 @@ Returns:
 - 接口名称：股本
 - HTTP：`GET`
 - Path：`api/v2/market/data/share/get-stock-share`
-- 参数：`stock_code`, `date`
+- 参数：`stock_code`, `date`, `date_type`, `page`, `page_size`
 - 来源文档：`股本.md`
 - 原始接口：`get_stock_share`
 
 ```text
 股本.
 
-Endpoint: ``api/v1/market/data/share/get-stock-share``.
+Endpoint: ``api/v2/market/data/share/get-stock-share``.
 Method: ``GET``.
 Documented endpoint: ``get_stock_share``.
 
 Args:
-    stock_code: 股票代码 (type: string; required: Y).
+    stock_code: 股票代码；不传时查询指定日期的全市场股本 (type: string; required: N).
     date: 日期 YYYYMMDD (type: string; required: Y).
+    date_type: 日期条件类型：``publish_date``（发布日期，默认）或 ``end_date``（生效日期） (type: string; required: N).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -3256,6 +3296,33 @@ Returns:
     A pandas ``DataFrame`` by default, Python rows when
     ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
     payloads when multi-page fetching is used with ``raw=True``.
+```
+
+<h4 id="api-stk-code-change-timeline"><code>stk_code_change_timeline</code></h4>
+
+- 接口名称：A股代码变更时间线
+- HTTP：`GET`
+- Path：`api/v1/market/data/stk_code_change_timeline`
+- 参数：-
+- 来源文档：`A股代码变更时间线.md`
+- 原始接口：`stk_code_change_timeline`
+
+```text
+A股代码变更时间线.
+
+Endpoint: ``api/v1/market/data/stk_code_change_timeline``.
+Method: ``GET``.
+Documented endpoint: ``stk_code_change_timeline``.
+
+Args:
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``.
 ```
 
 <h4 id="api-tdx-board-members"><code>tdx_board_members</code></h4>

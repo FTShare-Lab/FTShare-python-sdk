@@ -1491,6 +1491,65 @@ def test_stock_share_chg_forwards_is_last_paging():
     assert session.calls[0]["params"]["is_last"] == "true"
 
 
+def test_stock_share_forwards_date_type_and_full_market_pagination():
+    session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
+    client = FtshareClient(session=session)
+
+    client.stock_share(date="20261012", date_type="end_date", page=1, page_size=5, as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v2/market/data/share/get-stock-share"
+    assert session.calls[0]["params"] == {"date": "20261012", "date_type": "end_date", "page": 1, "page_size": 5}
+
+
+def test_stock_share_rejects_page_size_above_500():
+    client = FtshareClient(session=FakeSession([]))
+
+    with pytest.raises(ValueError, match="page_size must be between 1 and 500"):
+        client.stock_share(date="20261012", page_size=501)
+
+
+def test_stock_factor_unwraps_values_object():
+    session = FakeSession([FakeResponse(payload={"code": 200, "message": "success", "data": {"values": {"ts_code": "000001.SZ", "trade_date": "20261012", "close": 11.73}}})])
+    client = FtshareClient(session=session)
+
+    result = client.stock_factor(symbol="000001.SZ", trade_date="20261012", category="quote", as_dataframe=False)
+
+    assert result == {"ts_code": "000001.SZ", "trade_date": "20261012", "close": 11.73}
+
+
+def test_stock_factor_values_object_dataframe_is_single_row():
+    session = FakeSession([FakeResponse(payload={"code": 200, "message": "success", "data": {"values": {"ts_code": "000001.SZ", "close": 11.73}}})])
+    client = FtshareClient(session=session)
+
+    frame = client.stock_factor(symbol="000001.SZ")
+
+    assert isinstance(frame, pd.DataFrame)
+    assert len(frame) == 1
+    assert frame.loc[0, "ts_code"] == "000001.SZ"
+    assert frame.loc[0, "close"] == 11.73
+
+
+def test_stock_factor_forwards_symbol_date_and_category():
+    session = FakeSession([FakeResponse(payload={"code": 200, "message": "success", "data": {"values": {}}})])
+    client = FtshareClient(session=session)
+
+    client.stock_factor(symbol="000001.SZ", trade_date="20261012", category="trend", as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v2/market/data/stock-factor"
+    assert session.calls[0]["params"] == {"symbol": "000001.SZ", "trade_date": "20261012", "category": "trend"}
+
+
+def test_stk_code_change_timeline_hits_documented_path_and_extracts_data():
+    session = FakeSession([FakeResponse(payload={"code": 200, "message": "success", "data": [{"stock_name": "上海医药", "new_code": "601607", "market": "SH"}]})])
+    client = FtshareClient(session=session)
+
+    rows = client.stk_code_change_timeline(as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/stk_code_change_timeline"
+    assert session.calls[0]["params"] == {}
+    assert rows == [{"stock_name": "上海医药", "new_code": "601607", "market": "SH"}]
+
+
 def test_ths_industry_constituents_forwards_filters_and_pagination():
     session = FakeSession([FakeResponse(payload={"items": [], "total_pages": 0, "total_items": 0})])
     client = FtshareClient(session=session)
