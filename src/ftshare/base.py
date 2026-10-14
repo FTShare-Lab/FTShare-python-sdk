@@ -20,6 +20,29 @@ from .pagination import validate_pagination
 from .response import extract_tabular, raise_for_api_error, total_pages as extract_total_pages
 
 
+def _truncate_tabular_rows(payload: Any, keep: int) -> Any:
+    """Copy a raw payload with its row list truncated to ``keep`` rows.
+
+    Mirrors the container precedence used by :func:`extract_tabular`; unknown
+    shapes are returned unchanged.
+    """
+    if not isinstance(payload, dict) or keep < 0:
+        return payload
+    data = payload.get("data")
+    if isinstance(data, list):
+        return {**payload, "data": data[:keep]}
+    if isinstance(data, dict):
+        for key in ("records", "items", "index_descriptions"):
+            value = data.get(key)
+            if isinstance(value, list):
+                return {**payload, "data": {**data, key: value[:keep]}}
+    items = payload.get("items")
+    if isinstance(items, list):
+        return {**payload, "items": items[:keep]}
+    return payload
+
+
+
 class BaseClient:
     """Base synchronous client with shared HTTP behavior.
 
@@ -256,7 +279,8 @@ class BaseClient:
             max_pages: Optional safety cap used with ``all_pages``.
             max_page_size: Maximum allowed page size for this endpoint.
             raw: Return raw JSON. When multiple pages are fetched, returns a
-                list of raw page payloads.
+                list of raw page payloads; with ``limit`` the final payload's
+                rows are trimmed so the total matches ``limit``.
             fields: Optional field list or comma-separated field string.
             as_dataframe: Return a pandas ``DataFrame`` by default.
             unwrap_bare_data: When ``True``, an object-shaped ``data`` field
@@ -294,16 +318,18 @@ class BaseClient:
             request_page_size = min(limit, max_page_size)
         else:
             request_page_size = max_page_size
+        if limit is not None:
+            request_page_size = min(request_page_size, limit)
 
+        # Keep the requested page size constant across pages: the server derives
+        # each page's offset from page * page_size, so shrinking the last page
+        # would shift its window and duplicate or drop rows. Overshoot is trimmed
+        # by ``limit`` after the loop instead.
         while True:
-            current_page_size = request_page_size
-            if remaining is not None:
-                current_page_size = min(current_page_size, remaining)
-
             payload = self.get(
                 path,
                 page=effective_page,
-                page_size=current_page_size,
+                page_size=request_page_size,
                 raw=True,
                 **params,
             )
@@ -324,15 +350,28 @@ class BaseClient:
                 break
             if page_count is not None and effective_page >= page_count:
                 break
-            if page_count is None and len(page_rows) < current_page_size:
+            if page_count is None and len(page_rows) < request_page_size:
                 break
             if not page_rows:
                 break
             effective_page += 1
 
         if raw:
+            if limit is not None:
+                kept = 0
+                for index, payload in enumerate(payloads):
+                    page_rows = extract_tabular(payload)
+                    if not isinstance(page_rows, list):
+                        break
+                    if kept + len(page_rows) <= limit:
+                        kept += len(page_rows)
+                        continue
+                    payloads[index] = _truncate_tabular_rows(payload, limit - kept)
+                    break
             return payloads[0] if len(payloads) == 1 and not all_pages else payloads
 
+        if limit is not None:
+            rows = rows[:limit]
         result = self._select_fields(rows, fields)
         if as_dataframe:
             return self._to_dataframe(result)

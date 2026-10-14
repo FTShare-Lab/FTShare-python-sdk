@@ -1104,20 +1104,32 @@ class StockApiMixin:
     def eastmoney_board_constituents(
         self,
         board_code: Any | None = None,
+        date: Any | None = None,
+        page: int | None = None,
+        page_size: int | None = None,
+        limit: int | None = None,
+        all_pages: bool = False,
+        max_pages: int | None = None,
         *,
         raw: bool = False,
         fields: Sequence[str] | str | None = None,
         as_dataframe: bool = True,
         **kwargs: Any,
     ) -> Any:
-        """东方财富板块成份股.
+        """东方财富板块成分股.
 
         Endpoint: ``api/v1/market/data/eastmoney-board-constituents``.
         Method: ``GET``.
         Documented endpoint: ``eastmoney_board_constituents``.
 
         Args:
-            board_code: 板块代码，如 BK1024 (type: string; required: Y).
+            board_code: 板块代码，取东方财富板块代码（BK 开头），如 BK0475、BK0490、BK0153 (type: string; required: Y).
+            date: 查询日期，格式 YYYYMMDD；不传返回当前仍在板块内的成分股 (type: string; required: N).
+            page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+            page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+            limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+            all_pages: Fetch and combine pages until the server reports the last page.
+            max_pages: Optional safety cap for ``all_pages``.
             raw: Return the decoded JSON payload without tabular extraction.
             fields: Optional field list or comma-separated field string applied after extraction.
             as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -1128,10 +1140,17 @@ class StockApiMixin:
             ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
             payloads when multi-page fetching is used with ``raw=True``.
         """
-        request_params = {'board_code': board_code}
+        request_params = {'board_code': board_code, 'date': date}
         request_params.update(kwargs)
-        return self._call_endpoint(
-            'eastmoney_board_constituents',
+        path = ENDPOINTS['eastmoney_board_constituents'].path
+        return self.get_paginated(
+            path,
+            page=page,
+            page_size=page_size,
+            limit=limit,
+            all_pages=all_pages,
+            max_pages=max_pages,
+            max_page_size=ENDPOINTS['eastmoney_board_constituents'].max_page_size,
             raw=raw,
             fields=fields,
             as_dataframe=as_dataframe,
@@ -1694,6 +1713,33 @@ class StockApiMixin:
         request_params = {'trade_code': trade_code, 'start_date': start_date, 'end_date': end_date}
         request_params.update(kwargs)
         return self._call_endpoint('stk_code_change', raw=raw, fields=fields, as_dataframe=as_dataframe, **request_params)
+
+    def stk_code_change_timeline(
+        self,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """A股代码变更时间线.
+
+        Endpoint: ``api/v1/market/data/stk_code_change_timeline``.
+        Method: ``GET``.
+        Documented endpoint: ``stk_code_change_timeline``.
+
+        Args:
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``.
+        """
+        request_params = dict(kwargs)
+        return self._call_endpoint('stk_code_change_timeline', raw=raw, fields=fields, as_dataframe=as_dataframe, **request_params)
 
     def stk_status_change(
         self,
@@ -3881,6 +3927,12 @@ class StockApiMixin:
         self,
         stock_code: Any | None = None,
         date: Any | None = None,
+        date_type: Any | None = None,
+        page: int | None = None,
+        page_size: int | None = None,
+        limit: int | None = None,
+        all_pages: bool = False,
+        max_pages: int | None = None,
         *,
         raw: bool = False,
         fields: Sequence[str] | str | None = None,
@@ -3889,13 +3941,19 @@ class StockApiMixin:
     ) -> Any:
         """股本.
 
-        Endpoint: ``api/v1/market/data/share/get-stock-share``.
+        Endpoint: ``api/v2/market/data/share/get-stock-share``.
         Method: ``GET``.
         Documented endpoint: ``get_stock_share``.
 
         Args:
-            stock_code: 股票代码 (type: string; required: Y).
+            stock_code: 股票代码；不传时查询指定日期的全市场股本 (type: string; required: N).
             date: 日期 YYYYMMDD (type: string; required: Y).
+            date_type: 日期条件类型：``publish_date``（发布日期，默认）或 ``end_date``（生效日期） (type: string; required: N).
+            page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+            page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+            limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+            all_pages: Fetch and combine pages until the server reports the last page.
+            max_pages: Optional safety cap for ``all_pages``.
             raw: Return the decoded JSON payload without tabular extraction.
             fields: Optional field list or comma-separated field string applied after extraction.
             as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -3906,13 +3964,64 @@ class StockApiMixin:
             ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
             payloads when multi-page fetching is used with ``raw=True``.
         """
-        request_params = {'stock_code': stock_code, 'date': date}
+        request_params = {'stock_code': stock_code, 'date': date, 'date_type': date_type}
         request_params.update(kwargs)
-        return self._call_endpoint(
-            'stock_share',
+        endpoint = ENDPOINTS['stock_share']
+        return self.get_paginated(
+            endpoint.path,
+            page=page,
+            page_size=page_size,
+            limit=limit,
+            all_pages=all_pages,
+            max_pages=max_pages,
+            max_page_size=endpoint.max_page_size,
             raw=raw,
             fields=fields,
             as_dataframe=as_dataframe,
+            **request_params,
+        )
+
+    def stock_factor(
+        self,
+        symbol: Any | None = None,
+        trade_date: Any | None = None,
+        category: Any | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """股票技术面因子.
+
+        Endpoint: ``api/v2/market/data/stock-factor``.
+        Method: ``GET``.
+        Documented endpoint: ``market_stock_factor``.
+
+        Args:
+            symbol: 沪深北 A 股代码，必须带交易所后缀，如 ``000001.SZ`` (type: string; required: Y).
+            trade_date: 目标日期 YYYYMMDD；不传时以当前日期为目标日期 (type: string; required: N).
+            category: 返回字段分类：``quote``、``valuation``、``capital``、``trend``、``momentum``、``volatility``、``volume`` 或 ``sentiment``；不传时返回全部字段 (type: string; required: N).
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``。服务端把因子放在
+            ``data.values``，SDK 直接返回该对象（``as_dataframe=True`` 时为单行
+            ``DataFrame``）。
+        """
+        request_params = {'symbol': symbol, 'trade_date': trade_date, 'category': category}
+        request_params.update(kwargs)
+        path = ENDPOINTS['stock_factor'].path
+        return self.get(
+            path,
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            unwrap_bare_data=True,
             **request_params,
         )
 
@@ -4738,3 +4847,15 @@ class StockApiMixin:
         params.update(kwargs)
         path = ENDPOINTS['news_reaction_snapshot'].path
         return self.get_paginated(path, page=page, page_size=page_size, limit=limit, all_pages=all_pages, max_pages=max_pages, max_page_size=200, raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+
+    def stock_candlesticks_daily(self, trade_date: Any | None = None, page: int | None = None, page_size: int | None = None, limit: int | None = None, all_pages: bool = False, max_pages: int | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
+        """股票日K快照."""
+        params = {'trade_date': trade_date}
+        params.update(kwargs)
+        return self.get_paginated(ENDPOINTS['stock_candlesticks_daily'].path, page=page, page_size=page_size, limit=limit, all_pages=all_pages, max_pages=max_pages, max_page_size=500, raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+
+    def ths_board_constituents(self, board_code: Any | None = None, board_name: Any | None = None, board_type: Any | None = None, date: Any | None = None, page: int | None = None, page_size: int | None = None, limit: int | None = None, all_pages: bool = False, max_pages: int | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
+        """同花顺板块成分股."""
+        params = {'board_code': board_code, 'board_name': board_name, 'board_type': board_type, 'date': date}
+        params.update(kwargs)
+        return self.get_paginated(ENDPOINTS['ths_board_constituents'].path, page=page, page_size=page_size, limit=limit, all_pages=all_pages, max_pages=max_pages, max_page_size=1000, raw=raw, fields=fields, as_dataframe=as_dataframe, **params)

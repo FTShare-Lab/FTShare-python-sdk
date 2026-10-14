@@ -6,19 +6,19 @@
 
 | 指标 | 数量 |
 |---|---:|
-| SDK 方法总数 | 238 |
+| SDK 方法总数 | 244 |
 
 ## 专题分布
 
 | ftshare-doc 专题 | SDK 方法数 | API mixin 模块 | Endpoint 模块 |
 |---|---:|---|---|
-| 股票数据 | 127 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
+| 股票数据 | 131 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
 | 港股数据 | 3 | `ftshare.apis.hk` | `ftshare.endpoints.hk` |
 | 美股数据 | 2 | `ftshare.apis.us` | `ftshare.endpoints.us` |
 | 指数专题 | 15 | `ftshare.apis.index` | `ftshare.endpoints.index` |
 | ETF专题 | 17 | `ftshare.apis.etf` | `ftshare.endpoints.etf` |
 | 公募基金 | 18 | `ftshare.apis.fund` | `ftshare.endpoints.fund` |
-| 期货数据 | 18 | `ftshare.apis.futures` | `ftshare.endpoints.futures` |
+| 期货数据 | 20 | `ftshare.apis.futures` | `ftshare.endpoints.futures` |
 | 债券专题 | 9 | `ftshare.apis.bond` | `ftshare.endpoints.bond` |
 | 宏观经济 | 23 | `ftshare.apis.economic` | `ftshare.endpoints.economic` |
 | 大模型语料 | 5 | `ftshare.apis.llm_corpus` | `ftshare.endpoints.llm_corpus` |
@@ -55,7 +55,7 @@
 | [`cashflow_stock_code`](#api-cashflow-stock-code) | 现金流支持股票代码 | `GET` | `api/v2/market/data/finance/cashflow-stock-code` | - | `现金流支持股票代码.md` |
 | [`company_list`](#api-company-list) | 公司列表 | `GET` | `api/v1/market/data/company-list` | `stock_name`, `stock_code`, `page`, `page_size` | `公司列表.md` |
 | [`earnings_reports_paginated`](#api-earnings-reports-paginated) | 业绩快报 | `GET` | `api/v1/market/data/finance/stock-performance-express` | `stock_code`, `year`, `report_type`, `page`, `page_size` | `业绩快报.md` |
-| [`eastmoney_board_constituents`](#api-eastmoney-board-constituents) | 东方财富板块成份股 | `GET` | `api/v1/market/data/eastmoney-board-constituents` | `board_code` | `东方财富板块成份股.md` |
+| [`eastmoney_board_constituents`](#api-eastmoney-board-constituents) | 东方财富板块成分股 | `GET` | `api/v1/market/data/eastmoney-board-constituents` | `board_code`, `date`, `page`, `page_size` | `东方财富板块成分股.md` |
 | [`eastmoney_board_daily_kline`](#api-eastmoney-board-daily-kline) | 东方财富板块日线OHLC | `GET` | `api/v1/market/data/eastmoney-board-daily-ohlc` | `board_code`, `start_date`, `end_date`, `page`, `page_size` | `东方财富板块日线OHLC.md` |
 | [`eastmoney_concept_boards`](#api-eastmoney-concept-boards) | 东方财富概念板块 | `GET` | `api/v1/market/data/eastmoney-concept-boards` | - | `东方财富概念板块.md` |
 | [`eastmoney_dapan_flow`](#api-eastmoney-dapan-flow) | 东方财富大盘资金流 | `GET` | `api/v1/market/data/eastmoney-dapan-flow` | `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `东方财富大盘资金流.md` |
@@ -90,6 +90,7 @@
 | [`southbound`](#api-southbound) | 南向资金交易 | `GET` | `api/v1/market/data/southbound` | `date` | `南向资金交易.md` |
 | [`stk_alert_broker`](#api-stk-alert-broker) | 交易所重点提示证券 | `GET` | `api/v2/market/data/stk-alert-broker` | `ts_code`, `start_date`, `end_date`, `page`, `page_size` | `交易所重点提示证券.md` |
 | [`stk_code_change`](#api-stk-code-change) | A股代码变更 | `GET` | `api/v1/market/data/stk-code-change` | `trade_code`, `start_date`, `end_date` | `A股代码变更.md` |
+| [`stk_code_change_timeline`](#api-stk-code-change-timeline) | A股代码变更时间线 | `GET` | `api/v1/market/data/stk_code_change_timeline` | - | `A股代码变更时间线.md` |
 | [`stk_status_change`](#api-stk-status-change) | A股状态变更 | `GET` | `api/v1/market/data/stk-status-change` | `trade_code`, `change_date`, `change_type` | `A股状态变更.md` |
 | [`stk_limit`](#api-stk-limit) | 涨跌停价 | `GET` | `api/v1/market/data/stk-limit` | `instrument_type`, `symbol`, `symbol_id`, `market_id`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `涨跌停价.md` |
 | [`stk_manager_hold`](#api-stk-manager-hold) | 上市公司管理层持股 | `GET` | `api/v1/market/data/stk-manager-hold` | `trade_code`, `end_date` | `上市公司管理层持股.md` |
@@ -100,6 +101,7 @@
 | [`stk_surv`](#api-stk-surv) | 个股严重异常波动 | `GET` | `api/v2/market/data/stk-surv` | `ts_code`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `个股严重异常波动.md` |
 | [`stock_adjust_factor`](#api-stock-adjust-factor) | 股票复权因子 | `GET` | `api/v1/market/data/stock-adjust-factor` | `symbol`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `股票复权因子.md` |
 | [`stock_candlesticks`](#api-stock-candlesticks) | 股票K线 | `GET` | `api/v1/market/data/stock-candlesticks` | `symbol`, `interval_unit`, `adjust_kind`, `since_ts_millis`, `until_ts_millis`, `limit` | `股票K线.md` |
+| [`stock_candlesticks_daily`](#api-stock-candlesticks-daily) | 股票日K快照 | `GET` | `api/v1/market/data/stock-candlesticks-daily` | `trade_date`, `page`, `page_size` | `股票日K快照.md` |
 | [`stock_capital_flows`](#api-stock-capital-flows) | 股票资金流向 | `GET` | `api/v1/market/data/stock-capital-flows` | `date`, `time`, `symbol`, `page`, `page_size` | `股票资金流向.md` |
 | [`stock_comment_desire_em`](#api-stock-comment-desire-em) | 千股千评意愿度 | `GET` | `api/v1/market/data/stock-comment/desire` | `symbol` | `千股千评意愿度.md` |
 | [`stock_comment_em`](#api-stock-comment-em) | 千股千评 | `GET` | `api/v1/market/data/stock-comment/index` | `page`, `page_size` | `千股千评.md` |
@@ -110,6 +112,7 @@
 | [`stock_daec_stocks`](#api-stock-daec-stocks) | A股行情列表 | `GET` | `api/v1/market/data/daec/stocks/{board}` | `board`, `page`, `page_size`, `filter`, `order_by` | `A股行情列表.md` |
 | [`stock_description`](#api-stock-description) | 股票基础信息 | `GET` | `api/v1/market/data/stock-description` | `symbol_id`, `page`, `page_size` | `股票基础信息.md` |
 | [`stock_dividends`](#api-stock-dividends) | 股票分红记录 | `GET` | `api/v1/market/data/stock-dividends` | `symbol`, `since_date`, `until_date`, `page`, `page_size` | `股票分红记录.md` |
+| [`stock_factor`](#api-stock-factor) | 股票技术面因子 | `GET` | `api/v2/market/data/stock-factor` | `symbol`, `trade_date`, `category` | `股票技术面因子.md` |
 | [`stock_filter`](#api-stock-filter) | 股票筛选 | `GET` | `api/v2/market/data/stock-list/filter` | `symbol`, `board`, `listing_date_since`, `page`, `page_size` | `股票筛选.md` |
 | [`stock_float_holders`](#api-stock-float-holders) | 十大流通股东 | `GET` | `api/v1/market/data/holder/stock-holder-ften` | `stock_code`, `is_last`, `page`, `page_size` | `十大流通股东.md` |
 | [`stock_ggcg_em`](#api-stock-ggcg-em) | 东方财富股东增减持 | `GET` | `api/v1/market/data/holder/stock-ggcg-em` | `symbol`, `page`, `page_size` | `东方财富股东增减持.md` |
@@ -135,7 +138,7 @@
 | [`stock_realtime_day_kline`](#api-stock-realtime-day-kline) | 股票实时日K线 | `GET` | `api/v4/market/data/stock-realtime-day-kline` | `symbols` | `股票实时日K线.md` |
 | [`stock_realtime_list`](#api-stock-realtime-list) | A股行情列表 | `GET` | `api/v1/market/data/stock-list/{board}` | `board`, `page`, `page_size` | `A股行情列表.md` |
 | [`stock_realtime_minute_kline`](#api-stock-realtime-minute-kline) | 股票实时分钟K线 | `GET` | `api/v4/market/data/stock-realtime-minute-kline` | `symbols` | `股票实时分钟K线.md` |
-| [`stock_share`](#api-stock-share) | 股本 | `GET` | `api/v2/market/data/share/get-stock-share` | `stock_code`, `date` | `股本.md` |
+| [`stock_share`](#api-stock-share) | 股本 | `GET` | `api/v2/market/data/share/get-stock-share` | `stock_code`, `date`, `date_type`, `page`, `page_size` | `股本.md` |
 | [`stock_share_chg`](#api-stock-share-chg) | 股东增减持 | `GET` | `api/v1/market/data/holder/stock-share-chg` | `stock_code`, `is_last`, `page`, `page_size` | `股东增减持.md` |
 | [`stock_st_history`](#api-stock-st-history) | 股票历史ST状态 | `GET` | `api/v1/market/data/stock-st-history` | `symbol`, `st_type` | `股票历史ST状态.md` |
 | [`stock_unlock`](#api-stock-unlock) | 限售解禁 | `GET` | `api/v1/market/data/unlock/stock_unlock` | `stock_code`, `start_date`, `end_date`, `page`, `page_size` | `限售解禁.md` |
@@ -150,6 +153,7 @@
 | [`tdx_board_index`](#api-tdx-board-index) | 通达信板块指数最新快照 | `GET` | `api/v1/market/data/tdx-board-index` | `ts_code`, `board_name`, `board_type`, `board_type_code`, `market`, `page`, `page_size` | `通达信板块指数最新快照.md` |
 | [`tdx_board_members`](#api-tdx-board-members) | 通达信板块成分股最新快照 | `GET` | `api/v1/market/data/tdx-board-members` | `ts_code`, `board_name`, `board_type`, `board_type_code`, `con_code`, `con_name`, `market`, `page`, `page_size` | `通达信板块成分股最新快照.md` |
 | [`ths_board_kline`](#api-ths-board-kline) | 同花顺板块K线 | `GET` | `api/v1/market/data/ths-board-kline` | `board_code`, `page`, `page_size` | `同花顺板块K线.md` |
+| [`ths_board_constituents`](#api-ths-board-constituents) | 同花顺板块成分股 | `GET` | `api/v1/market/data/ths-board-constituents` | `board_code`, `board_name`, `board_type`, `date`, `page`, `page_size` | `同花顺板块成分股.md` |
 | [`stock_signal_latest_snapshot`](#api-stock-signal-latest-snapshot) | 信号最新快照 | `GET` | `api/v3/market/data/stock-signal-latest-snapshot` | `signal_type`, `page`, `page_size` | `信号最新快照.md` |
 | [`ths_stock_daily_flow`](#api-ths-stock-daily-flow) | 同花顺个股资金流日度 | `GET` | `api/v1/market/data/ths-stock-daily-flow` | `start_date`, `end_date`, `code`, `name`, `page`, `page_size` | `同花顺个股资金流日度.md` |
 | [`ths_concept_daily_flow`](#api-ths-concept-daily-flow) | 同花顺概念板块资金流日度 | `GET` | `api/v1/market/data/ths-concept-daily-flow` | `start_date`, `end_date`, `board_name`, `page`, `page_size` | `同花顺概念板块资金流日度.md` |
@@ -260,9 +264,11 @@
 | [`fut_settle`](#api-fut-settle) | 期货每日结算参数 | `GET` | `api/v1/market/data/futures/fut-settle` | `ts_code`, `trade_date`, `start_date`, `end_date`, `exchange`, `page`, `page_size` | `期货每日结算参数.md` |
 | [`fut_weekly_detail`](#api-fut-weekly-detail) | 期货主要品种交易周报 | `GET` | `api/v1/market/data/futures/fut-weekly-detail` | `week`, `prd`, `start_week`, `end_week`, `exchange`, `page`, `page_size` | `期货主要品种交易周报.md` |
 | [`fut_wsr`](#api-fut-wsr) | 期货仓单日报 | `GET` | `api/v1/market/data/futures/fut-wsr` | `trade_date`, `start_date`, `end_date`, `symbol`, `exchange`, `page`, `page_size` | `期货仓单日报.md` |
-| [`futures_contract_kline`](#api-futures-contract-kline) | 期货行情 | `GET` | `api/v1/market/data/futures/kline` | `symbol`, `interval`, `start`, `end`, `limit` | `期货行情.md` |
-| [`futures_minutes`](#api-futures-minutes) | 期货历史分钟行情 | `GET` | `api/v2/market/data/futures_minutes` | `symbol`, `interval`, `start`, `end`, `limit` | `期货历史分钟行情.md` |
+| [`futures_kline`](#api-futures-kline) | 期货合约历史K线 | `GET` | `api/v1/market/data/futures/kline` | `symbol`, `interval`, `start`, `end`, `limit` | `期货合约历史K线.md` |
+| [`futures_kline_batch`](#api-futures-kline-batch) | 批量期货合约历史K线 | `GET` | `api/v2/market/data/futures/kline/batch` | `symbols`, `interval`, `start`, `end`, `limit` | `批量期货合约历史K线.md` |
+| [`futures_minutes`](#api-futures-minutes) | 期货历史分钟K线 | `GET` | `api/v2/market/data/futures_minutes` | `symbol`, `symbols`, `interval`, `start`, `end`, `limit` | `期货历史分钟K线.md` |
 | [`futures_minutes_realtime`](#api-futures-minutes-realtime) | 期货实时分钟K线 | `GET` | `api/v4/market/data/futures_minutes/realtime` | `symbols` | `期货实时分钟K线.md` |
+| [`futures_realtime_day_kline`](#api-futures-realtime-day-kline) | 期货实时日K线 | `GET` | `api/v4/market/data/futures-realtime-day-kline` | `symbols` | `期货实时日K线.md` |
 | [`futures_nanhua_index_kline`](#api-futures-nanhua-index-kline) | 南华期货指数日K线 | `GET` | `api/v1/market/data/futures/nanhua-index-kline` | `code`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `南华期货指数日K线.md` |
 | [`major_contract`](#api-major-contract) | 重大合同 | `GET` | `api/v1/market/data/corporate/contract` | `start_date`, `end_date` | `重大合同.md` |
 | [`major_contract_by_symbol`](#api-major-contract-by-symbol) | 重大合同按标的 | `GET` | `api/v1/market/data/corporate/contract/by-symbol` | `symbol`, `page`, `page_size` | `重大合同按标的.md` |
@@ -697,22 +703,28 @@ Returns:
 
 <h4 id="api-eastmoney-board-constituents"><code>eastmoney_board_constituents</code></h4>
 
-- 接口名称：东方财富板块成份股
+- 接口名称：东方财富板块成分股
 - HTTP：`GET`
 - Path：`api/v1/market/data/eastmoney-board-constituents`
-- 参数：`board_code`
-- 来源文档：`东方财富板块成份股.md`
+- 参数：`board_code`, `date`, `page`, `page_size`
+- 来源文档：`东方财富板块成分股.md`
 - 原始接口：`eastmoney_board_constituents`
 
 ```text
-东方财富板块成份股.
+东方财富板块成分股.
 
 Endpoint: ``api/v1/market/data/eastmoney-board-constituents``.
 Method: ``GET``.
 Documented endpoint: ``eastmoney_board_constituents``.
 
 Args:
-    board_code: 板块代码，如 BK1024 (type: string; required: Y).
+    board_code: 板块代码，取东方财富板块代码（BK 开头），如 BK0475、BK0490、BK0153 (type: string; required: Y).
+    date: 查询日期，格式 YYYYMMDD；不传返回当前仍在板块内的成分股 (type: string; required: N).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -1893,6 +1905,19 @@ Returns:
     payloads when multi-page fetching is used with ``raw=True``.
 ```
 
+<h4 id="api-stock-candlesticks-daily"><code>stock_candlesticks_daily</code></h4>
+
+- 接口名称：股票日K快照
+- HTTP：`GET`
+- Path：`api/v1/market/data/stock-candlesticks-daily`
+- 参数：`trade_date`, `page`, `page_size`
+- 来源文档：`股票日K快照.md`
+- 原始接口：`stock_candlesticks_daily`
+
+```text
+股票日K快照.
+```
+
 <h4 id="api-stock-capital-flows"><code>stock_capital_flows</code></h4>
 
 - 接口名称：股票资金流向
@@ -2196,6 +2221,38 @@ Returns:
     A pandas ``DataFrame`` by default, Python rows when
     ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
     payloads when multi-page fetching is used with ``raw=True``.
+```
+
+<h4 id="api-stock-factor"><code>stock_factor</code></h4>
+
+- 接口名称：股票技术面因子
+- HTTP：`GET`
+- Path：`api/v2/market/data/stock-factor`
+- 参数：`symbol`, `trade_date`, `category`
+- 来源文档：`股票技术面因子.md`
+- 原始接口：`market_stock_factor`
+
+```text
+股票技术面因子.
+
+Endpoint: ``api/v2/market/data/stock-factor``.
+Method: ``GET``.
+Documented endpoint: ``market_stock_factor``.
+
+Args:
+    symbol: 沪深北 A 股代码，必须带交易所后缀，如 ``000001.SZ`` (type: string; required: Y).
+    trade_date: 目标日期 YYYYMMDD；不传时以当前日期为目标日期 (type: string; required: N).
+    category: 返回字段分类：``quote``、``valuation``、``capital``、``trend``、``momentum``、``volatility``、``volume`` 或 ``sentiment``；不传时返回全部字段 (type: string; required: N).
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``。服务端把因子放在
+    ``data.values``，SDK 直接返回该对象（``as_dataframe=True`` 时为单行
+    ``DataFrame``）。
 ```
 
 <h4 id="api-stock-filter"><code>stock_filter</code></h4>
@@ -2924,20 +2981,26 @@ Returns:
 - 接口名称：股本
 - HTTP：`GET`
 - Path：`api/v2/market/data/share/get-stock-share`
-- 参数：`stock_code`, `date`
+- 参数：`stock_code`, `date`, `date_type`, `page`, `page_size`
 - 来源文档：`股本.md`
 - 原始接口：`get_stock_share`
 
 ```text
 股本.
 
-Endpoint: ``api/v1/market/data/share/get-stock-share``.
+Endpoint: ``api/v2/market/data/share/get-stock-share``.
 Method: ``GET``.
 Documented endpoint: ``get_stock_share``.
 
 Args:
-    stock_code: 股票代码 (type: string; required: Y).
+    stock_code: 股票代码；不传时查询指定日期的全市场股本 (type: string; required: N).
     date: 日期 YYYYMMDD (type: string; required: Y).
+    date_type: 日期条件类型：``publish_date``（发布日期，默认）或 ``end_date``（生效日期） (type: string; required: N).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -3235,6 +3298,33 @@ Returns:
     payloads when multi-page fetching is used with ``raw=True``.
 ```
 
+<h4 id="api-stk-code-change-timeline"><code>stk_code_change_timeline</code></h4>
+
+- 接口名称：A股代码变更时间线
+- HTTP：`GET`
+- Path：`api/v1/market/data/stk_code_change_timeline`
+- 参数：-
+- 来源文档：`A股代码变更时间线.md`
+- 原始接口：`stk_code_change_timeline`
+
+```text
+A股代码变更时间线.
+
+Endpoint: ``api/v1/market/data/stk_code_change_timeline``.
+Method: ``GET``.
+Documented endpoint: ``stk_code_change_timeline``.
+
+Args:
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``.
+```
+
 <h4 id="api-tdx-board-members"><code>tdx_board_members</code></h4>
 
 - 接口名称：通达信板块成分股最新快照
@@ -3401,6 +3491,19 @@ Returns:
     A pandas ``DataFrame`` by default, Python rows when
     ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
     payloads when multi-page fetching is used with ``raw=True``.
+```
+
+<h4 id="api-ths-board-constituents"><code>ths_board_constituents</code></h4>
+
+- 接口名称：同花顺板块成分股
+- HTTP：`GET`
+- Path：`api/v1/market/data/ths-board-constituents`
+- 参数：`board_code`, `board_name`, `board_type`, `date`, `page`, `page_size`
+- 来源文档：`同花顺板块成分股.md`
+- 原始接口：`ths_board_constituents`
+
+```text
+同花顺板块成分股.
 ```
 
 <h4 id="api-xueqiu-rank"><code>xueqiu_rank</code></h4>
@@ -5020,21 +5123,21 @@ Returns:
     payloads when multi-page fetching is used with ``raw=True``.
 ```
 
-<h4 id="api-futures-contract-kline"><code>futures_contract_kline</code></h4>
+<h4 id="api-futures-kline"><code>futures_kline</code></h4>
 
-- 接口名称：期货行情
+- 接口名称：期货合约历史K线
 - HTTP：`GET`
 - Path：`api/v1/market/data/futures/kline`
 - 参数：`symbol`, `interval`, `start`, `end`, `limit`
-- 来源文档：`期货行情.md`
-- 原始接口：`futures_contract_kline`
+- 来源文档：`期货合约历史K线.md`
+- 原始接口：`futures_kline`
 
 ```text
-期货行情.
+期货合约历史K线.
 
 Endpoint: ``api/v1/market/data/futures/kline``.
 Method: ``GET``.
-Documented endpoint: ``futures_contract_kline``.
+Documented endpoint: ``futures_kline``.
 
 Args:
     symbol: 期货合约代码 (type: string; required: Y).
@@ -5052,27 +5155,60 @@ Returns:
     ``as_dataframe=False``, or raw JSON when ``raw=True``.
 ```
 
+<h4 id="api-futures-kline-batch"><code>futures_kline_batch</code></h4>
+
+- 接口名称：批量期货合约历史K线
+- HTTP：`GET`
+- Path：`api/v2/market/data/futures/kline/batch`
+- 参数：`symbols`, `interval`, `start`, `end`, `limit`
+- 来源文档：`批量期货合约历史K线.md`
+- 原始接口：`futures_kline_batch`
+
+```text
+批量期货合约历史K线.
+
+Endpoint: ``api/v2/market/data/futures/kline/batch``.
+Method: ``GET``.
+Documented endpoint: ``futures_kline_batch``.
+
+Args:
+    symbols: 1～20 个期货合约代码；支持重复参数、逗号分隔或列表 (type: string[]; required: Y).
+    interval: K 线周期，默认 ``daily`` (type: string; required: N).
+    start: 起始时间戳，单位毫秒 (type: integer; required: N).
+    end: 结束时间戳，单位毫秒，不能单独传 (type: integer; required: N).
+    limit: 每个合约返回条数上限，默认 500 (type: integer; required: N).
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, or raw JSON when ``raw=True``.
+```
+
 <h4 id="api-futures-minutes"><code>futures_minutes</code></h4>
 
-- 接口名称：期货历史分钟行情
+- 接口名称：期货历史分钟K线
 - HTTP：`GET`
 - Path：`api/v2/market/data/futures_minutes`
-- 参数：`symbol`, `interval`, `start`, `end`, `limit`
-- 来源文档：`期货历史分钟行情.md`
+- 参数：`symbol`, `symbols`, `interval`, `start`, `end`, `limit`
+- 来源文档：`期货历史分钟K线.md`
 - 原始接口：`futures_minutes`
 
 ```text
-期货历史分钟行情.
+期货历史分钟K线.
 
 Endpoint: ``api/v2/market/data/futures_minutes``.
 Method: ``GET``.
 Documented endpoint: ``futures_minutes``.
 
 Args:
-    symbol: 期货合约代码，带交易所短后缀 (type: string; required: Y).
+    symbol: 单个期货合约代码，带交易所短后缀；与 ``symbols`` 二选一 (type: string; required: N).
+    symbols: 1～20 个期货合约代码；支持重复参数、逗号分隔或列表；与 ``symbol`` 二选一 (type: string[]; required: N).
     interval: 分钟周期，默认 ``1min`` (type: string; required: N).
-    start: 起始时间戳，单位毫秒 (type: integer; required: N).
-    end: 结束时间戳，单位毫秒，不能单独传 (type: integer; required: N).
+    start: 起始时间戳，单位毫秒；必填 (type: integer; required: Y).
+    end: 结束时间戳，单位毫秒；必填，不能单独传 (type: integer; required: Y).
     limit: 返回条数上限，范围 1～1000 (type: integer; required: N).
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
@@ -5147,6 +5283,34 @@ Returns:
     A pandas ``DataFrame`` by default, Python rows when
     ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
     payloads when multi-page fetching is used with ``raw=True``.
+```
+
+<h4 id="api-futures-realtime-day-kline"><code>futures_realtime_day_kline</code></h4>
+
+- 接口名称：期货实时日K线
+- HTTP：`GET`
+- Path：`api/v4/market/data/futures-realtime-day-kline`
+- 参数：`symbols`
+- 来源文档：`期货实时日K线.md`
+- 原始接口：`futures_realtime_day_kline`
+
+```text
+期货实时日K线.
+
+Endpoint: ``api/v4/market/data/futures-realtime-day-kline``.
+Method: ``GET``.
+Documented endpoint: ``futures_realtime_day_kline``.
+
+Args:
+    symbols: 1～20 个期货合约代码；支持重复参数、逗号分隔或列表 (type: string[]; required: Y).
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, or raw JSON when ``raw=True``.
 ```
 
 <h4 id="api-major-contract"><code>major_contract</code></h4>

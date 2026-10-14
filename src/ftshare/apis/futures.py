@@ -298,6 +298,7 @@ class FuturesApiMixin:
     def futures_minutes(
         self,
         symbol: Any | None = None,
+        symbols: Any | None = None,
         interval: Any | None = None,
         start: Any | None = None,
         end: Any | None = None,
@@ -308,17 +309,18 @@ class FuturesApiMixin:
         as_dataframe: bool = True,
         **kwargs: Any,
     ) -> Any:
-        """期货历史分钟行情.
+        """期货历史分钟K线.
 
         Endpoint: ``api/v2/market/data/futures_minutes``.
         Method: ``GET``.
         Documented endpoint: ``futures_minutes``.
 
         Args:
-            symbol: 期货合约代码，带交易所短后缀 (type: string; required: Y).
+            symbol: 单个期货合约代码，带交易所短后缀；与 ``symbols`` 二选一 (type: string; required: N).
+            symbols: 1～20 个期货合约代码；支持重复参数、逗号分隔或列表；与 ``symbol`` 二选一 (type: string[]; required: N).
             interval: 分钟周期，默认 ``1min`` (type: string; required: N).
-            start: 起始时间戳，单位毫秒 (type: integer; required: N).
-            end: 结束时间戳，单位毫秒，不能单独传 (type: integer; required: N).
+            start: 起始时间戳，单位毫秒；必填 (type: integer; required: Y).
+            end: 结束时间戳，单位毫秒；必填，不能单独传 (type: integer; required: Y).
             limit: 返回条数上限，范围 1～1000 (type: integer; required: N).
             raw: Return the decoded JSON payload without tabular extraction.
             fields: Optional field list or comma-separated field string applied after extraction.
@@ -331,6 +333,7 @@ class FuturesApiMixin:
         """
         request_params = {
             'symbol': symbol,
+            'symbols': symbols,
             'interval': interval,
             'start': start,
             'end': end,
@@ -345,7 +348,7 @@ class FuturesApiMixin:
             **request_params,
         )
 
-    def futures_contract_kline(
+    def futures_kline(
         self,
         symbol: Any | None = None,
         interval: Any | None = None,
@@ -358,11 +361,11 @@ class FuturesApiMixin:
         as_dataframe: bool = True,
         **kwargs: Any,
     ) -> Any:
-        """期货行情.
+        """期货合约历史K线.
 
         Endpoint: ``api/v1/market/data/futures/kline``.
         Method: ``GET``.
-        Documented endpoint: ``futures_contract_kline``.
+        Documented endpoint: ``futures_kline``.
 
         Args:
             symbol: 期货合约代码 (type: string; required: Y).
@@ -388,7 +391,57 @@ class FuturesApiMixin:
         }
         request_params.update(kwargs)
         return self._call_endpoint(
-            'futures_contract_kline',
+            'futures_kline',
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
+
+    def futures_kline_batch(
+        self,
+        symbols: Any | None = None,
+        interval: Any | None = None,
+        start: Any | None = None,
+        end: Any | None = None,
+        limit: Any | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """批量期货合约历史K线.
+
+        Endpoint: ``api/v2/market/data/futures/kline/batch``.
+        Method: ``GET``.
+        Documented endpoint: ``futures_kline_batch``.
+
+        Args:
+            symbols: 1～20 个期货合约代码；支持重复参数、逗号分隔或列表 (type: string[]; required: Y).
+            interval: K 线周期，默认 ``daily`` (type: string; required: N).
+            start: 起始时间戳，单位毫秒 (type: integer; required: N).
+            end: 结束时间戳，单位毫秒，不能单独传 (type: integer; required: N).
+            limit: 每个合约返回条数上限，默认 500 (type: integer; required: N).
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, or raw JSON when ``raw=True``.
+        """
+        request_params = {
+            'symbols': symbols,
+            'interval': interval,
+            'start': start,
+            'end': end,
+            'limit': limit,
+        }
+        request_params.update(kwargs)
+        return self._call_endpoint(
+            'futures_kline_batch',
             raw=raw,
             fields=fields,
             as_dataframe=as_dataframe,
@@ -430,6 +483,43 @@ class FuturesApiMixin:
             as_dataframe=as_dataframe,
             **request_params,
         )
+
+    def futures_realtime_day_kline(
+        self,
+        symbols: Any | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """期货实时日K线.
+
+        Endpoint: ``api/v4/market/data/futures-realtime-day-kline``.
+        Method: ``GET``.
+        Documented endpoint: ``futures_realtime_day_kline``.
+
+        Args:
+            symbols: 1～20 个期货合约代码；支持重复参数、逗号分隔或列表 (type: string[]; required: Y).
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, or raw JSON when ``raw=True``.
+        """
+        request_params = {'symbols': symbols}
+        request_params.update(kwargs)
+        return self._call_endpoint(
+            'futures_realtime_day_kline',
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
+
     def fut_wsr(
         self,
         trade_date: Any | None = None,

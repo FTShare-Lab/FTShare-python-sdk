@@ -81,10 +81,11 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
     },
     'eastmoney_board_constituents': {
         'path': 'api/v1/market/data/eastmoney-board-constituents',
-        'title': '东方财富板块成份股',
-        'doc_file': '东方财富板块成份股.md',
+        'title': '东方财富板块成分股',
+        'doc_file': '东方财富板块成分股.md',
         'original_api': 'eastmoney_board_constituents',
-        'params': ('board_code',),
+        'params': ('board_code', 'date', 'page', 'page_size'),
+        'max_page_size': 500,
     },
     'eastmoney_board_daily_kline': {
         'path': 'api/v1/market/data/eastmoney-board-daily-ohlc',
@@ -519,7 +520,15 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'title': '股本',
         'doc_file': '股本.md',
         'original_api': 'get_stock_share',
-        'params': ('stock_code', 'date'),
+        'params': ('stock_code', 'date', 'date_type', 'page', 'page_size'),
+        'max_page_size': 500,
+    },
+    'stock_factor': {
+        'path': 'api/v2/market/data/stock-factor',
+        'title': '股票技术面因子',
+        'doc_file': '股票技术面因子.md',
+        'original_api': 'market_stock_factor',
+        'params': ('symbol', 'trade_date', 'category'),
     },
     'stock_ggcg_em': {
         'path': 'api/v1/market/data/holder/stock-ggcg-em',
@@ -535,6 +544,13 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'doc_file': 'A股代码变更.md',
         'original_api': 'get_stk_code_change',
         'params': ('trade_code', 'start_date', 'end_date'),
+    },
+    'stk_code_change_timeline': {
+        'path': 'api/v1/market/data/stk_code_change_timeline',
+        'title': 'A股代码变更时间线',
+        'doc_file': 'A股代码变更时间线.md',
+        'original_api': 'stk_code_change_timeline',
+        'params': (),
     },
     'stk_status_change': {
         'path': 'api/v1/market/data/stk-status-change',
@@ -960,6 +976,24 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'original_api': 'news_reaction_snapshot',
         'params': ('symbol', 'start_date', 'end_date', 'lookback_hours', 'page', 'page_size'),
         'max_page_size': 200,
+    },
+
+    'stock_candlesticks_daily': {
+        'path': 'api/v1/market/data/stock-candlesticks-daily',
+        'title': '股票日K快照',
+        'doc_file': '股票日K快照.md',
+        'original_api': 'stock_candlesticks_daily',
+        'params': ('trade_date', 'page', 'page_size'),
+        'max_page_size': 500,
+    },
+
+    'ths_board_constituents': {
+        'path': 'api/v1/market/data/ths-board-constituents',
+        'title': '同花顺板块成分股',
+        'doc_file': '同花顺板块成分股.md',
+        'original_api': 'ths_board_constituents',
+        'params': ('board_code', 'board_name', 'board_type', 'date', 'page', 'page_size'),
+        'max_page_size': 1000,
     },
 
 })
