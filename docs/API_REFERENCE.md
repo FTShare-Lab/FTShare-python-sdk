@@ -5501,7 +5501,7 @@ Args:
     symbols: 1～20 个可转债代码；支持重复参数、逗号分隔或 JSON 字符串数组（与 symbol 二选一） (type: string[]; required: N).
     interval_value: 分钟周期：仅支持 1、5、15，默认 1 (type: enum; required: N).
     since_ts_millis: 起始时间戳，单位毫秒；单只、批量都必须提供 (type: int(ms); required: Y).
-    until_ts_millis: 结束时间戳，单位毫秒；不得早于 since，且单次跨度不超过 3 个自然日 (type: int(ms); required: Y).
+    until_ts_millis: 结束时间戳，单位毫秒；不得早于 since，且单次跨度不超过 30 个北京时间自然日（包含起止日期，非交易日也计入） (type: int(ms); required: Y).
     limit: 每只标的聚合后最多返回条数，范围 1～1000；省略返回窗口内全部记录 (type: int; required: N).
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
