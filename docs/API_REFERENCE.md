@@ -251,7 +251,6 @@
 ### 期货数据
 
 | [`eastmoney_futures_strange`](#api-eastmoney-futures-strange) | 东方财富期货龙虎榜 | `GET` | `api/v1/market/data/eastmoney-futures-strange` | `exchange`, `variety`, `contract`, `trade_date` | `东方财富期货龙虎榜.md` |
-| [`futures_minutes_batch`](#api-futures-minutes-batch) | 批量期货历史分钟行情 | `GET` | `api/v2/market/data/futures_minutes/batch` | `symbols`, `interval`, `start`, `end`, `limit` | `批量期货历史分钟行情.md` |
 | [`member_build_process`](#api-member-build-process) | 会员建仓过程 | `GET` | `api/v2/market/data/member-build-process` | `exchange`, `member_name`, `instrument_id`, `start_date`, `end_date`, `contract_multiplier`, `page`, `page_size` | `会员建仓过程.md` |
 | [`member_position_ranking`](#api-member-position-ranking) | 会员持仓排名 | `GET` | `api/v2/market/data/member-position-ranking` | `exchange`, `instrument_id`, `trade_date`, `direction`, `page`, `page_size` | `会员持仓排名.md` |
 
@@ -5172,7 +5171,7 @@ Method: ``GET``.
 Documented endpoint: ``futures_kline_batch``.
 
 Args:
-    symbols: 1～20 个期货合约代码；支持重复参数、逗号分隔或列表 (type: string[]; required: Y).
+    symbols: 1～20 个期货合约代码；使用逗号分隔，兼容重复参数 (type: string; required: Y).
     interval: K 线周期，默认 ``daily`` (type: string; required: N).
     start: 起始时间戳，单位毫秒 (type: integer; required: N).
     end: 结束时间戳，单位毫秒，不能单独传 (type: integer; required: N).
@@ -5205,7 +5204,7 @@ Documented endpoint: ``futures_minutes``.
 
 Args:
     symbol: 单个期货合约代码，带交易所短后缀；与 ``symbols`` 二选一 (type: string; required: N).
-    symbols: 1～20 个期货合约代码；支持重复参数、逗号分隔或列表；与 ``symbol`` 二选一 (type: string[]; required: N).
+    symbols: 1～20 个期货合约代码；使用逗号分隔，兼容重复参数；与 ``symbol`` 二选一 (type: string; required: N).
     interval: 分钟周期，默认 ``1min`` (type: string; required: N).
     start: 起始时间戳，单位毫秒；必填 (type: integer; required: Y).
     end: 结束时间戳，单位毫秒；必填，不能单独传 (type: integer; required: Y).
@@ -5237,7 +5236,7 @@ Method: ``GET``.
 Documented endpoint: ``futures_minutes_realtime``.
 
 Args:
-    symbols: 期货合约代码列表，1～20 个 (type: array; required: Y).
+    symbols: 逗号分隔的期货合约代码列表，1～20 个 (type: string; required: Y).
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -5302,7 +5301,7 @@ Method: ``GET``.
 Documented endpoint: ``futures_realtime_day_kline``.
 
 Args:
-    symbols: 1～20 个期货合约代码；支持重复参数、逗号分隔或列表 (type: string[]; required: Y).
+    symbols: 1～20 个期货合约代码；使用逗号分隔，兼容重复参数 (type: string; required: Y).
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -5463,7 +5462,7 @@ Method: ``GET``.
 Documented endpoint: ``convertible_bond_candlesticks_batch``.
 
 Args:
-    symbols: 可转债代码列表，1～20 个；支持重复参数、逗号分隔或 JSON 字符串数组 (type: string[]; required: Y).
+    symbols: 1～20 个可转债代码；使用逗号分隔，兼容重复参数和 JSON 字符串数组 (type: string; required: Y).
     interval_unit: 周期单位：Day/Week/Month/Year，大小写不敏感 (type: enum; required: Y).
     adjust_kind: 复权：None（默认，不复权）/Forward（前复权）/Backward（后复权） (type: enum; required: N).
     since_ts_millis: 起始时间戳，单位毫秒；不得晚于 until，且与 until 相差不超过 12 个自然月 (type: int(ms); required: Y).
@@ -5498,7 +5497,7 @@ Documented endpoint: ``convertible_bond_minute_candlesticks``.
 
 Args:
     symbol: 单只可转债代码（与 symbols 二选一，不能同时传） (type: string; required: N).
-    symbols: 1～20 个可转债代码；支持重复参数、逗号分隔或 JSON 字符串数组（与 symbol 二选一） (type: string[]; required: N).
+    symbols: 1～20 个可转债代码；使用逗号分隔，兼容重复参数和 JSON 字符串数组（与 symbol 二选一） (type: string; required: N).
     interval_value: 分钟周期：仅支持 1、5、15，默认 1 (type: enum; required: N).
     since_ts_millis: 起始时间戳，单位毫秒；单只、批量都必须提供 (type: int(ms); required: Y).
     until_ts_millis: 结束时间戳，单位毫秒；不得早于 since，且单次跨度不超过 30 个北京时间自然日（包含起止日期，非交易日也计入） (type: int(ms); required: Y).
@@ -6721,12 +6720,6 @@ Returns:
 - Path：`api/v1/market/data/eastmoney-futures-strange`
 - 参数：`exchange, variety, contract, trade_date`
 - 来源文档：`东方财富期货龙虎榜.md`
-
-<h4 id="api-futures-minutes-batch"><code>futures_minutes_batch</code></h4>
-
-- Path：`api/v2/market/data/futures_minutes/batch`
-- 参数：`symbols, interval, start, end, limit`
-- 来源文档：`批量期货历史分钟行情.md`
 
 <h4 id="api-member-build-process"><code>member_build_process</code></h4>
 

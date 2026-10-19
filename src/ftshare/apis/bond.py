@@ -80,7 +80,7 @@ class BondApiMixin:
         Documented endpoint: ``convertible_bond_candlesticks_batch``.
 
         Args:
-            symbols: 可转债代码列表，1～20 个；支持重复参数、逗号分隔或 JSON 字符串数组 (type: string[]; required: Y).
+            symbols: 1～20 个可转债代码；使用逗号分隔，兼容重复参数和 JSON 字符串数组 (type: string; required: Y).
             interval_unit: 周期单位：Day/Week/Month/Year，大小写不敏感 (type: enum; required: Y).
             adjust_kind: 复权：None（默认，不复权）/Forward（前复权）/Backward（后复权） (type: enum; required: N).
             since_ts_millis: 起始时间戳，单位毫秒；不得晚于 until，且与 until 相差不超过 12 个自然月 (type: int(ms); required: Y).
@@ -96,7 +96,7 @@ class BondApiMixin:
             ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
             payloads when multi-page fetching is used with ``raw=True``.
         """
-        request_params = {'symbols': symbols, 'interval_unit': interval_unit, 'adjust_kind': adjust_kind, 'since_ts_millis': since_ts_millis, 'until_ts_millis': until_ts_millis, 'limit': limit}
+        request_params = {'symbols': symbols_to_csv_string(symbols), 'interval_unit': interval_unit, 'adjust_kind': adjust_kind, 'since_ts_millis': since_ts_millis, 'until_ts_millis': until_ts_millis, 'limit': limit}
         request_params.update(kwargs)
         return self._call_endpoint(
             'convertible_bond_candlesticks_batch',
@@ -128,7 +128,7 @@ class BondApiMixin:
 
         Args:
             symbol: 单只可转债代码（与 symbols 二选一，不能同时传） (type: string; required: N).
-            symbols: 1～20 个可转债代码；支持重复参数、逗号分隔或 JSON 字符串数组（与 symbol 二选一） (type: string[]; required: N).
+            symbols: 1～20 个可转债代码；使用逗号分隔，兼容重复参数和 JSON 字符串数组（与 symbol 二选一） (type: string; required: N).
             interval_value: 分钟周期：仅支持 1、5、15，默认 1 (type: enum; required: N).
             since_ts_millis: 起始时间戳，单位毫秒；单只、批量都必须提供 (type: int(ms); required: Y).
             until_ts_millis: 结束时间戳，单位毫秒；不得早于 since，且单次跨度不超过 30 个北京时间自然日（包含起止日期，非交易日也计入） (type: int(ms); required: Y).
@@ -143,7 +143,7 @@ class BondApiMixin:
             ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
             payloads when multi-page fetching is used with ``raw=True``.
         """
-        request_params = {'symbol': symbol, 'symbols': symbols, 'interval_value': interval_value, 'since_ts_millis': since_ts_millis, 'until_ts_millis': until_ts_millis, 'limit': limit}
+        request_params = {'symbol': symbol, 'symbols': symbols_to_csv_string(symbols), 'interval_value': interval_value, 'since_ts_millis': since_ts_millis, 'until_ts_millis': until_ts_millis, 'limit': limit}
         request_params.update(kwargs)
         return self._call_endpoint(
             'convertible_bond_minute_candlesticks',

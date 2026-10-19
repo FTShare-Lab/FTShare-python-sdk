@@ -20,7 +20,6 @@ pytestmark = pytest.mark.integration
 # server moves.
 KNOWN_SERVER_ISSUES: dict[str, str] = {
     "ashare_news_sentiment_factors": "HTTP 502 下游服务请求失败 for every parameter combination",
-    "futures_minutes_batch": "HTTP 404 请求的资源不存在 — route absent on the test server",
 }
 
 
