@@ -350,7 +350,6 @@ def test_requested_endpoint_api_versions():
         "eastmoney_futures_strange": "api/v1/market/data/eastmoney-futures-strange",
         "member_build_process": "api/v2/market/data/member-build-process",
         "member_position_ranking": "api/v2/market/data/member-position-ranking",
-        "futures_minutes_batch": "api/v2/market/data/futures_minutes/batch",
         "hsi_daily_weight": "api/v1/market/data/hk/hsi-daily-weight",
         "stk_ah_comparison": "api/v1/market/data/hk/stk-ah-comparison",
         "sw_index_history_minutes": "api/v1/market/data/sw-index/history-minutes",
@@ -382,12 +381,13 @@ def test_requested_endpoint_api_versions():
     assert {name: ENDPOINTS[name].path for name in expected_paths} == expected_paths
 
 
-def test_new_batch_endpoints_forward_symbols_and_documented_parameters():
+def test_new_batch_endpoints_forward_symbols_as_comma_separated_string():
     cases = [
         (
             "stock_candlesticks_batch",
+            ["600519.SH", "000001.SZ"],
+            "600519.SH,000001.SZ",
             {
-                "symbols": '["600519.SH"]',
                 "interval_unit": "day",
                 "adjust_kind": "forward",
                 "since_ts_millis": 1784048400000,
@@ -397,8 +397,9 @@ def test_new_batch_endpoints_forward_symbols_and_documented_parameters():
         ),
         (
             "etf_candlesticks_batch",
+            ["510300.SH", "159915.SZ"],
+            "510300.SH,159915.SZ",
             {
-                "symbols": '["510300.SH"]',
                 "interval_unit": "day",
                 "adjust_kind": "forward",
                 "since_ts_millis": 1784048400000,
@@ -408,8 +409,9 @@ def test_new_batch_endpoints_forward_symbols_and_documented_parameters():
         ),
         (
             "index_candlesticks_batch",
+            ["000300.SH", "000905.SH"],
+            "000300.SH,000905.SH",
             {
-                "symbols": '["000300.SH"]',
                 "interval_unit": "day",
                 "adjust_kind": "forward",
                 "since_ts_millis": 1784048400000,
@@ -419,8 +421,9 @@ def test_new_batch_endpoints_forward_symbols_and_documented_parameters():
         ),
         (
             "stock_minutes_batch",
+            ["600519.SH", "000001.SZ"],
+            "600519.SH,000001.SZ",
             {
-                "symbols": '["600519.SH"]',
                 "interval_value": 1,
                 "adjust_kind": "none",
                 "since_ts_millis": 1784048400000,
@@ -430,8 +433,9 @@ def test_new_batch_endpoints_forward_symbols_and_documented_parameters():
         ),
         (
             "etf_minutes_batch",
+            ["510300.SH", "159915.SZ"],
+            "510300.SH,159915.SZ",
             {
-                "symbols": '["510300.SH"]',
                 "interval_value": 1,
                 "adjust_kind": "none",
                 "since_ts_millis": 1784048400000,
@@ -441,8 +445,9 @@ def test_new_batch_endpoints_forward_symbols_and_documented_parameters():
         ),
         (
             "index_minutes_batch",
+            ["000300.SH", "000905.SH"],
+            "000300.SH,000905.SH",
             {
-                "symbols": '["000300.SH"]',
                 "interval_value": 1,
                 "since_ts_millis": 1784048400000,
                 "until_ts_millis": 1784050200000,
@@ -450,25 +455,28 @@ def test_new_batch_endpoints_forward_symbols_and_documented_parameters():
             },
         ),
         (
-            "futures_minutes_batch",
-            {
-                "symbols": '["A2609.DCE"]',
-                "interval": "1min",
-                "start": 1784048400000,
-                "end": 1784050200000,
-                "limit": 5,
-            },
+            "futures_minutes_realtime",
+            ["A2609.DCE", "CU2609.SHF"],
+            "A2609.DCE,CU2609.SHF",
+            {},
         ),
     ]
 
-    for method_name, kwargs in cases:
+    for method_name, symbols, expected_symbols, kwargs in cases:
         session = FakeSession([FakeResponse(payload=[])])
         client = FtshareClient(session=session)
 
-        getattr(client, method_name)(as_dataframe=False, **kwargs)
+        getattr(client, method_name)(symbols=symbols, as_dataframe=False, **kwargs)
 
         assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + ENDPOINTS[method_name].path
-        assert session.calls[0]["params"] == kwargs
+        assert session.calls[0]["params"] == {"symbols": expected_symbols, **kwargs}
+
+    session = FakeSession([FakeResponse(payload=[])])
+    client = FtshareClient(session=session)
+
+    client.stock_candlesticks_batch(symbols='["600519.SH"]', interval_unit="day", since_ts_millis=1784048400000, until_ts_millis=1784050200000, as_dataframe=False)
+
+    assert session.calls[0]["params"]["symbols"] == '["600519.SH"]'
 
 
 def test_eastmoney_etf_flow_allows_page_size_up_to_1000():
@@ -764,7 +772,7 @@ def test_etf_share_and_net_value_reject_page_size_above_200():
         client.etf_net_value(etf_code="510300", page_size=201)
 
 
-def test_realtime_kline_methods_serialize_symbols_list_to_json():
+def test_realtime_kline_methods_serialize_symbols_list_to_csv():
     realtime_payload = {"code": 200, "message": "success", "data": [{"symbol": "600519.SH", "items": [], "total": 0}]}
     methods = [
         "stock_realtime_day_kline",
@@ -781,7 +789,7 @@ def test_realtime_kline_methods_serialize_symbols_list_to_json():
 
         getattr(client, method_name)(symbols=["600519.SH", "000001.SZ"], as_dataframe=False)
 
-        assert session.calls[0]["params"] == {"symbols": '["600519.SH", "000001.SZ"]'}
+        assert session.calls[0]["params"] == {"symbols": "600519.SH,000001.SZ"}
 
     session = FakeSession([FakeResponse(payload=realtime_payload)])
     client = FtshareClient(session=session)
@@ -789,6 +797,14 @@ def test_realtime_kline_methods_serialize_symbols_list_to_json():
     client.stock_realtime_day_kline(symbols='["600519.SH"]', as_dataframe=False)
 
     assert session.calls[0]["params"] == {"symbols": '["600519.SH"]'}
+
+
+def test_abnormal_trading_methods_accept_documented_500_row_page_size():
+    client = FtshareClient(session=FakeSession([]))
+
+    for method_name in ("abnormal_trading_details", "abnormal_trading_overview"):
+        with pytest.raises(ValueError, match="page_size must be between 1 and 500"):
+            getattr(client, method_name)(page_size=501)
 
 
 def test_futures_kline_batch_and_realtime_day_kline_forward_symbols_list():
@@ -806,7 +822,7 @@ def test_futures_kline_batch_and_realtime_day_kline_forward_symbols_list():
 
     assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v2/market/data/futures/kline/batch"
     assert session.calls[0]["params"] == {
-        "symbols": ["A2611.DCE", "M2611.DCE"],
+        "symbols": "A2611.DCE,M2611.DCE",
         "interval": "daily",
         "start": 1790784000000,
         "end": 1791647999000,
@@ -819,7 +835,7 @@ def test_futures_kline_batch_and_realtime_day_kline_forward_symbols_list():
     client.futures_realtime_day_kline(symbols=["A2611.DCE", "CU2611.SHF"], as_dataframe=False)
 
     assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v4/market/data/futures-realtime-day-kline"
-    assert session.calls[0]["params"] == {"symbols": ["A2611.DCE", "CU2611.SHF"]}
+    assert session.calls[0]["params"] == {"symbols": "A2611.DCE,CU2611.SHF"}
 
 
 def test_futures_minutes_forwards_symbols_for_batch_queries():
@@ -837,7 +853,7 @@ def test_futures_minutes_forwards_symbols_for_batch_queries():
 
     assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v2/market/data/futures_minutes"
     assert session.calls[0]["params"] == {
-        "symbols": ["A2611.DCE", "CU2611.SHF"],
+        "symbols": "A2611.DCE,CU2611.SHF",
         "interval": "5min",
         "start": 1791475200000,
         "end": 1791647999000,
@@ -1336,7 +1352,7 @@ def test_convertible_bond_kline_family_forwards_documented_parameters():
             "convertible_bond_candlesticks_batch",
             "api/v2/market/data/convertible-bond-candlesticks/batch",
             kline,
-            {"symbols": ["113042.SH", "123107.SZ"], "interval_unit": "Day", "since_ts_millis": 1786291200000, "until_ts_millis": 1786377599999, "limit": 1},
+            {"symbols": "113042.SH,123107.SZ", "interval_unit": "Day", "since_ts_millis": 1786291200000, "until_ts_millis": 1786377599999, "limit": 1},
         ),
         (
             "convertible_bond_minute_candlesticks",
@@ -1366,7 +1382,7 @@ def test_convertible_bond_kline_family_forwards_documented_parameters():
     )
 
     assert session.calls[0]["params"] == {
-        "symbols": ["113042.SH", "123107.SZ"],
+        "symbols": "113042.SH,123107.SZ",
         "since_ts_millis": 1786291200000,
         "until_ts_millis": 1786377599999,
     }
@@ -1377,7 +1393,7 @@ def test_convertible_bond_kline_family_forwards_documented_parameters():
 
         getattr(client, method_name)(symbols=["113042.SH", "123107.SZ"], as_dataframe=False)
 
-        assert session.calls[0]["params"] == {"symbols": '["113042.SH", "123107.SZ"]'}
+        assert session.calls[0]["params"] == {"symbols": "113042.SH,123107.SZ"}
 
 
 def test_stock_intraday_forwards_range_days_and_ts_ms():

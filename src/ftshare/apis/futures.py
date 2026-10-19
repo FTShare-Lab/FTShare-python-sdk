@@ -6,6 +6,7 @@ from collections.abc import Sequence
 from typing import Any
 
 from ..endpoints import ENDPOINTS
+from ..params import symbols_to_csv_string
 
 
 class FuturesApiMixin:
@@ -317,7 +318,7 @@ class FuturesApiMixin:
 
         Args:
             symbol: 单个期货合约代码，带交易所短后缀；与 ``symbols`` 二选一 (type: string; required: N).
-            symbols: 1～20 个期货合约代码；支持重复参数、逗号分隔或列表；与 ``symbol`` 二选一 (type: string[]; required: N).
+            symbols: 1～20 个期货合约代码；使用逗号分隔，兼容重复参数；与 ``symbol`` 二选一 (type: string; required: N).
             interval: 分钟周期，默认 ``1min`` (type: string; required: N).
             start: 起始时间戳，单位毫秒；必填 (type: integer; required: Y).
             end: 结束时间戳，单位毫秒；必填，不能单独传 (type: integer; required: Y).
@@ -333,7 +334,7 @@ class FuturesApiMixin:
         """
         request_params = {
             'symbol': symbol,
-            'symbols': symbols,
+            'symbols': symbols_to_csv_string(symbols),
             'interval': interval,
             'start': start,
             'end': end,
@@ -418,7 +419,7 @@ class FuturesApiMixin:
         Documented endpoint: ``futures_kline_batch``.
 
         Args:
-            symbols: 1～20 个期货合约代码；支持重复参数、逗号分隔或列表 (type: string[]; required: Y).
+            symbols: 1～20 个期货合约代码；使用逗号分隔，兼容重复参数 (type: string; required: Y).
             interval: K 线周期，默认 ``daily`` (type: string; required: N).
             start: 起始时间戳，单位毫秒 (type: integer; required: N).
             end: 结束时间戳，单位毫秒，不能单独传 (type: integer; required: N).
@@ -433,7 +434,7 @@ class FuturesApiMixin:
             ``as_dataframe=False``, or raw JSON when ``raw=True``.
         """
         request_params = {
-            'symbols': symbols,
+            'symbols': symbols_to_csv_string(symbols),
             'interval': interval,
             'start': start,
             'end': end,
@@ -464,7 +465,7 @@ class FuturesApiMixin:
         Documented endpoint: ``futures_minutes_realtime``.
 
         Args:
-            symbols: 期货合约代码列表，1～20 个 (type: array; required: Y).
+            symbols: 逗号分隔的期货合约代码列表，1～20 个 (type: string; required: Y).
             raw: Return the decoded JSON payload without tabular extraction.
             fields: Optional field list or comma-separated field string applied after extraction.
             as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -474,7 +475,7 @@ class FuturesApiMixin:
             A pandas ``DataFrame`` by default, Python rows when
             ``as_dataframe=False``, or raw JSON when ``raw=True``.
         """
-        request_params = {'symbols': symbols}
+        request_params = {'symbols': symbols_to_csv_string(symbols)}
         request_params.update(kwargs)
         return self._call_endpoint(
             'futures_minutes_realtime',
@@ -500,7 +501,7 @@ class FuturesApiMixin:
         Documented endpoint: ``futures_realtime_day_kline``.
 
         Args:
-            symbols: 1～20 个期货合约代码；支持重复参数、逗号分隔或列表 (type: string[]; required: Y).
+            symbols: 1～20 个期货合约代码；使用逗号分隔，兼容重复参数 (type: string; required: Y).
             raw: Return the decoded JSON payload without tabular extraction.
             fields: Optional field list or comma-separated field string applied after extraction.
             as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -510,7 +511,7 @@ class FuturesApiMixin:
             A pandas ``DataFrame`` by default, Python rows when
             ``as_dataframe=False``, or raw JSON when ``raw=True``.
         """
-        request_params = {'symbols': symbols}
+        request_params = {'symbols': symbols_to_csv_string(symbols)}
         request_params.update(kwargs)
         return self._call_endpoint(
             'futures_realtime_day_kline',
@@ -847,9 +848,3 @@ class FuturesApiMixin:
         params = {'exchange': exchange, 'instrument_id': instrument_id, 'trade_date': trade_date, 'direction': direction}
         params.update(kwargs)
         return self.get_paginated(ENDPOINTS['member_position_ranking'].path, page=page, page_size=page_size, limit=limit, all_pages=all_pages, max_pages=max_pages, raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
-
-    def futures_minutes_batch(self, symbols: Any | None = None, interval: Any | None = None, start: Any | None = None, end: Any | None = None, limit: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
-        """批量期货历史分钟行情."""
-        params = {'symbols': symbols, 'interval': interval, 'start': start, 'end': end, 'limit': limit}
-        params.update(kwargs)
-        return self._call_endpoint('futures_minutes_batch', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)

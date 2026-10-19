@@ -146,12 +146,5 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'original_api': 'member_position_ranking',
         'params': ('exchange', 'instrument_id', 'trade_date', 'direction', 'page', 'page_size'),
     },
-    'futures_minutes_batch': {
-        'path': 'api/v2/market/data/futures_minutes/batch',
-        'title': '批量期货历史分钟行情',
-        'doc_file': '批量期货历史分钟行情.md',
-        'original_api': 'futures_minutes_batch',
-        'params': ('symbols', 'interval', 'start', 'end', 'limit'),
-    },
 
 })

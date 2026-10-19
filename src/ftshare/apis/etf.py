@@ -7,7 +7,7 @@ from collections.abc import Sequence
 from typing import Any
 
 from ..endpoints import ENDPOINTS
-from ..params import symbols_to_json_string
+from ..params import symbols_to_csv_string
 
 
 class EtfApiMixin:
@@ -330,20 +330,20 @@ class EtfApiMixin:
 
     def etf_realtime_minute_kline(self, symbols: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
         """ETF实时分钟K线."""
-        params = {'symbols': symbols_to_json_string(symbols)}
+        params = {'symbols': symbols_to_csv_string(symbols)}
         params.update(kwargs)
         return self._call_endpoint('etf_realtime_minute_kline', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
 
 
     def etf_realtime_day_kline(self, symbols: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
         """ETF实时日K线."""
-        params = {'symbols': symbols_to_json_string(symbols)}
+        params = {'symbols': symbols_to_csv_string(symbols)}
         params.update(kwargs)
         return self._call_endpoint('etf_realtime_day_kline', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
 
     def etf_minutes_batch(self, symbols: Any | None = None, interval_value: Any | None = None, adjust_kind: Any | None = None, since_ts_millis: Any | None = None, until_ts_millis: Any | None = None, limit: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
         """批量ETF历史分钟行情."""
-        params = {'symbols': symbols, 'interval_value': interval_value, 'adjust_kind': adjust_kind, 'since_ts_millis': since_ts_millis, 'until_ts_millis': until_ts_millis, 'limit': limit}
+        params = {'symbols': symbols_to_csv_string(symbols), 'interval_value': interval_value, 'adjust_kind': adjust_kind, 'since_ts_millis': since_ts_millis, 'until_ts_millis': until_ts_millis, 'limit': limit}
         params.update(kwargs)
         return self._call_endpoint('etf_minutes_batch', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
 
@@ -429,7 +429,7 @@ class EtfApiMixin:
 
     def etf_candlesticks_batch(self, symbols: Any | None = None, interval_unit: Any | None = None, adjust_kind: Any | None = None, since_ts_millis: Any | None = None, until_ts_millis: Any | None = None, limit: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
         """批量ETFK线."""
-        params = {'symbols': symbols, 'interval_unit': interval_unit, 'adjust_kind': adjust_kind, 'since_ts_millis': since_ts_millis, 'until_ts_millis': until_ts_millis, 'limit': limit}
+        params = {'symbols': symbols_to_csv_string(symbols), 'interval_unit': interval_unit, 'adjust_kind': adjust_kind, 'since_ts_millis': since_ts_millis, 'until_ts_millis': until_ts_millis, 'limit': limit}
         params.update(kwargs)
         return self._call_endpoint('etf_candlesticks_batch', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
 
