@@ -7,7 +7,7 @@ from collections.abc import Sequence
 from typing import Any
 
 from ..endpoints import ENDPOINTS
-from ..params import symbols_to_json_string
+from ..params import symbols_to_csv_string
 
 
 class EtfApiMixin:
@@ -330,14 +330,14 @@ class EtfApiMixin:
 
     def etf_realtime_minute_kline(self, symbols: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
         """ETF实时分钟K线."""
-        params = {'symbols': symbols_to_json_string(symbols)}
+        params = {'symbols': symbols_to_csv_string(symbols)}
         params.update(kwargs)
         return self._call_endpoint('etf_realtime_minute_kline', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
 
 
     def etf_realtime_day_kline(self, symbols: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
         """ETF实时日K线."""
-        params = {'symbols': symbols_to_json_string(symbols)}
+        params = {'symbols': symbols_to_csv_string(symbols)}
         params.update(kwargs)
         return self._call_endpoint('etf_realtime_day_kline', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
 

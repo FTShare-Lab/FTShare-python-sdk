@@ -12,6 +12,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'doc_file': '龙虎榜明细.md',
         'original_api': 'abnormal_trading_details',
         'params': ('date', 'page', 'page_size'),
+        'max_page_size': 500,
     },
     'abnormal_trading_overview': {
         'path': 'api/v1/market/data/abnormal-trading-overview',
@@ -19,6 +20,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'doc_file': '龙虎榜总览.md',
         'original_api': 'abnormal_trading_overview',
         'params': ('date', 'page', 'page_size'),
+        'max_page_size': 500,
     },
     'auction_results': {
         'path': 'api/v2/market/data/auction-results',

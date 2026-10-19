@@ -764,7 +764,7 @@ def test_etf_share_and_net_value_reject_page_size_above_200():
         client.etf_net_value(etf_code="510300", page_size=201)
 
 
-def test_realtime_kline_methods_serialize_symbols_list_to_json():
+def test_realtime_kline_methods_serialize_symbols_list_to_csv():
     realtime_payload = {"code": 200, "message": "success", "data": [{"symbol": "600519.SH", "items": [], "total": 0}]}
     methods = [
         "stock_realtime_day_kline",
@@ -781,7 +781,7 @@ def test_realtime_kline_methods_serialize_symbols_list_to_json():
 
         getattr(client, method_name)(symbols=["600519.SH", "000001.SZ"], as_dataframe=False)
 
-        assert session.calls[0]["params"] == {"symbols": '["600519.SH", "000001.SZ"]'}
+        assert session.calls[0]["params"] == {"symbols": "600519.SH,000001.SZ"}
 
     session = FakeSession([FakeResponse(payload=realtime_payload)])
     client = FtshareClient(session=session)
@@ -789,6 +789,14 @@ def test_realtime_kline_methods_serialize_symbols_list_to_json():
     client.stock_realtime_day_kline(symbols='["600519.SH"]', as_dataframe=False)
 
     assert session.calls[0]["params"] == {"symbols": '["600519.SH"]'}
+
+
+def test_abnormal_trading_methods_accept_documented_500_row_page_size():
+    client = FtshareClient(session=FakeSession([]))
+
+    for method_name in ("abnormal_trading_details", "abnormal_trading_overview"):
+        with pytest.raises(ValueError, match="page_size must be between 1 and 500"):
+            getattr(client, method_name)(page_size=501)
 
 
 def test_futures_kline_batch_and_realtime_day_kline_forward_symbols_list():
@@ -1377,7 +1385,7 @@ def test_convertible_bond_kline_family_forwards_documented_parameters():
 
         getattr(client, method_name)(symbols=["113042.SH", "123107.SZ"], as_dataframe=False)
 
-        assert session.calls[0]["params"] == {"symbols": '["113042.SH", "123107.SZ"]'}
+        assert session.calls[0]["params"] == {"symbols": "113042.SH,123107.SZ"}
 
 
 def test_stock_intraday_forwards_range_days_and_ts_ms():

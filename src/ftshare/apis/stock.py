@@ -6,7 +6,7 @@ from collections.abc import Sequence
 from typing import Any
 
 from ..endpoints import ENDPOINTS
-from ..params import symbols_to_json_string
+from ..params import symbols_to_csv_string
 
 
 def _present_params(params: dict[str, Any]) -> list[str]:
@@ -1554,7 +1554,7 @@ class StockApiMixin:
 
         Args:
             symbol: 股票代码，如 600522 (type: string; required: N).
-            trade_date: 交易日 YYYYMMDD；与 start_date/end_date 互斥 (type: string; required: N).
+            trade_date: 交易日 YYYYMMDD；可与 start_date/end_date 按 AND 条件组合过滤 (type: string; required: N).
             start_date: 区间起始日 YYYYMMDD；需与 end_date 同时提供 (type: string; required: N).
             end_date: 区间结束日 YYYYMMDD；需与 start_date 同时提供 (type: string; required: N).
             page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
@@ -2367,6 +2367,7 @@ class StockApiMixin:
             limit=limit,
             all_pages=all_pages,
             max_pages=max_pages,
+            max_page_size=500,
             raw=raw,
             fields=fields,
             as_dataframe=as_dataframe,
@@ -2415,6 +2416,7 @@ class StockApiMixin:
             limit=limit,
             all_pages=all_pages,
             max_pages=max_pages,
+            max_page_size=500,
             raw=raw,
             fields=fields,
             as_dataframe=as_dataframe,
@@ -4735,14 +4737,14 @@ class StockApiMixin:
 
     def stock_realtime_minute_kline(self, symbols: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
         """股票实时分钟K线."""
-        params = {'symbols': symbols_to_json_string(symbols)}
+        params = {'symbols': symbols_to_csv_string(symbols)}
         params.update(kwargs)
         return self._call_endpoint('stock_realtime_minute_kline', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
 
 
     def stock_realtime_day_kline(self, symbols: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
         """股票实时日K线."""
-        params = {'symbols': symbols_to_json_string(symbols)}
+        params = {'symbols': symbols_to_csv_string(symbols)}
         params.update(kwargs)
         return self._call_endpoint('stock_realtime_day_kline', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
 

@@ -971,7 +971,7 @@ Documented endpoint: ``get_eastmoney_stock_flow``.
 
 Args:
     symbol: 股票代码，如 600522 (type: string; required: N).
-    trade_date: 交易日 YYYYMMDD；与 start_date/end_date 互斥 (type: string; required: N).
+    trade_date: 交易日 YYYYMMDD；可与 start_date/end_date 按 AND 条件组合过滤 (type: string; required: N).
     start_date: 区间起始日 YYYYMMDD；需与 end_date 同时提供 (type: string; required: N).
     end_date: 区间结束日 YYYYMMDD；需与 start_date 同时提供 (type: string; required: N).
     page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
@@ -2920,7 +2920,7 @@ Returns:
 - HTTP：`GET`
 - Path：`api/v4/market/data/stock-realtime-day-kline`
 - 参数：`symbols`
-- 说明：`symbols` 支持 list/tuple（SDK 自动序列化为 JSON 字符串数组）或 JSON 字符串。
+- 说明：`symbols` 支持 list/tuple（SDK 自动序列化为逗号分隔字符串）或已是逗号分隔/JSON 字符串的代码列表。
 - 来源文档：`股票实时日K线.md`
 - 原始接口：`stock_realtime_day_kline`
 
@@ -2968,7 +2968,7 @@ Returns:
 - HTTP：`GET`
 - Path：`api/v4/market/data/stock-realtime-minute-kline`
 - 参数：`symbols`
-- 说明：`symbols` 支持 list/tuple（SDK 自动序列化为 JSON 字符串数组）或 JSON 字符串。
+- 说明：`symbols` 支持 list/tuple（SDK 自动序列化为逗号分隔字符串）或已是逗号分隔/JSON 字符串的代码列表。
 - 来源文档：`股票实时分钟K线.md`
 - 原始接口：`stock_realtime_minute_kline`
 
@@ -3799,7 +3799,7 @@ Returns:
 - HTTP：`GET`
 - Path：`api/v4/market/data/index-realtime-day-kline`
 - 参数：`symbols`
-- 说明：`symbols` 支持 list/tuple（SDK 自动序列化为 JSON 字符串数组）或 JSON 字符串。
+- 说明：`symbols` 支持 list/tuple（SDK 自动序列化为逗号分隔字符串）或已是逗号分隔/JSON 字符串的代码列表。
 - 来源文档：`指数实时日K线.md`
 - 原始接口：`index_realtime_day_kline`
 
@@ -3813,7 +3813,7 @@ Returns:
 - HTTP：`GET`
 - Path：`api/v4/market/data/index-realtime-minute-kline`
 - 参数：`symbols`
-- 说明：`symbols` 支持 list/tuple（SDK 自动序列化为 JSON 字符串数组）或 JSON 字符串。
+- 说明：`symbols` 支持 list/tuple（SDK 自动序列化为逗号分隔字符串）或已是逗号分隔/JSON 字符串的代码列表。
 - 来源文档：`指数实时分钟K线.md`
 - 原始接口：`index_realtime_minute_kline`
 
@@ -4233,7 +4233,7 @@ Returns:
 - HTTP：`GET`
 - Path：`api/v4/market/data/etf-realtime-day-kline`
 - 参数：`symbols`
-- 说明：`symbols` 支持 list/tuple（SDK 自动序列化为 JSON 字符串数组）或 JSON 字符串。
+- 说明：`symbols` 支持 list/tuple（SDK 自动序列化为逗号分隔字符串）或已是逗号分隔/JSON 字符串的代码列表。
 - 来源文档：`ETF实时日K线.md`
 - 原始接口：`etf_realtime_day_kline`
 
@@ -4247,7 +4247,7 @@ ETF实时日K线.
 - HTTP：`GET`
 - Path：`api/v4/market/data/etf-realtime-minute-kline`
 - 参数：`symbols`
-- 说明：`symbols` 支持 list/tuple（SDK 自动序列化为 JSON 字符串数组）或 JSON 字符串。
+- 说明：`symbols` 支持 list/tuple（SDK 自动序列化为逗号分隔字符串）或已是逗号分隔/JSON 字符串的代码列表。
 - 来源文档：`ETF实时分钟K线.md`
 - 原始接口：`etf_realtime_minute_kline`
 
@@ -5531,7 +5531,7 @@ Method: ``GET``.
 Documented endpoint: ``convertible_bond_realtime_day_kline``.
 
 Args:
-    symbols: 1～20 个可转债代码的 JSON 字符串数组，如 ``["113042.SH","123107.SZ"]``；单只也必须传单元素数组 (type: string; required: Y).
+    symbols: 1～20 个可转债代码的逗号分隔列表，如 ``113042.SH,123107.SZ``；也兼容 JSON 字符串数组格式；支持带交易所后缀和可推断市场的六码裸代码 (type: string; required: Y).
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -5559,7 +5559,7 @@ Method: ``GET``.
 Documented endpoint: ``convertible_bond_realtime_minute_kline``.
 
 Args:
-    symbols: 1～20 个可转债代码的 JSON 字符串数组，如 ``["113042.SH","123107.SZ"]``；单只也必须传单元素数组 (type: string; required: Y).
+    symbols: 1～20 个可转债代码的逗号分隔列表，如 ``113042.SH,123107.SZ``；也兼容 JSON 字符串数组格式；支持带交易所后缀和可推断市场的六码裸代码 (type: string; required: Y).
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.

@@ -6,7 +6,7 @@ from collections.abc import Sequence
 from typing import Any
 
 from ..endpoints import ENDPOINTS
-from ..params import symbols_to_json_string
+from ..params import symbols_to_csv_string
 
 
 class BondApiMixin:
@@ -161,7 +161,7 @@ class BondApiMixin:
         Documented endpoint: ``convertible_bond_realtime_day_kline``.
 
         Args:
-            symbols: 1～20 个可转债代码的 JSON 字符串数组，如 ``["113042.SH","123107.SZ"]``；单只也必须传单元素数组 (type: string; required: Y).
+            symbols: 1～20 个可转债代码的逗号分隔列表，如 ``113042.SH,123107.SZ``；也兼容 JSON 字符串数组格式；支持带交易所后缀和可推断市场的六码裸代码 (type: string; required: Y).
             raw: Return the decoded JSON payload without tabular extraction.
             fields: Optional field list or comma-separated field string applied after extraction.
             as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -171,7 +171,7 @@ class BondApiMixin:
             A pandas ``DataFrame`` by default, Python rows when
             ``as_dataframe=False``, or raw JSON when ``raw=True``.
         """
-        params = {'symbols': symbols_to_json_string(symbols)}
+        params = {'symbols': symbols_to_csv_string(symbols)}
         params.update(kwargs)
         return self._call_endpoint('convertible_bond_realtime_day_kline', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
 
@@ -183,7 +183,7 @@ class BondApiMixin:
         Documented endpoint: ``convertible_bond_realtime_minute_kline``.
 
         Args:
-            symbols: 1～20 个可转债代码的 JSON 字符串数组，如 ``["113042.SH","123107.SZ"]``；单只也必须传单元素数组 (type: string; required: Y).
+            symbols: 1～20 个可转债代码的逗号分隔列表，如 ``113042.SH,123107.SZ``；也兼容 JSON 字符串数组格式；支持带交易所后缀和可推断市场的六码裸代码 (type: string; required: Y).
             raw: Return the decoded JSON payload without tabular extraction.
             fields: Optional field list or comma-separated field string applied after extraction.
             as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -193,7 +193,7 @@ class BondApiMixin:
             A pandas ``DataFrame`` by default, Python rows when
             ``as_dataframe=False``, or raw JSON when ``raw=True``.
         """
-        params = {'symbols': symbols_to_json_string(symbols)}
+        params = {'symbols': symbols_to_csv_string(symbols)}
         params.update(kwargs)
         return self._call_endpoint('convertible_bond_realtime_minute_kline', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
 
