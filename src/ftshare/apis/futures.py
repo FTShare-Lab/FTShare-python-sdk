@@ -831,6 +831,58 @@ class FuturesApiMixin:
             **request_params,
         )
 
+    def index_fut_depth(
+        self,
+        trade_date: Any | None = None,
+        start_date: Any | None = None,
+        end_date: Any | None = None,
+        code_prefix: Any | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """股指期货与指数深度行情.
+
+        Endpoint: ``api/v1/market/data/index-fut/depth``.
+        Method: ``GET``.
+        Documented endpoint: ``index_fut_depth``.
+
+        Args:
+            trade_date: 单日查询日期 YYYYMMDD；不传日期参数时查询最新交易日，与 start_date、end_date 互斥 (type: string; required: N).
+            start_date: 历史区间起始交易日 YYYYMMDD；必须与 end_date 同时传入 (type: string; required: N).
+            end_date: 历史区间结束交易日 YYYYMMDD；必须与 start_date 同时传入，区间不能超过 3 年 (type: string; required: N).
+            code_prefix: 品种筛选，支持 ``IF`` / ``IC`` / ``IM`` / ``IH``，不区分大小写；不传返回全部品种 (type: string; required: N).
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, or raw JSON when ``raw=True``。服务端返回
+            ``data`` 对象（``count`` / ``futures`` / ``index`` / ``instrument_map``），
+            SDK 直接返回该对象（``as_dataframe=True`` 时为单行 DataFrame，
+            嵌套数组保留原样）。
+        """
+        request_params = {
+            'trade_date': trade_date,
+            'start_date': start_date,
+            'end_date': end_date,
+            'code_prefix': code_prefix,
+        }
+        request_params.update(kwargs)
+        path = ENDPOINTS['index_fut_depth'].path
+        return self.get(
+            path,
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            unwrap_bare_data=True,
+            **request_params,
+        )
+
     def eastmoney_futures_strange(self, exchange: Any | None = None, variety: Any | None = None, contract: Any | None = None, trade_date: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
         """东方财富期货龙虎榜."""
         params = {'exchange': exchange, 'variety': variety, 'contract': contract, 'trade_date': trade_date}

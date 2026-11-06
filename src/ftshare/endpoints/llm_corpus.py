@@ -6,6 +6,22 @@ from .types import Endpoint, build_endpoints
 
 
 ENDPOINTS: dict[str, Endpoint] = build_endpoints({
+    'market_announcements': {
+        'path': 'api/v2/market/data/announcements/market-announcements',
+        'title': '全市场公告列表',
+        'doc_file': '全市场公告列表.md',
+        'original_api': 'market_v2_announcements_market_announcements',
+        'params': ('keyword', 'category', 'stock_code', 'start_date', 'end_date', 'plate', 'column_type', 'page', 'page_size'),
+        'max_page_size': 500,
+    },
+    'periodic_reports': {
+        'path': 'api/v2/market/data/announcements/periodic-reports',
+        'title': '定期报告列表',
+        'doc_file': '定期报告列表.md',
+        'original_api': 'market_v2_announcements_periodic_reports',
+        'params': ('stock_code', 'report_type', 'report_year', 'document_variant', 'page', 'page_size'),
+        'max_page_size': 500,
+    },
     'semantic_search_news': {
         'path': 'api/v3/market/data/semantic-search-news',
         'title': '新闻语义搜索',

@@ -12,6 +12,145 @@ from ..endpoints import ENDPOINTS
 class LlmCorpusApiMixin:
     """Endpoint methods for the llm_corpus ftshare-doc topic."""
 
+    def market_announcements(
+        self,
+        keyword: Any | None = None,
+        category: Any | None = None,
+        stock_code: Any | None = None,
+        start_date: Any | None = None,
+        end_date: Any | None = None,
+        plate: Any | None = None,
+        column_type: Any | None = None,
+        page: int | None = None,
+        page_size: int | None = None,
+        limit: int | None = None,
+        all_pages: bool = False,
+        max_pages: int | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """全市场公告列表.
+
+        Endpoint: ``api/v2/market/data/announcements/market-announcements``.
+        Method: ``GET``.
+        Documented endpoint: ``market_v2_announcements_market_announcements``.
+
+        Args:
+            keyword: 公告标题关键字，子串匹配；去首尾空格后最长 60 字符 (type: string; required: N).
+            category: 公告分类，22 个允许值逗号分隔多选，任一命中即返回 (type: string; required: N).
+            stock_code: 股票代码；支持裸代码、短后缀、长后缀与冒号格式 (type: string; required: N).
+            start_date: 起始日期 YYYYMMDD；单独提供时查询该单日 (type: string; required: N).
+            end_date: 结束日期 YYYYMMDD；不能单独提供，须与 start_date 成对使用 (type: string; required: N).
+            plate: 板块，取值 ``sh`` / ``sz`` / ``sz_chi_next`` / ``sh_star`` / ``bj``，逗号分隔多选 (type: string; required: N).
+            column_type: 栏目，取值 ``stock`` / ``hke`` / ``fund`` / ``bond``，逗号分隔多选 (type: string; required: N).
+            page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+            page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+            limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+            all_pages: Fetch and combine pages until the server reports the last page.
+            max_pages: Optional safety cap for ``all_pages``.
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``.
+        """
+        request_params = {
+            'keyword': keyword,
+            'category': category,
+            'stock_code': stock_code,
+            'start_date': start_date,
+            'end_date': end_date,
+            'plate': plate,
+            'column_type': column_type,
+        }
+        request_params.update(kwargs)
+        path = ENDPOINTS['market_announcements'].path
+        return self.get_paginated(
+            path,
+            page=page,
+            page_size=page_size,
+            limit=limit,
+            all_pages=all_pages,
+            max_pages=max_pages,
+            max_page_size=ENDPOINTS['market_announcements'].max_page_size,
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
+
+    def periodic_reports(
+        self,
+        stock_code: Any | None = None,
+        report_type: Any | None = None,
+        report_year: Any | None = None,
+        document_variant: Any | None = None,
+        page: int | None = None,
+        page_size: int | None = None,
+        limit: int | None = None,
+        all_pages: bool = False,
+        max_pages: int | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """定期报告列表.
+
+        Endpoint: ``api/v2/market/data/announcements/periodic-reports``.
+        Method: ``GET``.
+        Documented endpoint: ``market_v2_announcements_periodic_reports``.
+
+        Args:
+            stock_code: 股票代码；支持裸代码、短后缀与长后缀（不支持冒号格式） (type: string; required: N).
+            report_type: 报告类型：``annual`` / ``semi_annual`` / ``q1`` / ``q3`` (type: string; required: N).
+            report_year: 报告年份，如 2025 (type: integer; required: N).
+            document_variant: 文件版本类型：``full`` / ``summary`` / ``english`` (type: string; required: N).
+            page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+            page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+            limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+            all_pages: Fetch and combine pages until the server reports the last page.
+            max_pages: Optional safety cap for ``all_pages``.
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``.
+        """
+        request_params = {
+            'stock_code': stock_code,
+            'report_type': report_type,
+            'report_year': report_year,
+            'document_variant': document_variant,
+        }
+        request_params.update(kwargs)
+        path = ENDPOINTS['periodic_reports'].path
+        return self.get_paginated(
+            path,
+            page=page,
+            page_size=page_size,
+            limit=limit,
+            all_pages=all_pages,
+            max_pages=max_pages,
+            max_page_size=ENDPOINTS['periodic_reports'].max_page_size,
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
+
     def shareholders_meeting(
         self,
         page: int | None = None,
