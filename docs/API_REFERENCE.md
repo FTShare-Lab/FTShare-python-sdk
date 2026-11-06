@@ -6,7 +6,7 @@
 
 | 指标 | 数量 |
 |---|---:|
-| SDK 方法总数 | 244 |
+| SDK 方法总数 | 248 |
 
 ## 专题分布
 
@@ -18,11 +18,11 @@
 | 指数专题 | 15 | `ftshare.apis.index` | `ftshare.endpoints.index` |
 | ETF专题 | 17 | `ftshare.apis.etf` | `ftshare.endpoints.etf` |
 | 公募基金 | 18 | `ftshare.apis.fund` | `ftshare.endpoints.fund` |
-| 期货数据 | 20 | `ftshare.apis.futures` | `ftshare.endpoints.futures` |
+| 期货数据 | 21 | `ftshare.apis.futures` | `ftshare.endpoints.futures` |
 | 债券专题 | 9 | `ftshare.apis.bond` | `ftshare.endpoints.bond` |
 | 宏观经济 | 23 | `ftshare.apis.economic` | `ftshare.endpoints.economic` |
-| 大模型语料 | 5 | `ftshare.apis.llm_corpus` | `ftshare.endpoints.llm_corpus` |
-| 现货数据 | 1 | `ftshare.apis.spot` | `ftshare.endpoints.spot` |
+| 大模型语料 | 7 | `ftshare.apis.llm_corpus` | `ftshare.endpoints.llm_corpus` |
+| 现货数据 | 2 | `ftshare.apis.spot` | `ftshare.endpoints.spot` |
 | 外汇数据 | 0 | `ftshare.apis.forex` | `ftshare.endpoints.forex` |
 
 ## 接口索引
@@ -269,6 +269,7 @@
 | [`futures_minutes_realtime`](#api-futures-minutes-realtime) | 期货实时分钟K线 | `GET` | `api/v4/market/data/futures_minutes/realtime` | `symbols` | `期货实时分钟K线.md` |
 | [`futures_realtime_day_kline`](#api-futures-realtime-day-kline) | 期货实时日K线 | `GET` | `api/v4/market/data/futures-realtime-day-kline` | `symbols` | `期货实时日K线.md` |
 | [`futures_nanhua_index_kline`](#api-futures-nanhua-index-kline) | 南华期货指数日K线 | `GET` | `api/v1/market/data/futures/nanhua-index-kline` | `code`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `南华期货指数日K线.md` |
+| [`index_fut_depth`](#api-index-fut-depth) | 股指期货与指数深度行情 | `GET` | `api/v1/market/data/index-fut/depth` | `trade_date`, `start_date`, `end_date`, `code_prefix` | `股指期货与指数深度行情.md` |
 | [`major_contract`](#api-major-contract) | 重大合同 | `GET` | `api/v1/market/data/corporate/contract` | `start_date`, `end_date` | `重大合同.md` |
 | [`major_contract_by_symbol`](#api-major-contract-by-symbol) | 重大合同按标的 | `GET` | `api/v1/market/data/corporate/contract/by-symbol` | `symbol`, `page`, `page_size` | `重大合同按标的.md` |
 | [`major_contract_summary`](#api-major-contract-summary) | 重大合同汇总 | `GET` | `api/v1/market/data/corporate/contract/summary` | `page`, `page_size` | `重大合同汇总.md` |
@@ -319,6 +320,8 @@
 
 | SDK 方法 | 接口名称 | HTTP | Path | 参数 | 来源文档 |
 |---|---|---|---|---|---|
+| [`market_announcements`](#api-market-announcements) | 全市场公告列表 | `GET` | `api/v2/market/data/announcements/market-announcements` | `keyword`, `category`, `stock_code`, `start_date`, `end_date`, `plate`, `column_type`, `page`, `page_size` | `全市场公告列表.md` |
+| [`periodic_reports`](#api-periodic-reports) | 定期报告列表 | `GET` | `api/v2/market/data/announcements/periodic-reports` | `stock_code`, `report_type`, `report_year`, `document_variant`, `page`, `page_size` | `定期报告列表.md` |
 | [`semantic_search_news`](#api-semantic-search-news) | 新闻语义搜索 | `GET` | `api/v3/market/data/semantic-search-news` | `query`, `limit`, `year`, `start_time`, `end_time` | `新闻语义搜索.md` |
 | [`shareholders_meeting`](#api-shareholders-meeting) | 股东大会 | `GET` | `api/v1/market/data/corporate/meeting` | `page`, `page_size` | `股东大会.md` |
 | [`stock_announcements`](#api-stock-announcements) | 公告列表 | `GET` | `api/v2/market/data/announcements/stock-announcements` | `stock_code`, `start_date`, `end_date`, `type`, `page`, `page_size` | `公告列表.md` |
@@ -331,6 +334,7 @@
 | SDK 方法 | 接口名称 | HTTP | Path | 参数 | 来源文档 |
 |---|---|---|---|---|---|
 | [`bullion_price`](#api-bullion-price) | 贵金属价格 | `GET` | `api/v1/market/data/bullion/price` | `symbol`, `start_date`, `end_date`, `page`, `page_size` | `贵金属价格.md` |
+| [`sge_spot_description_all`](#api-sge-spot-description-all) | 上金所现货品种 | `GET` | `api/v1/market/data/sge-spot-description-all` | `category`, `active_only` | `上金所现货品种.md` |
 
 ## 接口详情
 
@@ -5312,6 +5316,40 @@ Returns:
     ``as_dataframe=False``, or raw JSON when ``raw=True``.
 ```
 
+<h4 id="api-index-fut-depth"><code>index_fut_depth</code></h4>
+
+- 接口名称：股指期货与指数深度行情
+- HTTP：`GET`
+- Path：`api/v1/market/data/index-fut/depth`
+- 参数：`trade_date`, `start_date`, `end_date`, `code_prefix`
+- 来源文档：`股指期货与指数深度行情.md`
+- 原始接口：`index_fut_depth`
+
+```text
+股指期货与指数深度行情.
+
+Endpoint: ``api/v1/market/data/index-fut/depth``.
+Method: ``GET``.
+Documented endpoint: ``index_fut_depth``.
+
+Args:
+    trade_date: 单日查询日期 YYYYMMDD；不传日期参数时查询最新交易日，与 start_date、end_date 互斥 (type: string; required: N).
+    start_date: 历史区间起始交易日 YYYYMMDD；必须与 end_date 同时传入 (type: string; required: N).
+    end_date: 历史区间结束交易日 YYYYMMDD；必须与 start_date 同时传入，区间不能超过 3 年 (type: string; required: N).
+    code_prefix: 品种筛选，支持 ``IF`` / ``IC`` / ``IM`` / ``IH``，不区分大小写；不传返回全部品种 (type: string; required: N).
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, or raw JSON when ``raw=True``。服务端返回
+    ``data`` 对象（``count`` / ``futures`` / ``index`` / ``instrument_map``），
+    SDK 直接返回该对象（``as_dataframe=True`` 时为单行 DataFrame，
+    嵌套数组保留原样）。
+```
+
 <h4 id="api-major-contract"><code>major_contract</code></h4>
 
 - 接口名称：重大合同
@@ -6390,6 +6428,83 @@ Returns:
 
 ### 大模型语料
 
+<h4 id="api-market-announcements"><code>market_announcements</code></h4>
+
+- 接口名称：全市场公告列表
+- HTTP：`GET`
+- Path：`api/v2/market/data/announcements/market-announcements`
+- 参数：`keyword`, `category`, `stock_code`, `start_date`, `end_date`, `plate`, `column_type`, `page`, `page_size`
+- 来源文档：`全市场公告列表.md`
+- 原始接口：`market_v2_announcements_market_announcements`
+
+```text
+全市场公告列表.
+
+Endpoint: ``api/v2/market/data/announcements/market-announcements``.
+Method: ``GET``.
+Documented endpoint: ``market_v2_announcements_market_announcements``.
+
+Args:
+    keyword: 公告标题关键字，子串匹配；去首尾空格后最长 60 字符 (type: string; required: N).
+    category: 公告分类，22 个允许值逗号分隔多选，任一命中即返回 (type: string; required: N).
+    stock_code: 股票代码；支持裸代码、短后缀、长后缀与冒号格式 (type: string; required: N).
+    start_date: 起始日期 YYYYMMDD；单独提供时查询该单日 (type: string; required: N).
+    end_date: 结束日期 YYYYMMDD；不能单独提供，须与 start_date 成对使用 (type: string; required: N).
+    plate: 板块，取值 ``sh`` / ``sz`` / ``sz_chi_next`` / ``sh_star`` / ``bj``，逗号分隔多选 (type: string; required: N).
+    column_type: 栏目，取值 ``stock`` / ``hke`` / ``fund`` / ``bond``，逗号分隔多选 (type: string; required: N).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
+```
+
+<h4 id="api-periodic-reports"><code>periodic_reports</code></h4>
+
+- 接口名称：定期报告列表
+- HTTP：`GET`
+- Path：`api/v2/market/data/announcements/periodic-reports`
+- 参数：`stock_code`, `report_type`, `report_year`, `document_variant`, `page`, `page_size`
+- 来源文档：`定期报告列表.md`
+- 原始接口：`market_v2_announcements_periodic_reports`
+
+```text
+定期报告列表.
+
+Endpoint: ``api/v2/market/data/announcements/periodic-reports``.
+Method: ``GET``.
+Documented endpoint: ``market_v2_announcements_periodic_reports``.
+
+Args:
+    stock_code: 股票代码；支持裸代码、短后缀与长后缀（不支持冒号格式） (type: string; required: N).
+    report_type: 报告类型：``annual`` / ``semi_annual`` / ``q1`` / ``q3`` (type: string; required: N).
+    report_year: 报告年份，如 2025 (type: integer; required: N).
+    document_variant: 文件版本类型：``full`` / ``summary`` / ``english`` (type: string; required: N).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page. The SDK validates this against the endpoint-specific maximum.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
+```
+
 <h4 id="api-semantic-search-news"><code>semantic_search_news</code></h4>
 
 - 接口名称：新闻语义搜索
@@ -6629,6 +6744,35 @@ Returns:
     A pandas ``DataFrame`` by default, Python rows when
     ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
     payloads when multi-page fetching is used with ``raw=True``.
+```
+
+<h4 id="api-sge-spot-description-all"><code>sge_spot_description_all</code></h4>
+
+- 接口名称：上金所现货品种
+- HTTP：`GET`
+- Path：`api/v1/market/data/sge-spot-description-all`
+- 参数：`category`, `active_only`
+- 来源文档：`上金所现货品种.md`
+- 原始接口：`sge_spot_description_all`
+
+```text
+上金所现货品种.
+
+Endpoint: ``api/v1/market/data/sge-spot-description-all``.
+Method: ``GET``.
+Documented endpoint: ``sge_spot_description_all``.
+
+Args:
+    category: 品种分类筛选：``spot_full`` 现货实盘 / ``spot_forward`` 现货即期 / ``spot_deferred`` 现货延期交收；不传返回全部分类 (type: string; required: N).
+    active_only: ``true`` 仅返回活跃品种（17 只）；不传、``false`` 或空串返回全部（含已下架品种） (type: bool; required: N).
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, or raw JSON when ``raw=True``.
 ```
 
 <h4 id="api-eastmoney-all-board-daily-kline"><code>eastmoney_all_board_daily_kline</code></h4>

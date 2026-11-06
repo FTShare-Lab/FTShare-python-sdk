@@ -1879,3 +1879,94 @@ def test_ths_board_constituents_allows_page_size_up_to_1000():
 
     with pytest.raises(ValueError, match="page_size must be between 1 and 1000"):
         client.ths_board_constituents(board_code="300082", page_size=1001)
+
+
+def test_sge_spot_description_all_forwards_filters():
+    rows = [{"symbol": "AUTD.SGEX", "category": "spot_deferred"}]
+    session = FakeSession([FakeResponse(payload={"code": 200, "message": "success", "data": rows})])
+    client = FtshareClient(session=session)
+
+    result = client.sge_spot_description_all(category="spot_deferred", active_only=True, as_dataframe=False)
+
+    assert result == rows
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/sge-spot-description-all"
+    assert session.calls[0]["params"] == {"category": "spot_deferred", "active_only": "true"}
+
+
+def test_market_announcements_forwards_filters_and_allows_page_size_500():
+    session = FakeSession([FakeResponse(payload=paginated_records([]))])
+    client = FtshareClient(session=session)
+
+    client.market_announcements(
+        keyword="年度报告",
+        category="annual",
+        stock_code="000001.SZ",
+        start_date="20261001",
+        end_date="20261031",
+        plate="sh",
+        column_type="stock",
+        page=1,
+        page_size=500,
+        as_dataframe=False,
+    )
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v2/market/data/announcements/market-announcements"
+    assert session.calls[0]["params"] == {
+        "keyword": "年度报告",
+        "category": "annual",
+        "stock_code": "000001.SZ",
+        "start_date": "20261001",
+        "end_date": "20261031",
+        "plate": "sh",
+        "column_type": "stock",
+        "page": 1,
+        "page_size": 500,
+    }
+
+    with pytest.raises(ValueError, match="page_size must be between 1 and 500"):
+        client.market_announcements(page_size=501)
+
+
+def test_periodic_reports_forwards_filters_and_allows_page_size_500():
+    session = FakeSession([FakeResponse(payload=paginated_records([]))])
+    client = FtshareClient(session=session)
+
+    client.periodic_reports(
+        stock_code="000001.SZ",
+        report_type="annual",
+        report_year=2025,
+        document_variant="full",
+        page=1,
+        page_size=500,
+        as_dataframe=False,
+    )
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v2/market/data/announcements/periodic-reports"
+    assert session.calls[0]["params"] == {
+        "stock_code": "000001.SZ",
+        "report_type": "annual",
+        "report_year": 2025,
+        "document_variant": "full",
+        "page": 1,
+        "page_size": 500,
+    }
+
+    with pytest.raises(ValueError, match="page_size must be between 1 and 500"):
+        client.periodic_reports(page_size=501)
+
+
+def test_index_fut_depth_unwraps_bare_object_data():
+    data = {
+        "count": 1,
+        "futures": [{"trade_date": "20261030", "code_prefix": "IF"}],
+        "index": [{"trade_date": "20261030", "symbol_id": 300, "name": "沪深300"}],
+        "instrument_map": {"fut_info": [], "index_info": []},
+    }
+    session = FakeSession([FakeResponse(payload={"code": 200, "message": "success", "data": data})])
+    client = FtshareClient(session=session)
+
+    result = client.index_fut_depth(trade_date="20261030", code_prefix="IF", as_dataframe=False)
+
+    assert result == data
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/index-fut/depth"
+    assert session.calls[0]["params"] == {"trade_date": "20261030", "code_prefix": "IF"}

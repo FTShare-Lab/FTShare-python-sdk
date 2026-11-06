@@ -13,4 +13,11 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'original_api': 'get_bullion_price',
         'params': ('symbol', 'start_date', 'end_date', 'page', 'page_size'),
     },
+    'sge_spot_description_all': {
+        'path': 'api/v1/market/data/sge-spot-description-all',
+        'title': '上金所现货品种',
+        'doc_file': '上金所现货品种.md',
+        'original_api': 'sge_spot_description_all',
+        'params': ('category', 'active_only'),
+    },
 })

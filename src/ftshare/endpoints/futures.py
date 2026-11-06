@@ -125,6 +125,14 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'params': ('code', 'trade_date', 'start_date', 'end_date', 'page', 'page_size'),
     },
 
+    'index_fut_depth': {
+        'path': 'api/v1/market/data/index-fut/depth',
+        'title': '股指期货与指数深度行情',
+        'doc_file': '股指期货与指数深度行情.md',
+        'original_api': 'index_fut_depth',
+        'params': ('trade_date', 'start_date', 'end_date', 'code_prefix'),
+    },
+
     'eastmoney_futures_strange': {
         'path': 'api/v1/market/data/eastmoney-futures-strange',
         'title': '东方财富期货龙虎榜',

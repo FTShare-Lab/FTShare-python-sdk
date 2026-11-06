@@ -5,6 +5,7 @@ from typing import Any
 
 
 SAMPLE_VALUES: dict[str, Any] = {
+    "active_only": True,
     "adjust": "Forward",
     "adjust_kind": "forward",
     "announcement_id": "announcement-1",
@@ -28,6 +29,8 @@ SAMPLE_VALUES: dict[str, Any] = {
     "classify_std": "证监会行业分类",
     "client_type": "一般",
     "code": "000001.SZ",
+    "code_prefix": "IF",
+    "column_type": "stock",
     "compat": "v2",
     "con_code": "000001",
     "con_name": "平安银行",
@@ -42,6 +45,7 @@ SAMPLE_VALUES: dict[str, Any] = {
     "date": "20260717",
     "days": 5,
     "direction": "forward",
+    "document_variant": "full",
     "end": "20260717",
     "end_date": "20260717",
     "end_week": "202630",
@@ -69,6 +73,7 @@ SAMPLE_VALUES: dict[str, Any] = {
     "invest_type": "all",
     "is_inoffice": "1",
     "is_last": True,
+    "keyword": "年度报告",
     "level": "1",
     "list_type": "热股",
     "limit": 5,
@@ -91,6 +96,7 @@ SAMPLE_VALUES: dict[str, Any] = {
     "page_size": 5,
     "pattern": "双重顶",
     "period": "2024",
+    "plate": "sh",
     "prd": "螺纹钢",
     "prediction_date": "20260717",
     "publish_date": "20260717",
@@ -101,6 +107,7 @@ SAMPLE_VALUES: dict[str, Any] = {
     "refresh": False,
     "report_date": 20260331,
     "report_type": "annual",
+    "report_year": 2025,
     "rept_type": "annual",
     "request_id": "request-1",
     "scope": "ChinaStock",
