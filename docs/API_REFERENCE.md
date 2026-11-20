@@ -6,7 +6,7 @@
 
 | 指标 | 数量 |
 |---|---:|
-| SDK 方法总数 | 248 |
+| SDK 方法总数 | 250 |
 
 ## 专题分布
 
@@ -15,10 +15,10 @@
 | 股票数据 | 131 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
 | 港股数据 | 3 | `ftshare.apis.hk` | `ftshare.endpoints.hk` |
 | 美股数据 | 2 | `ftshare.apis.us` | `ftshare.endpoints.us` |
-| 指数专题 | 15 | `ftshare.apis.index` | `ftshare.endpoints.index` |
+| 指数专题 | 16 | `ftshare.apis.index` | `ftshare.endpoints.index` |
 | ETF专题 | 17 | `ftshare.apis.etf` | `ftshare.endpoints.etf` |
 | 公募基金 | 18 | `ftshare.apis.fund` | `ftshare.endpoints.fund` |
-| 期货数据 | 21 | `ftshare.apis.futures` | `ftshare.endpoints.futures` |
+| 期货数据 | 22 | `ftshare.apis.futures` | `ftshare.endpoints.futures` |
 | 债券专题 | 9 | `ftshare.apis.bond` | `ftshare.endpoints.bond` |
 | 宏观经济 | 23 | `ftshare.apis.economic` | `ftshare.endpoints.economic` |
 | 大模型语料 | 7 | `ftshare.apis.llm_corpus` | `ftshare.endpoints.llm_corpus` |
@@ -197,6 +197,7 @@
 | [`index_realtime_minute_kline`](#api-index-realtime-minute-kline) | 指数实时分钟K线 | `GET` | `api/v4/market/data/index-realtime-minute-kline` | `symbols` | `指数实时分钟K线.md` |
 | [`index_weight_list`](#api-index-weight-list) | 指数权重列表 | `GET` | `api/v1/market/data/index/index_weight` | `index_code`, `date`, `page`, `page_size` | `指数权重列表.md` |
 | [`index_weight_summary`](#api-index-weight-summary) | 指数权重汇总 | `GET` | `api/v1/market/data/index/index_weight_summary` | `index_code`, `page`, `page_size` | `指数权重汇总.md` |
+| [`sw_index_daily_quotes`](#api-sw-index-daily-quotes) | 申万指数日行情 | `GET` | `api/v1/market/data/sw-index/daily-quotes` | `index_code`, `trade_date`, `start_date`, `end_date`, `index_type`, `page`, `page_size` | `申万指数日行情.md` |
 | [`sw_industry_constituent_history`](#api-sw-industry-constituent-history) | 申万行业成份股历史 | `GET` | `api/v1/market/data/sw-industry/constituent-history` | `industry_code` | `申万行业成份股历史.md` |
 | [`sw_industry_daily_metrics`](#api-sw-industry-daily-metrics) | 申万行业日度指标 | `GET` | `api/v1/market/data/sw-industry/daily-metrics` | `level`, `start_date`, `end_date`, `industry_code`, `page`, `page_size` | `申万行业日度指标.md` |
 | [`sw_industry_overview`](#api-sw-industry-overview) | 申万行业总览 | `GET` | `api/v1/market/data/sw-industry/overview` | `date`, `level`, `page`, `page_size` | `申万行业总览.md` |
@@ -263,9 +264,11 @@
 | [`fut_settle`](#api-fut-settle) | 期货每日结算参数 | `GET` | `api/v1/market/data/futures/fut-settle` | `ts_code`, `trade_date`, `start_date`, `end_date`, `exchange`, `page`, `page_size` | `期货每日结算参数.md` |
 | [`fut_weekly_detail`](#api-fut-weekly-detail) | 期货主要品种交易周报 | `GET` | `api/v1/market/data/futures/fut-weekly-detail` | `week`, `prd`, `start_week`, `end_week`, `exchange`, `page`, `page_size` | `期货主要品种交易周报.md` |
 | [`fut_wsr`](#api-fut-wsr) | 期货仓单日报 | `GET` | `api/v1/market/data/futures/fut-wsr` | `trade_date`, `start_date`, `end_date`, `symbol`, `exchange`, `page`, `page_size` | `期货仓单日报.md` |
+| [`futures_daily_kline`](#api-futures-daily-kline) | 期货官方日K与9999主连 | `GET` | `api/v1/market/data/futures/daily-kline` | `symbol`, `trade_date`, `start_date`, `end_date`, `rule_version`, `page`, `page_size` | `期货官方日K与9999主连.md` |
 | [`futures_kline`](#api-futures-kline) | 期货合约历史K线 | `GET` | `api/v1/market/data/futures/kline` | `symbol`, `interval`, `start`, `end`, `limit` | `期货合约历史K线.md` |
 | [`futures_kline_batch`](#api-futures-kline-batch) | 批量期货合约历史K线 | `GET` | `api/v2/market/data/futures/kline/batch` | `symbols`, `interval`, `start`, `end`, `limit` | `批量期货合约历史K线.md` |
 | [`futures_minutes`](#api-futures-minutes) | 期货历史分钟K线 | `GET` | `api/v2/market/data/futures_minutes` | `symbol`, `symbols`, `interval`, `start`, `end`, `limit` | `期货历史分钟K线.md` |
+| [`futures_minutes_single`](#api-futures-minutes-single) | 期货历史分钟K线单合约 | `GET` | `api/v2/market/data/futures_minutes/single` | `symbol`, `interval`, `start`, `end`, `limit` | `期货历史分钟K线单合约.md` |
 | [`futures_minutes_realtime`](#api-futures-minutes-realtime) | 期货实时分钟K线 | `GET` | `api/v4/market/data/futures_minutes/realtime` | `symbols` | `期货实时分钟K线.md` |
 | [`futures_realtime_day_kline`](#api-futures-realtime-day-kline) | 期货实时日K线 | `GET` | `api/v4/market/data/futures-realtime-day-kline` | `symbols` | `期货实时日K线.md` |
 | [`futures_nanhua_index_kline`](#api-futures-nanhua-index-kline) | 南华期货指数日K线 | `GET` | `api/v1/market/data/futures/nanhua-index-kline` | `code`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `南华期货指数日K线.md` |
@@ -1786,7 +1789,7 @@ Returns:
 ```text
 盘前数据.
 
-Endpoint: ``api/v1/market/data/stk-premarket``.
+Endpoint: ``api/v2/market/data/stk-premarket``.
 Method: ``GET``.
 Documented endpoint: ``stk_premarket``.
 
@@ -3893,6 +3896,45 @@ Returns:
     payloads when multi-page fetching is used with ``raw=True``.
 ```
 
+<h4 id="api-sw-index-daily-quotes"><code>sw_index_daily_quotes</code></h4>
+
+- 接口名称：申万指数日行情
+- HTTP：`GET`
+- Path：`api/v1/market/data/sw-index/daily-quotes`
+- 参数：`index_code`, `trade_date`, `start_date`, `end_date`, `index_type`, `page`, `page_size`
+- 来源文档：`申万指数日行情.md`
+- 原始接口：`sw_index_daily_quotes`
+
+```text
+申万指数日行情.
+
+Endpoint: ``api/v1/market/data/sw-index/daily-quotes``.
+Method: ``GET``.
+Documented endpoint: ``sw_index_daily_quotes``.
+
+Args:
+    index_code: 申万指数代码，如 ``801001``；也可带 ``.SI`` 后缀，如 ``801001.SI``，后缀不区分大小写 (type: string; required: N).
+    trade_date: 单个交易日 ``YYYYMMDD``，用于查询当日全市场截面；与 ``start_date``/``end_date`` 互斥 (type: string; required: N).
+    start_date: 起始日期 ``YYYYMMDD``，包含当天；不传 ``trade_date`` 时必填，且需与 ``end_date`` 同时提供 (type: string; required: N).
+    end_date: 截止日期 ``YYYYMMDD``，包含当天；不传 ``trade_date`` 时必填，且需与 ``start_date`` 同时提供 (type: string; required: N).
+    index_type: 指数分类，可取 ``一级行业`` / ``二级行业`` / ``三级行业`` / ``市场表征`` / ``风格指数`` / ``量化策略`` / ``新三板`` / ``大类风格``；空串视同未传 (type: string; required: N).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page, default 50. The SDK validates this against the endpoint-specific maximum of 200.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``。服务端
+    数值字段以字符串返回，``trade_date`` 为 ``YYYY-MM-DD``。
+```
+
 <h4 id="api-sw-industry-constituent-history"><code>sw_industry_constituent_history</code></h4>
 
 - 接口名称：申万行业成份股历史
@@ -4892,7 +4934,7 @@ Documented endpoint: ``get_china_futures_base_data_handler``.
 
 Args:
     trade_date: 交易日 YYYYMMDD；不传则使用前一交易日（CST） (type: int; required: N).
-    symbol: 合约全码如 A2605.DCE；大小写不敏感；不传或空表示该日全部 (type: string; required: N).
+    symbol: 不带交易所后缀的合约代码，如 ``CU2609``；请求不区分大小写；CZCE 真实合约必须使用四位年份代码（如 ``AP2612``）；不传或空表示该日全部 (type: string; required: N).
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -4990,7 +5032,7 @@ Method: ``GET``.
 Documented endpoint: ``ft_limit``.
 
 Args:
-    ts_code: 合约代码，例如 `A2609.DCE`、`CU2608.SHF`。 (type: string; required: N).
+    ts_code: 不带交易所后缀的合约代码，如 ``A2609``、``CU2608``；请求不区分大小写并兼容 Tushare 短后缀，响应统一返回完整交易所后缀 (type: string; required: N).
     trade_date: 单个交易日，格式 `YYYYMMDD`；不能与日期区间同时使用。`trade_date` 与 `start_date`+`end_date` 至少提供一组。 (type: integer; required: N).
     start_date: 开始交易日，格式 `YYYYMMDD`；须与 `end_date` 同时提供。 (type: integer; required: N).
     end_date: 结束交易日，格式 `YYYYMMDD`；须与 `start_date` 同时提供。 (type: integer; required: N).
@@ -5029,7 +5071,7 @@ Method: ``GET``.
 Documented endpoint: ``fut_settle``.
 
 Args:
-    ts_code: 合约代码。 (type: string; required: N).
+    ts_code: 不带交易所后缀的合约代码，如 ``A2609``；请求不区分大小写，CZCE 真实合约必须使用四位年份代码（如 ``AP2612``） (type: string; required: N).
     trade_date: 单个交易日，格式 `YYYYMMDD`；不能与日期区间同时使用。 (type: integer; required: N).
     start_date: 开始交易日，格式 `YYYYMMDD`；必须与 `end_date` 同时传入，且日期区间跨度不超过 31 天。 (type: integer; required: N).
     end_date: 结束交易日，格式 `YYYYMMDD`；必须与 `start_date` 同时传入。 (type: integer; required: N).
@@ -5126,6 +5168,44 @@ Returns:
     payloads when multi-page fetching is used with ``raw=True``.
 ```
 
+<h4 id="api-futures-daily-kline"><code>futures_daily_kline</code></h4>
+
+- 接口名称：期货官方日K与9999主连
+- HTTP：`GET`
+- Path：`api/v1/market/data/futures/daily-kline`
+- 参数：`symbol`, `trade_date`, `start_date`, `end_date`, `rule_version`, `page`, `page_size`
+- 来源文档：`期货官方日K与9999主连.md`
+- 原始接口：`futures_daily_kline`
+
+```text
+期货官方日K与9999主连.
+
+Endpoint: ``api/v1/market/data/futures/daily-kline``.
+Method: ``GET``.
+Documented endpoint: ``futures_daily_kline``.
+
+Args:
+    symbol: 期货合约或 9999 主连代码，交易所后缀可带可不带，如 ``A2405``、``A2405.DCE``、``A9999``、``A9999.DCE``；不带后缀时由服务端推断交易所。CZCE 真实合约必须使用四位年份代码（如 ``AP2612.CZCE``），三位代码返回成功空结果 (type: string; required: Y).
+    trade_date: 单个交易日 ``YYYYMMDD``；与 ``start_date``、``end_date`` 二选一 (type: string; required: N).
+    start_date: 范围查询起始交易日 ``YYYYMMDD``；必须与 ``end_date`` 成对传入，不能与 ``trade_date`` 同时传入 (type: string; required: N).
+    end_date: 范围查询结束交易日 ``YYYYMMDD``；必须与 ``start_date`` 成对传入，且不能早于 ``start_date`` (type: string; required: N).
+    rule_version: 9999 主连映射规则版本，默认 ``v1``；查询真实合约时无需传入 (type: string; required: N).
+    page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+    page_size: Rows per page, default 50. The SDK validates this against the endpoint-specific maximum of 500.
+    limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+    all_pages: Fetch and combine pages until the server reports the last page.
+    max_pages: Optional safety cap for ``all_pages``.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+    payloads when multi-page fetching is used with ``raw=True``.
+```
+
 <h4 id="api-futures-kline"><code>futures_kline</code></h4>
 
 - 接口名称：期货合约历史K线
@@ -5175,7 +5255,7 @@ Method: ``GET``.
 Documented endpoint: ``futures_kline_batch``.
 
 Args:
-    symbols: 1～20 个期货合约代码；使用逗号分隔，兼容重复参数 (type: string; required: Y).
+    symbols: 1～20 个不带交易所后缀的期货合约代码；使用逗号分隔，兼容重复参数；CZCE 真实合约必须使用四位年份代码 (type: string; required: Y).
     interval: K 线周期，默认 ``daily`` (type: string; required: N).
     start: 起始时间戳，单位毫秒 (type: integer; required: N).
     end: 结束时间戳，单位毫秒，不能单独传 (type: integer; required: N).
@@ -5207,12 +5287,12 @@ Method: ``GET``.
 Documented endpoint: ``futures_minutes``.
 
 Args:
-    symbol: 单个期货合约代码，带交易所短后缀；与 ``symbols`` 二选一 (type: string; required: N).
-    symbols: 1～20 个期货合约代码；使用逗号分隔，兼容重复参数；与 ``symbol`` 二选一 (type: string; required: N).
+    symbol: 单个期货合约代码，不带交易所后缀，如 ``A2611``；请求不区分大小写，CZCE 真实合约必须使用四位年份代码；与 ``symbols`` 二选一 (type: string; required: N).
+    symbols: 1～20 个不带交易所后缀的期货合约代码；使用逗号分隔，兼容重复参数；CZCE 真实合约必须使用四位年份代码；与 ``symbol`` 二选一 (type: string; required: N).
     interval: 分钟周期，默认 ``1min`` (type: string; required: N).
     start: 起始时间戳，单位毫秒；必填 (type: integer; required: Y).
     end: 结束时间戳，单位毫秒；必填，不能单独传 (type: integer; required: Y).
-    limit: 返回条数上限，范围 1～1000 (type: integer; required: N).
+    limit: 返回条数上限，范围 1～10000，批量时按每个合约分别限制 (type: integer; required: N).
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -5221,6 +5301,39 @@ Args:
 Returns:
     A pandas ``DataFrame`` by default, Python rows when
     ``as_dataframe=False``, or raw JSON when ``raw=True``.
+```
+
+<h4 id="api-futures-minutes-single"><code>futures_minutes_single</code></h4>
+
+- 接口名称：期货历史分钟K线单合约
+- HTTP：`GET`
+- Path：`api/v2/market/data/futures_minutes/single`
+- 参数：`symbol`, `interval`, `start`, `end`, `limit`
+- 来源文档：`期货历史分钟K线单合约.md`
+- 原始接口：`futures_minutes_single`
+
+```text
+期货历史分钟K线单合约.
+
+Endpoint: ``api/v2/market/data/futures_minutes/single``.
+Method: ``GET``.
+Documented endpoint: ``futures_minutes_single``.
+
+Args:
+    symbol: 单个期货合约代码，使用不带交易所后缀的裸代码，如 ``A2611``，不区分大小写；只接受 ``symbol``，传 ``symbols`` 会返回 HTTP 400 (type: string; required: Y).
+    interval: 分钟周期，默认 ``1min``；可选 ``1min`` / ``5min`` / ``15min`` / ``30min`` / ``60min`` (type: string; required: N).
+    start: 起始时间戳，单位毫秒，闭区间，按北京时间解释；必须与 ``end`` 同时传入 (type: integer; required: Y).
+    end: 结束时间戳，单位毫秒，闭区间；与 ``start`` 的时间跨度不得超过 3 个自然日（含首尾） (type: integer; required: Y).
+    limit: 返回的最新 K 线条数，默认 500，范围 1～10000 (type: integer; required: N).
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, or raw JSON when ``raw=True``。``data.total``
+    为查询范围内聚合后的总记录数，不受 ``limit`` 截断。
 ```
 
 <h4 id="api-futures-minutes-realtime"><code>futures_minutes_realtime</code></h4>
@@ -5240,7 +5353,7 @@ Method: ``GET``.
 Documented endpoint: ``futures_minutes_realtime``.
 
 Args:
-    symbols: 逗号分隔的期货合约代码列表，1～20 个 (type: string; required: Y).
+    symbols: 逗号分隔的不带交易所后缀的期货合约代码列表，1～20 个；CZCE 真实合约必须使用四位年份代码 (type: string; required: Y).
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
@@ -5305,7 +5418,7 @@ Method: ``GET``.
 Documented endpoint: ``futures_realtime_day_kline``.
 
 Args:
-    symbols: 1～20 个期货合约代码；使用逗号分隔，兼容重复参数 (type: string; required: Y).
+    symbols: 1～20 个不带交易所后缀的期货合约代码；使用逗号分隔，兼容重复参数；CZCE 真实合约必须使用四位年份代码 (type: string; required: Y).
     raw: Return the decoded JSON payload without tabular extraction.
     fields: Optional field list or comma-separated field string applied after extraction.
     as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.

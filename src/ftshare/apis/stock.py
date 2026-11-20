@@ -2840,7 +2840,7 @@ class StockApiMixin:
     ) -> Any:
         """盘前数据.
 
-        Endpoint: ``api/v1/market/data/stk-premarket``.
+        Endpoint: ``api/v2/market/data/stk-premarket``.
         Method: ``GET``.
         Documented endpoint: ``stk_premarket``.
 

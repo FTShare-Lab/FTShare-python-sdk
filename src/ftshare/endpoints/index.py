@@ -104,6 +104,13 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'original_api': 'sw_index_history_minutes',
         'params': ('index_code', 'start_date', 'end_date', 'page', 'page_size'),
     },
+    'sw_index_daily_quotes': {
+        'path': 'api/v1/market/data/sw-index/daily-quotes',
+        'title': '申万指数日行情',
+        'doc_file': '申万指数日行情.md',
+        'original_api': 'sw_index_daily_quotes',
+        'params': ('index_code', 'trade_date', 'start_date', 'end_date', 'index_type', 'page', 'page_size'),
+    },
     'index_minutes_batch': {
         'path': 'api/v2/market/data/index_minutes/batch',
         'title': '批量指数历史分钟行情',
