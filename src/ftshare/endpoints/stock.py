@@ -732,7 +732,7 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'title': 'A股新闻情绪因子',
         'doc_file': 'A股新闻情绪因子.md',
         'original_api': 'ashare_news_sentiment_factors',
-        'params': ('trade_code', 'start_date', 'end_date', 'page', 'page_size'),
+        'params': ('trade_code', 'date', 'start_date', 'end_date', 'page', 'page_size'),
     },
 
     'kline_pattern_annotations': {
@@ -812,7 +812,8 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'title': 'A股相关性 Top-K',
         'doc_file': 'A股相关性 Top-K.md',
         'original_api': 'ashare_rating_factor_snapshot',
-        'params': ('trade_code', 'date', 'top_k'),
+        'params': ('trade_code', 'date', 'top_k', 'page', 'page_size'),
+        'max_page_size': 500,
     },
 
     'stock_minute_seal': {
