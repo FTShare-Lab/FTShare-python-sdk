@@ -45,8 +45,8 @@
 | [`abnormal_trading_details`](#api-abnormal-trading-details) | 龙虎榜明细 | `GET` | `api/v1/market/data/abnormal-trading-details` | `date`, `page`, `page_size` | `龙虎榜明细.md` |
 | [`abnormal_trading_overview`](#api-abnormal-trading-overview) | 龙虎榜总览 | `GET` | `api/v1/market/data/abnormal-trading-overview` | `date`, `page`, `page_size` | `龙虎榜总览.md` |
 | [`ashare_interactions`](#api-ashare-interactions) | e互动 | `GET` | `api/v2/market/data/ashare-interactions` | `start_date`, `end_date`, `trade_code`, `company_name`, `industry_code`, `industry_name`, `data_source`, `page`, `page_size` | `e互动.md` |
-| [`ashare_news_sentiment_factors`](#api-ashare-news-sentiment-factors) | A股新闻情绪因子 | `GET` | `api/v3/market/data/ashare-news-sentiment-factors` | `trade_code`, `start_date`, `end_date`, `page`, `page_size` | `A股新闻情绪因子.md` |
-| [`ashare_rating_factor_snapshot`](#api-ashare-rating-factor-snapshot) | A股相关性 Top-K | `GET` | `api/v3/market/data/ashare-rating-factor-snapshot` | `trade_code`, `date`, `top_k` | `A股相关性 Top-K.md` |
+| [`ashare_news_sentiment_factors`](#api-ashare-news-sentiment-factors) | A股新闻情绪因子 | `GET` | `api/v3/market/data/ashare-news-sentiment-factors` | `trade_code`, `date`, `start_date`, `end_date`, `page`, `page_size` | `A股新闻情绪因子.md` |
+| [`ashare_rating_factor_snapshot`](#api-ashare-rating-factor-snapshot) | A股相关性 Top-K | `GET` | `api/v3/market/data/ashare-rating-factor-snapshot` | `trade_code`, `date`, `top_k`, `page`, `page_size` | `A股相关性 Top-K.md` |
 | [`auction_results`](#api-auction-results) | 集合竞价结果 | `GET` | `api/v2/market/data/auction-results` | `ts_code`, `trade_date`, `start_date`, `end_date`, `page`, `page_size` | `集合竞价结果.md` |
 | [`balance`](#api-balance) | A股资产负债表 | `GET` | `api/v1/market/data/finance/balance` | `stock_code`, `year`, `report_type`, `page`, `page_size` | `A股资产负债表.md` |
 | [`block_trades`](#api-block-trades) | 大宗交易 | `GET` | `api/v1/market/data/block-trades` | `date`, `page`, `page_size` | `大宗交易.md` |
@@ -419,7 +419,7 @@ e互动.
 - 接口名称：A股新闻情绪因子
 - HTTP：`GET`
 - Path：`api/v3/market/data/ashare-news-sentiment-factors`
-- 参数：`trade_code`, `start_date`, `end_date`, `page`, `page_size`
+- 参数：`trade_code`, `date`, `start_date`, `end_date`, `page`, `page_size`
 - 来源文档：`A股新闻情绪因子.md`
 - 原始接口：`ashare_news_sentiment_factors`
 
@@ -432,7 +432,7 @@ A股新闻情绪因子.
 - 接口名称：A股相关性 Top-K
 - HTTP：`GET`
 - Path：`api/v3/market/data/ashare-rating-factor-snapshot`
-- 参数：`trade_code`, `date`, `top_k`
+- 参数：`trade_code`, `date`, `top_k`, `page`, `page_size`
 - 来源文档：`A股相关性 Top-K.md`
 - 原始接口：`ashare_rating_factor_snapshot`
 
