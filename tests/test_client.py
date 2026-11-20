@@ -353,6 +353,9 @@ def test_requested_endpoint_api_versions():
         "hsi_daily_weight": "api/v1/market/data/hk/hsi-daily-weight",
         "stk_ah_comparison": "api/v1/market/data/hk/stk-ah-comparison",
         "sw_index_history_minutes": "api/v1/market/data/sw-index/history-minutes",
+        "sw_index_daily_quotes": "api/v1/market/data/sw-index/daily-quotes",
+        "futures_daily_kline": "api/v1/market/data/futures/daily-kline",
+        "futures_minutes_single": "api/v2/market/data/futures_minutes/single",
         "index_minutes_batch": "api/v2/market/data/index_minutes/batch",
         "etf_minutes_batch": "api/v2/market/data/etf_minutes/batch",
         "etf_announcements": "api/v2/market/data/announcements/etf-announcements",
@@ -1970,3 +1973,105 @@ def test_index_fut_depth_unwraps_bare_object_data():
     assert result == data
     assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/index-fut/depth"
     assert session.calls[0]["params"] == {"trade_date": "20261030", "code_prefix": "IF"}
+
+
+def test_futures_daily_kline_forwards_symbol_range_and_allows_page_size_500():
+    payload = {
+        "code": 200,
+        "message": "success",
+        "data": {
+            "items": [
+                {
+                    "symbol": "A9999",
+                    "trade_date": 20261117,
+                    "open": 5011.0,
+                    "high": 5040.0,
+                    "low": 4998.0,
+                    "close": 5023.0,
+                    "volume": 233487,
+                    "amount": 11730307300.0,
+                    "open_interest": 342838,
+                }
+            ],
+            "total": 1,
+            "page": 1,
+            "page_size": 500,
+        },
+    }
+    session = FakeSession([FakeResponse(payload=payload)])
+    client = FtshareClient(session=session)
+
+    df = client.futures_daily_kline(
+        symbol="A9999.DCE",
+        start_date="20261101",
+        end_date="20261117",
+        rule_version="v1",
+        page=1,
+        page_size=500,
+    )
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/futures/daily-kline"
+    assert session.calls[0]["params"] == {
+        "symbol": "A9999.DCE",
+        "start_date": "20261101",
+        "end_date": "20261117",
+        "rule_version": "v1",
+        "page": 1,
+        "page_size": 500,
+    }
+    assert df["symbol"].tolist() == ["A9999"]
+
+    with pytest.raises(ValueError, match="page_size must be between 1 and 500"):
+        client.futures_daily_kline(symbol="A9999.DCE", page_size=501)
+
+
+def test_futures_minutes_single_forwards_bare_symbol_and_interval():
+    session = FakeSession([FakeResponse(payload={"code": 200, "message": "success", "data": {"items": [], "total": 0}})])
+    client = FtshareClient(session=session)
+
+    client.futures_minutes_single(
+        symbol="A2611",
+        interval="5min",
+        start=1791475200000,
+        end=1791647999000,
+        limit=500,
+        as_dataframe=False,
+    )
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v2/market/data/futures_minutes/single"
+    assert session.calls[0]["params"] == {
+        "symbol": "A2611",
+        "interval": "5min",
+        "start": 1791475200000,
+        "end": 1791647999000,
+        "limit": 500,
+    }
+
+
+def test_sw_index_daily_quotes_forwards_filters_and_extracts_records():
+    session = FakeSession([FakeResponse(payload=paginated_records([{"index_code": "801001", "trade_date": "2026-11-02"}]))])
+    client = FtshareClient(session=session)
+
+    rows = client.sw_index_daily_quotes(
+        index_code="801001.SI",
+        start_date="20261101",
+        end_date="20261111",
+        index_type="市场表征",
+        page=1,
+        page_size=200,
+        as_dataframe=False,
+    )
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/api/v1/market/data/sw-index/daily-quotes"
+    assert session.calls[0]["params"] == {
+        "index_code": "801001.SI",
+        "start_date": "20261101",
+        "end_date": "20261111",
+        "index_type": "市场表征",
+        "page": 1,
+        "page_size": 200,
+    }
+    assert rows == [{"index_code": "801001", "trade_date": "2026-11-02"}]
+
+    with pytest.raises(ValueError, match="page_size must be between 1 and 200"):
+        client.sw_index_daily_quotes(page_size=201)

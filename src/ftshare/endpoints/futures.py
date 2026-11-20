@@ -34,6 +34,21 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'original_api': 'futures_minutes',
         'params': ('symbol', 'symbols', 'interval', 'start', 'end', 'limit'),
     },
+    'futures_minutes_single': {
+        'path': 'api/v2/market/data/futures_minutes/single',
+        'title': '期货历史分钟K线单合约',
+        'doc_file': '期货历史分钟K线单合约.md',
+        'original_api': 'futures_minutes_single',
+        'params': ('symbol', 'interval', 'start', 'end', 'limit'),
+    },
+    'futures_daily_kline': {
+        'path': 'api/v1/market/data/futures/daily-kline',
+        'title': '期货官方日K与9999主连',
+        'doc_file': '期货官方日K与9999主连.md',
+        'original_api': 'futures_daily_kline',
+        'params': ('symbol', 'trade_date', 'start_date', 'end_date', 'rule_version', 'page', 'page_size'),
+        'max_page_size': 500,
+    },
     'futures_kline': {
         'path': 'api/v1/market/data/futures/kline',
         'title': '期货合约历史K线',

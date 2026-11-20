@@ -486,6 +486,73 @@ class IndexApiMixin:
         params.update(kwargs)
         return self.get_paginated(ENDPOINTS['sw_index_history_minutes'].path, page=page, page_size=page_size, limit=limit, all_pages=all_pages, max_pages=max_pages, raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
 
+    def sw_index_daily_quotes(
+        self,
+        index_code: Any | None = None,
+        trade_date: Any | None = None,
+        start_date: Any | None = None,
+        end_date: Any | None = None,
+        index_type: Any | None = None,
+        page: int | None = None,
+        page_size: int | None = None,
+        limit: int | None = None,
+        all_pages: bool = False,
+        max_pages: int | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """申万指数日行情.
+
+        Endpoint: ``api/v1/market/data/sw-index/daily-quotes``.
+        Method: ``GET``.
+        Documented endpoint: ``sw_index_daily_quotes``.
+
+        Args:
+            index_code: 申万指数代码，如 ``801001``；也可带 ``.SI`` 后缀，如 ``801001.SI``，后缀不区分大小写 (type: string; required: N).
+            trade_date: 单个交易日 ``YYYYMMDD``，用于查询当日全市场截面；与 ``start_date``/``end_date`` 互斥 (type: string; required: N).
+            start_date: 起始日期 ``YYYYMMDD``，包含当天；不传 ``trade_date`` 时必填，且需与 ``end_date`` 同时提供 (type: string; required: N).
+            end_date: 截止日期 ``YYYYMMDD``，包含当天；不传 ``trade_date`` 时必填，且需与 ``start_date`` 同时提供 (type: string; required: N).
+            index_type: 指数分类，可取 ``一级行业`` / ``二级行业`` / ``三级行业`` / ``市场表征`` / ``风格指数`` / ``量化策略`` / ``新三板`` / ``大类风格``；空串视同未传 (type: string; required: N).
+            page: Page number, starting from 1. If omitted, the server default is used unless ``limit`` or ``all_pages`` is set.
+            page_size: Rows per page, default 50. The SDK validates this against the endpoint-specific maximum of 200.
+            limit: Maximum number of rows to return. The SDK may fetch multiple pages to satisfy this limit.
+            all_pages: Fetch and combine pages until the server reports the last page.
+            max_pages: Optional safety cap for ``all_pages``.
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
+            payloads when multi-page fetching is used with ``raw=True``。服务端
+            数值字段以字符串返回，``trade_date`` 为 ``YYYY-MM-DD``。
+        """
+        request_params = {
+            'index_code': index_code,
+            'trade_date': trade_date,
+            'start_date': start_date,
+            'end_date': end_date,
+            'index_type': index_type,
+        }
+        request_params.update(kwargs)
+        return self.get_paginated(
+            ENDPOINTS['sw_index_daily_quotes'].path,
+            page=page,
+            page_size=page_size,
+            limit=limit,
+            all_pages=all_pages,
+            max_pages=max_pages,
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **request_params,
+        )
+
     def index_minutes_batch(self, symbols: Any | None = None, interval_value: Any | None = None, since_ts_millis: Any | None = None, until_ts_millis: Any | None = None, limit: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
         """批量指数历史分钟行情."""
         params = {'symbols': symbols_to_csv_string(symbols), 'interval_value': interval_value, 'since_ts_millis': since_ts_millis, 'until_ts_millis': until_ts_millis, 'limit': limit}
