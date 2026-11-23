@@ -835,6 +835,21 @@ def test_ashare_news_sentiment_factors_forwards_date_and_date_range():
     assert session.calls[1]["params"] == {"trade_code": "600000.SH", "start_date": "20261112", "end_date": "20261113"}
 
 
+def test_ashare_news_sentiment_factors_keeps_legacy_positional_date_and_pagination():
+    session = FakeSession([FakeResponse(payload=paginated_records([]))])
+    client = FtshareClient(session=session)
+
+    client.ashare_news_sentiment_factors("600000.SH", "20261112", "20261113", 1, 5, as_dataframe=False)
+
+    assert session.calls[0]["params"] == {
+        "trade_code": "600000.SH",
+        "start_date": "20261112",
+        "end_date": "20261113",
+        "page": 1,
+        "page_size": 5,
+    }
+
+
 def test_ashare_rating_factor_snapshot_paginates_with_documented_500_cap():
     records = [{"trade_code": "600000.SH", "snapshot_date": "20261117", "related_securities": []}]
     session = FakeSession([FakeResponse(payload=paginated_records(records))])

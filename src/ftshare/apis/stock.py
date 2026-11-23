@@ -4548,7 +4548,7 @@ class StockApiMixin:
         return self.get_paginated(path, page=page, page_size=page_size, limit=limit, all_pages=all_pages, max_pages=max_pages, raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
 
 
-    def ashare_news_sentiment_factors(self, trade_code: Any | None = None, date: Any | None = None, start_date: Any | None = None, end_date: Any | None = None, page: Any | None = None, page_size: Any | None = None, limit: int | None = None, all_pages: bool = False, max_pages: int | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
+    def ashare_news_sentiment_factors(self, trade_code: Any | None = None, start_date: Any | None = None, end_date: Any | None = None, page: Any | None = None, page_size: Any | None = None, limit: int | None = None, all_pages: bool = False, max_pages: int | None = None, *, date: Any | None = None, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
         """A股新闻情绪因子."""
         params = {'trade_code': trade_code, 'date': date, 'start_date': start_date, 'end_date': end_date}
         params.update(kwargs)
