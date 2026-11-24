@@ -169,5 +169,12 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'original_api': 'member_position_ranking',
         'params': ('exchange', 'instrument_id', 'trade_date', 'direction', 'page', 'page_size'),
     },
+    'futures_dominant_mapping': {
+        'path': 'api/v1/market/data/futures/dominant-mapping',
+        'title': '期货主力合约映射',
+        'doc_file': '期货主力合约映射.md',
+        'original_api': 'futures_dominant_mapping',
+        'params': ('trade_date', 'rule_version'),
+    },
 
 })

@@ -312,6 +312,7 @@ SPECIAL_CALLS.update({
     "futures_kline": {"symbol": "A2609", "interval": "daily", "start": _millis("2026-05-01"), "end": _millis("2026-07-17", "15:00:00"), "limit": 5},
     "futures_kline_batch": {"symbols": "A2609", "interval": "daily", "start": _millis("2026-05-01"), "end": _millis("2026-07-17", "15:00:00"), "limit": 5},
     "futures_daily_kline": {"symbol": "A9999.DCE", "trade_date": None, "start_date": "20261101", "end_date": "20261117", "rule_version": "v1", "page": 1, "page_size": 5},
+    "futures_dominant_mapping": {"trade_date": "20261123", "rule_version": "v2"},
     "futures_minutes": {"symbol": "A2609", "symbols": None, "interval": "1min", "start": _millis("2026-07-17", "09:30:00"), "end": _millis("2026-07-17", "10:00:00"), "limit": 5},
     "futures_minutes_single": {"symbol": "A2611.DCE", "interval": "5min", "start": _millis("2026-07-17", "09:30:00"), "end": _millis("2026-07-17", "10:00:00"), "limit": 5},
     "futures_minutes_realtime": {"symbols": "A2609"},
@@ -370,4 +371,8 @@ SPECIAL_CALLS.update({
     "limit_event_timeline_3s": {"symbol": "000019.SZ", "trade_date": "20260909", "page": 1, "page_size": 5},
     "etf_pre_single": {"symbol": "510300.SH", "date": "20260717"},
     "eastmoney_futures_strange": {"exchange": "gfex", "variety": "多晶硅", "contract": "ps2609", "trade_date": "20260721"},
+    "sector_knowledge_facts": {"sector_name": "A股半导体", "sector_type": None, "market": "CN", "keyword": None, "keyword_expression": None, "fact_category": "行业供需", "start_date": "20260101", "end_date": "20261123", "min_influence_score": 60, "min_reliability_score": 60, "sort": "latest", "page": 1, "page_size": 5},
+    "sector_knowledge_insights": {"sector_name": "A股半导体", "sector_type": None, "market": "CN", "keyword": None, "keyword_expression": None, "insight_category": "产业景气研判", "start_date": "20260101", "end_date": "20261123", "min_influence_score": 60, "min_confidence": 0.8, "sort": "confidence", "page": 1, "page_size": 5},
+    "sector_knowledge_sectors": {"market": "CN", "sector_type": None, "name_keyword": "半导体"},
+    "sector_knowledge_search_options": {},
 })

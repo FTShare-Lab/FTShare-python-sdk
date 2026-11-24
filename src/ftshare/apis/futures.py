@@ -1019,3 +1019,24 @@ class FuturesApiMixin:
         params = {'exchange': exchange, 'instrument_id': instrument_id, 'trade_date': trade_date, 'direction': direction}
         params.update(kwargs)
         return self.get_paginated(ENDPOINTS['member_position_ranking'].path, page=page, page_size=page_size, limit=limit, all_pages=all_pages, max_pages=max_pages, raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+
+    def futures_dominant_mapping(self, trade_date: Any | None = None, rule_version: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
+        """查询指定交易日的期货主力合约映射，返回交易所、品种、主力合约与规则版本；不分页。
+
+        Args:
+            trade_date: 主力映射生效交易日，格式 ``YYYYMMDD``，例如 ``20261123`` (type: string; required: Y).
+            rule_version: 主力规则版本，支持 ``v1``、``v2``、``v3``、``v4``，区分大小写；省略或传空值时默认 ``v1``，传入不支持的版本返回空数组 (type: string; required: N).
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``。服务端返回
+            ``data`` 数组（``trade_date`` / ``exchange`` / ``variety`` /
+            ``dominant_symbol`` / ``rule_version``），不分页。
+        """
+        params = {'trade_date': trade_date, 'rule_version': rule_version}
+        params.update(kwargs)
+        return self._call_endpoint('futures_dominant_mapping', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)

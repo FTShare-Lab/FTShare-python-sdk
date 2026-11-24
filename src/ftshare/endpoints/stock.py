@@ -999,4 +999,35 @@ ENDPOINTS: dict[str, Endpoint] = build_endpoints({
         'max_page_size': 1000,
     },
 
+    'sector_knowledge_facts': {
+        'path': 'api/v3/market/data/sector-knowledge/facts',
+        'title': '板块事实检索',
+        'doc_file': '板块事实检索.md',
+        'original_api': 'sector_knowledge_facts',
+        'params': ('sector_name', 'sector_type', 'market', 'keyword', 'keyword_expression', 'fact_category', 'start_date', 'end_date', 'min_influence_score', 'min_reliability_score', 'sort', 'page', 'page_size'),
+    },
+
+    'sector_knowledge_insights': {
+        'path': 'api/v3/market/data/sector-knowledge/insights',
+        'title': '板块洞察检索',
+        'doc_file': '板块洞察检索.md',
+        'original_api': 'sector_knowledge_insights',
+        'params': ('sector_name', 'sector_type', 'market', 'keyword', 'keyword_expression', 'insight_category', 'start_date', 'end_date', 'min_influence_score', 'min_confidence', 'sort', 'page', 'page_size'),
+    },
+
+    'sector_knowledge_sectors': {
+        'path': 'api/v3/market/data/sector-knowledge/sectors',
+        'title': '板块描述列表',
+        'doc_file': '板块描述列表.md',
+        'original_api': 'sector_knowledge_sectors',
+        'params': ('market', 'sector_type', 'name_keyword'),
+    },
+
+    'sector_knowledge_search_options': {
+        'path': 'api/v3/market/data/sector-knowledge/search-options',
+        'title': '板块知识检索选项',
+        'doc_file': '板块知识检索选项.md',
+        'original_api': 'sector_knowledge_search_options',
+    },
+
 })

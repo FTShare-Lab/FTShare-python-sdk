@@ -4862,3 +4862,247 @@ class StockApiMixin:
         params = {'board_code': board_code, 'board_name': board_name, 'board_type': board_type, 'date': date}
         params.update(kwargs)
         return self.get_paginated(ENDPOINTS['ths_board_constituents'].path, page=page, page_size=page_size, limit=limit, all_pages=all_pages, max_pages=max_pages, max_page_size=1000, raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+
+    def sector_knowledge_facts(
+        self,
+        sector_name: Any | None = None,
+        sector_type: Any | None = None,
+        market: Any | None = None,
+        keyword: Any | None = None,
+        keyword_expression: Any | None = None,
+        fact_category: Any | None = None,
+        start_date: Any | None = None,
+        end_date: Any | None = None,
+        min_influence_score: Any | None = None,
+        min_reliability_score: Any | None = None,
+        sort: Any | None = None,
+        page: int | None = None,
+        page_size: int | None = None,
+        limit: int | None = None,
+        all_pages: bool = False,
+        max_pages: int | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """板块事实检索.
+
+        Endpoint: ``api/v3/market/data/sector-knowledge/facts``.
+        Method: ``GET``.
+        Documented endpoint: ``sector_knowledge_facts``.
+
+        Args:
+            sector_name: 板块标准名称，精确匹配 (type: string; required: N).
+            sector_type: 板块类型：industry / concept / region / index_style / macro_asset (type: string; required: N).
+            market: 市场：CN / US / HK / KR / JP / global (type: string; required: N).
+            keyword: 关键词子串匹配 title、content，最长 200 字符；与 keyword_expression 互斥 (type: string; required: N).
+            keyword_expression: 布尔表达式，支持 AND、OR、括号；与 keyword 互斥 (type: string; required: N).
+            fact_category: 板块事实分类，可重复传入；同维度多值为 OR (type: string; required: N).
+            start_date: 原始发布日期下界，YYYYMMDD (type: string; required: N).
+            end_date: 原始发布日期上界，YYYYMMDD (type: string; required: N).
+            min_influence_score: 最低影响力，0–100 (type: integer; required: N).
+            min_reliability_score: 最低可靠性，0–100 (type: integer; required: N).
+            sort: 排序方式：relevance / latest / influence，默认 relevance (type: string; required: N).
+            page: 页码，从 1 开始，默认 1，最大 1000.
+            page_size: 每页条数，默认 50，最大 200.
+            limit: Maximum number of rows to return when aggregating pages.
+            all_pages: Fetch every page.
+            max_pages: Safety bound when ``all_pages`` is enabled.
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``。关键词或表达式检索须同时提供
+            ``sector_name``。
+        """
+        params = {
+            'sector_name': sector_name,
+            'sector_type': sector_type,
+            'market': market,
+            'keyword': keyword,
+            'keyword_expression': keyword_expression,
+            'fact_category': fact_category,
+            'start_date': start_date,
+            'end_date': end_date,
+            'min_influence_score': min_influence_score,
+            'min_reliability_score': min_reliability_score,
+            'sort': sort,
+        }
+        params.update(kwargs)
+        return self.get_paginated(
+            ENDPOINTS['sector_knowledge_facts'].path,
+            page=page,
+            page_size=page_size,
+            limit=limit,
+            all_pages=all_pages,
+            max_pages=max_pages,
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **params,
+        )
+
+    def sector_knowledge_insights(
+        self,
+        sector_name: Any | None = None,
+        sector_type: Any | None = None,
+        market: Any | None = None,
+        keyword: Any | None = None,
+        keyword_expression: Any | None = None,
+        insight_category: Any | None = None,
+        start_date: Any | None = None,
+        end_date: Any | None = None,
+        min_influence_score: Any | None = None,
+        min_confidence: Any | None = None,
+        sort: Any | None = None,
+        page: int | None = None,
+        page_size: int | None = None,
+        limit: int | None = None,
+        all_pages: bool = False,
+        max_pages: int | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """板块洞察检索.
+
+        Endpoint: ``api/v3/market/data/sector-knowledge/insights``.
+        Method: ``GET``.
+        Documented endpoint: ``sector_knowledge_insights``.
+
+        Args:
+            sector_name: 板块标准名称，精确匹配 (type: string; required: N).
+            sector_type: 板块类型：industry / concept / region / index_style / macro_asset (type: string; required: N).
+            market: 市场：CN / US / HK / KR / JP / global (type: string; required: N).
+            keyword: 关键词子串匹配 title、summary，最长 200 字符；与 keyword_expression 互斥 (type: string; required: N).
+            keyword_expression: 布尔表达式，支持 AND、OR、括号；与 keyword 互斥 (type: string; required: N).
+            insight_category: 板块洞察分类，可重复传入；同维度多值为 OR (type: string; required: N).
+            start_date: 板块洞察生成日期下界，YYYYMMDD (type: string; required: N).
+            end_date: 板块洞察生成日期上界，YYYYMMDD (type: string; required: N).
+            min_influence_score: 最低影响力，0–100 (type: integer; required: N).
+            min_confidence: 最低置信度，0–1 (type: number; required: N).
+            sort: 排序方式：relevance / latest / influence / confidence，默认 relevance (type: string; required: N).
+            page: 页码，从 1 开始，默认 1，最大 1000.
+            page_size: 每页条数，默认 50，最大 200.
+            limit: Maximum number of rows to return when aggregating pages.
+            all_pages: Fetch every page.
+            max_pages: Safety bound when ``all_pages`` is enabled.
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``。关键词、表达式或
+            ``min_confidence`` 检索须同时提供 ``sector_name``。
+        """
+        params = {
+            'sector_name': sector_name,
+            'sector_type': sector_type,
+            'market': market,
+            'keyword': keyword,
+            'keyword_expression': keyword_expression,
+            'insight_category': insight_category,
+            'start_date': start_date,
+            'end_date': end_date,
+            'min_influence_score': min_influence_score,
+            'min_confidence': min_confidence,
+            'sort': sort,
+        }
+        params.update(kwargs)
+        return self.get_paginated(
+            ENDPOINTS['sector_knowledge_insights'].path,
+            page=page,
+            page_size=page_size,
+            limit=limit,
+            all_pages=all_pages,
+            max_pages=max_pages,
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **params,
+        )
+
+    def sector_knowledge_sectors(
+        self,
+        market: Any | None = None,
+        sector_type: Any | None = None,
+        name_keyword: Any | None = None,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """板块描述列表.
+
+        Endpoint: ``api/v3/market/data/sector-knowledge/sectors``.
+        Method: ``GET``.
+        Documented endpoint: ``sector_knowledge_sectors``.
+
+        Args:
+            market: 市场过滤：CN / US / HK / KR / JP / global (type: string; required: N).
+            sector_type: 板块类型过滤：industry / concept / region / index_style / macro_asset (type: string; required: N).
+            name_keyword: 板块标准名或别名关键词，最多返回 10 个候选，最长 100 字符 (type: string; required: N).
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            A pandas ``DataFrame`` by default, Python rows when
+            ``as_dataframe=False``, raw JSON when ``raw=True``。不分页，返回当前查询匹配的完整板块列表。
+        """
+        params = {'market': market, 'sector_type': sector_type, 'name_keyword': name_keyword}
+        params.update(kwargs)
+        return self._call_endpoint(
+            'sector_knowledge_sectors',
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            **params,
+        )
+
+    def sector_knowledge_search_options(
+        self,
+        *,
+        raw: bool = False,
+        fields: Sequence[str] | str | None = None,
+        as_dataframe: bool = True,
+        **kwargs: Any,
+    ) -> Any:
+        """板块知识检索选项.
+
+        Endpoint: ``api/v3/market/data/sector-knowledge/search-options``.
+        Method: ``GET``.
+        Documented endpoint: ``sector_knowledge_search_options``.
+
+        Args:
+            raw: Return the decoded JSON payload without tabular extraction.
+            fields: Optional field list or comma-separated field string applied after extraction.
+            as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+            **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+        Returns:
+            默认返回单行 pandas ``DataFrame``；``as_dataframe=False`` 时返回 ``data`` 对象（含
+            ``fact``、``insight``、``sector_type_list``、``market_list``、``sort``），``raw=True``
+            时返回完整 JSON 信封。
+        """
+        params = {}
+        params.update(kwargs)
+        return self.get(
+            ENDPOINTS['sector_knowledge_search_options'].path,
+            raw=raw,
+            fields=fields,
+            as_dataframe=as_dataframe,
+            unwrap_bare_data=True,
+            **params,
+        )

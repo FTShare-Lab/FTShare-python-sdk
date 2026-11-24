@@ -2135,3 +2135,117 @@ def test_sw_index_daily_quotes_forwards_filters_and_extracts_records():
 
     with pytest.raises(ValueError, match="page_size must be between 1 and 200"):
         client.sw_index_daily_quotes(page_size=201)
+
+
+def test_sector_knowledge_facts_forwards_filters_and_extracts_records():
+    records = [{"sector_name": "A股半导体", "title": "存储涨价", "fact_category": "行业供需"}]
+    session = FakeSession([FakeResponse(payload=paginated_records(records))])
+    client = FtshareClient(session=session)
+
+    rows = client.sector_knowledge_facts(
+        sector_name="A股半导体",
+        fact_category=["行业供需", "公司事件"],
+        start_date="20260101",
+        end_date="20261123",
+        sort="latest",
+        page=1,
+        page_size=5,
+        as_dataframe=False,
+    )
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + ENDPOINTS["sector_knowledge_facts"].path
+    assert session.calls[0]["params"] == {
+        "sector_name": "A股半导体",
+        "fact_category": ["行业供需", "公司事件"],
+        "start_date": "20260101",
+        "end_date": "20261123",
+        "sort": "latest",
+        "page": 1,
+        "page_size": 5,
+    }
+    assert rows == records
+    with pytest.raises(ValueError, match="page_size must be between 1 and 200"):
+        client.sector_knowledge_facts(sector_name="A股半导体", page_size=201)
+
+
+def test_sector_knowledge_insights_forwards_confidence_filter():
+    records = [{"sector_name": "A股半导体", "title": "景气兑现", "confidence": 0.95}]
+    session = FakeSession([FakeResponse(payload=paginated_records(records))])
+    client = FtshareClient(session=session)
+
+    rows = client.sector_knowledge_insights(
+        sector_name="A股半导体",
+        insight_category="产业景气研判",
+        min_confidence=0.8,
+        sort="confidence",
+        page=1,
+        page_size=5,
+        as_dataframe=False,
+    )
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + ENDPOINTS["sector_knowledge_insights"].path
+    assert session.calls[0]["params"] == {
+        "sector_name": "A股半导体",
+        "insight_category": "产业景气研判",
+        "min_confidence": 0.8,
+        "sort": "confidence",
+        "page": 1,
+        "page_size": 5,
+    }
+    assert rows == records
+
+
+def test_sector_knowledge_sectors_calls_route_without_pagination():
+    data = [{"sector_name": "A股半导体", "sector_type": "industry", "market": "CN", "description": "..."}]
+    session = FakeSession([FakeResponse(payload={"code": 200, "message": "success", "data": data})])
+    client = FtshareClient(session=session)
+
+    rows = client.sector_knowledge_sectors(market="CN", name_keyword="半导体", as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + ENDPOINTS["sector_knowledge_sectors"].path
+    assert session.calls[0]["params"] == {"market": "CN", "name_keyword": "半导体"}
+    assert rows == data
+
+
+def test_sector_knowledge_search_options_unwraps_data_object():
+    data = {
+        "fact": {"category_list": [], "searchable_field_list": ["title", "content"], "keyword_match": "substring"},
+        "insight": {"category_list": [], "searchable_field_list": ["title", "summary"], "keyword_match": "substring"},
+        "sector_type_list": ["industry", "concept"],
+        "market_list": ["CN"],
+        "sort": {"fact": ["relevance"], "insight": ["relevance"]},
+    }
+    session = FakeSession([FakeResponse(payload={"code": 200, "message": "success", "data": data})])
+    client = FtshareClient(session=session)
+
+    result = client.sector_knowledge_search_options(as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + ENDPOINTS["sector_knowledge_search_options"].path
+    assert session.calls[0]["params"] == {}
+    assert result == data
+
+
+def test_futures_dominant_mapping_calls_route_without_pagination():
+    data = [
+        {"trade_date": "20261123", "exchange": "CFFEX", "variety": "IF", "dominant_symbol": "IF2612", "rule_version": "v1"},
+        {"trade_date": "20261123", "exchange": "CZCE", "variety": "AP", "dominant_symbol": "AP2701", "rule_version": "v1"},
+    ]
+    session = FakeSession([FakeResponse(payload={"code": 200, "message": "success", "data": data})])
+    client = FtshareClient(session=session)
+
+    rows = client.futures_dominant_mapping(trade_date="20261123", as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + ENDPOINTS["futures_dominant_mapping"].path
+    assert session.calls[0]["params"] == {"trade_date": "20261123"}
+    assert rows == data
+
+
+def test_futures_dominant_mapping_forwards_rule_version():
+    data = [{"trade_date": "20261123", "exchange": "DCE", "variety": "A", "dominant_symbol": "a2701", "rule_version": "v4"}]
+    session = FakeSession([FakeResponse(payload={"code": 200, "message": "success", "data": data})])
+    client = FtshareClient(session=session)
+
+    rows = client.futures_dominant_mapping(trade_date="20261123", rule_version="v4", as_dataframe=False)
+
+    assert session.calls[0]["params"] == {"trade_date": "20261123", "rule_version": "v4"}
+    assert rows == data
