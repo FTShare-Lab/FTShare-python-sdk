@@ -4548,9 +4548,9 @@ class StockApiMixin:
         return self.get_paginated(path, page=page, page_size=page_size, limit=limit, all_pages=all_pages, max_pages=max_pages, raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
 
 
-    def ashare_news_sentiment_factors(self, trade_code: Any | None = None, start_date: Any | None = None, end_date: Any | None = None, page: Any | None = None, page_size: Any | None = None, limit: int | None = None, all_pages: bool = False, max_pages: int | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
+    def ashare_news_sentiment_factors(self, trade_code: Any | None = None, start_date: Any | None = None, end_date: Any | None = None, page: Any | None = None, page_size: Any | None = None, limit: int | None = None, all_pages: bool = False, max_pages: int | None = None, *, date: Any | None = None, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
         """A股新闻情绪因子."""
-        params = {'trade_code': trade_code, 'start_date': start_date, 'end_date': end_date}
+        params = {'trade_code': trade_code, 'date': date, 'start_date': start_date, 'end_date': end_date}
         params.update(kwargs)
         path = ENDPOINTS['ashare_news_sentiment_factors'].path
         return self.get_paginated(path, page=page, page_size=page_size, limit=limit, all_pages=all_pages, max_pages=max_pages, raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
@@ -4674,11 +4674,12 @@ class StockApiMixin:
         )
 
 
-    def ashare_rating_factor_snapshot(self, trade_code: Any | None = None, date: Any | None = None, top_k: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
+    def ashare_rating_factor_snapshot(self, trade_code: Any | None = None, date: Any | None = None, top_k: Any | None = None, page: int | None = None, page_size: int | None = None, limit: int | None = None, all_pages: bool = False, max_pages: int | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:
         """A股相关性 Top-K."""
         params = {'trade_code': trade_code, 'date': date, 'top_k': top_k}
         params.update(kwargs)
-        return self._call_endpoint('ashare_rating_factor_snapshot', raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
+        path = ENDPOINTS['ashare_rating_factor_snapshot'].path
+        return self.get_paginated(path, page=page, page_size=page_size, limit=limit, all_pages=all_pages, max_pages=max_pages, max_page_size=ENDPOINTS['ashare_rating_factor_snapshot'].max_page_size, raw=raw, fields=fields, as_dataframe=as_dataframe, **params)
 
 
     def stock_minute_seal(self, trade_date: Any | None = None, symbol: Any | None = None, *, raw: bool = False, fields: Sequence[str] | str | None = None, as_dataframe: bool = True, **kwargs: Any) -> Any:

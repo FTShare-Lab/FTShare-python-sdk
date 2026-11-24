@@ -810,6 +810,66 @@ def test_abnormal_trading_methods_accept_documented_500_row_page_size():
             getattr(client, method_name)(page_size=501)
 
 
+def test_ashare_news_sentiment_factors_forwards_date_and_date_range():
+    records = [{"prediction_date": "20261113", "trade_code": "600000.SH", "sentiment_index": 1, "confidence": 1}]
+    session = FakeSession([FakeResponse(payload=paginated_records(records)), FakeResponse(payload=paginated_records([]))])
+    client = FtshareClient(session=session)
+
+    rows = client.ashare_news_sentiment_factors(
+        trade_code="600000.SH",
+        date="20261117",
+        page=1,
+        page_size=5,
+        as_dataframe=False,
+    )
+    client.ashare_news_sentiment_factors(
+        trade_code="600000.SH",
+        start_date="20261112",
+        end_date="20261113",
+        as_dataframe=False,
+    )
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + ENDPOINTS["ashare_news_sentiment_factors"].path
+    assert session.calls[0]["params"] == {"trade_code": "600000.SH", "date": "20261117", "page": 1, "page_size": 5}
+    assert rows == records
+    assert session.calls[1]["params"] == {"trade_code": "600000.SH", "start_date": "20261112", "end_date": "20261113"}
+
+
+def test_ashare_news_sentiment_factors_keeps_legacy_positional_date_and_pagination():
+    session = FakeSession([FakeResponse(payload=paginated_records([]))])
+    client = FtshareClient(session=session)
+
+    client.ashare_news_sentiment_factors("600000.SH", "20261112", "20261113", 1, 5, as_dataframe=False)
+
+    assert session.calls[0]["params"] == {
+        "trade_code": "600000.SH",
+        "start_date": "20261112",
+        "end_date": "20261113",
+        "page": 1,
+        "page_size": 5,
+    }
+
+
+def test_ashare_rating_factor_snapshot_paginates_with_documented_500_cap():
+    records = [{"trade_code": "600000.SH", "snapshot_date": "20261117", "related_securities": []}]
+    session = FakeSession([FakeResponse(payload=paginated_records(records))])
+    client = FtshareClient(session=session)
+
+    rows = client.ashare_rating_factor_snapshot(
+        date="20261117",
+        top_k=5,
+        page=2,
+        page_size=500,
+        as_dataframe=False,
+    )
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + ENDPOINTS["ashare_rating_factor_snapshot"].path
+    assert session.calls[0]["params"] == {"date": "20261117", "top_k": 5, "page": 2, "page_size": 500}
+    assert rows == records
+    with pytest.raises(ValueError, match="page_size must be between 1 and 500"):
+        client.ashare_rating_factor_snapshot(page_size=501)
+
+
 def test_futures_kline_batch_and_realtime_day_kline_forward_symbols_list():
     session = FakeSession([FakeResponse(payload=[])])
     client = FtshareClient(session=session)

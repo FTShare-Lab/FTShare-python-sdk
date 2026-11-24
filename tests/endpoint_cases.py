@@ -163,8 +163,8 @@ SPECIAL_CALLS: dict[str, dict[str, Any]] = {
     "stock_daec_stocks": {"board": "all", "page": 1, "page_size": 5, "filter": "close > 10", "order_by": "change_rate desc"},
     "stock_realtime_list": {"board": "chi-next", "page": 1, "page_size": 5},
     "stock_intraday_prices": {"symbol": "600000.SH", "range": None, "days": None, "ts_ms": 1784048400000},
-    "ashare_news_sentiment_factors": {"trade_code": "000001.SZ", "start_date": "20260715", "end_date": "20260717", "page": 1, "page_size": 5},
-    "ashare_rating_factor_snapshot": {"trade_code": "000001.SZ", "date": "20260717", "top_k": 5},
+    "ashare_news_sentiment_factors": {"trade_code": "000001.SZ", "date": None, "start_date": "20260715", "end_date": "20260717", "page": 1, "page_size": 5},
+    "ashare_rating_factor_snapshot": {"trade_code": "000001.SZ", "date": "20260717", "top_k": 5, "page": 1, "page_size": 5},
     "baidu_financial_calendar": {"category": "economic", "start_date": "20260715", "end_date": "20260717", "page": 1, "page_size": 5},
     "eastmoney_board_daily_kline": {"board_code": "BK1024", "start_date": "20260818", "end_date": "20260820", "page": 1, "page_size": 5},
     "eastmoney_us_stock_list": {"refresh": False, "page": 1, "page_size": 5},
@@ -293,7 +293,7 @@ def _millis(day: str, time: str = "00:00:00") -> int:
 # here. Each entry must still list every documented parameter of its endpoint.
 SPECIAL_CALLS.update({
     "ashare_interactions": {"start_date": "20260701", "end_date": "20260717", "trade_code": None, "company_name": None, "industry_code": None, "industry_name": None, "data_source": None, "page": 1, "page_size": 5},
-    "ashare_news_sentiment_factors": {"trade_code": "600000.SH", "start_date": "20260801", "end_date": "20260811", "page": 1, "page_size": 5},
+    "ashare_news_sentiment_factors": {"trade_code": "600000.SH", "date": None, "start_date": "20260801", "end_date": "20260811", "page": 1, "page_size": 5},
     "bse_mapping": {"o_code": None, "n_code": None, "page": 1, "page_size": 5},
     "bullion_price": {"symbol": "XAUUSD", "start_date": 20260101, "end_date": 20260918, "page": 1, "page_size": 5},
     "china_futures_base_data": {"trade_date": None, "symbol": None},
