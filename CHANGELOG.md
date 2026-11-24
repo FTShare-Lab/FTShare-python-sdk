@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- New sector knowledge endpoints: `sector_knowledge_facts` (板块事实检索) and `sector_knowledge_insights` (板块洞察检索) with keyword/expression, category, date, score and sort filters plus pagination; `sector_knowledge_sectors` (板块描述列表) and `sector_knowledge_search_options` (板块知识检索选项) for name and enum discovery.
+
 ### Changed
 - `ashare_news_sentiment_factors` now accepts the documented single-day `date` parameter; `start_date`/`end_date` must be passed together and span no more than 31 days, and omitting all dates queries the current prediction day.
 - `ashare_rating_factor_snapshot` is now paginated (`page`/`page_size` with the documented 500-row cap, plus `limit`/`all_pages`/`max_pages`); `trade_code` is optional for full-market queries and `top_k` is capped at 10 by the service.

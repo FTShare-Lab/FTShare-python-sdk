@@ -370,4 +370,8 @@ SPECIAL_CALLS.update({
     "limit_event_timeline_3s": {"symbol": "000019.SZ", "trade_date": "20260909", "page": 1, "page_size": 5},
     "etf_pre_single": {"symbol": "510300.SH", "date": "20260717"},
     "eastmoney_futures_strange": {"exchange": "gfex", "variety": "多晶硅", "contract": "ps2609", "trade_date": "20260721"},
+    "sector_knowledge_facts": {"sector_name": "A股半导体", "sector_type": None, "market": "CN", "keyword": None, "keyword_expression": None, "fact_category": "行业供需", "start_date": "20260101", "end_date": "20261123", "min_influence_score": 60, "min_reliability_score": 60, "sort": "latest", "page": 1, "page_size": 5},
+    "sector_knowledge_insights": {"sector_name": "A股半导体", "sector_type": None, "market": "CN", "keyword": None, "keyword_expression": None, "insight_category": "产业景气研判", "start_date": "20260101", "end_date": "20261123", "min_influence_score": 60, "min_confidence": 0.8, "sort": "confidence", "page": 1, "page_size": 5},
+    "sector_knowledge_sectors": {"market": "CN", "sector_type": None, "name_keyword": "半导体"},
+    "sector_knowledge_search_options": {},
 })

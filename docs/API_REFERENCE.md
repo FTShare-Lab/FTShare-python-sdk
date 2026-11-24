@@ -6,13 +6,13 @@
 
 | 指标 | 数量 |
 |---|---:|
-| SDK 方法总数 | 250 |
+| SDK 方法总数 | 254 |
 
 ## 专题分布
 
 | ftshare-doc 专题 | SDK 方法数 | API mixin 模块 | Endpoint 模块 |
 |---|---:|---|---|
-| 股票数据 | 131 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
+| 股票数据 | 135 | `ftshare.apis.stock` | `ftshare.endpoints.stock` |
 | 港股数据 | 3 | `ftshare.apis.hk` | `ftshare.endpoints.hk` |
 | 美股数据 | 2 | `ftshare.apis.us` | `ftshare.endpoints.us` |
 | 指数专题 | 16 | `ftshare.apis.index` | `ftshare.endpoints.index` |
@@ -163,6 +163,10 @@
 | [`trading_calendar`](#api-trading-calendar) | 交易日历 | `GET` | `api/v1/market/data/time/trading-calendar` | `market`, `start_date`, `end_date` | `交易日历.md` |
 | [`xueqiu_rank`](#api-xueqiu-rank) | 雪球股票排名 | `GET` | `api/v1/market/data/xueqiu-rank` | `rank_group`, `period`, `trade_date`, `page`, `page_size` | `雪球股票排名.md` |
 | [`yzxdr_detail`](#api-yzxdr-detail) | 一致行动人明细 | `GET` | `api/v1/market/data/yzxdr-detail` | `year`, `quarter`, `stock_code`, `page`, `page_size` | `一致行动人明细.md` |
+| [`sector_knowledge_facts`](#api-sector-knowledge-facts) | 板块事实检索 | `GET` | `api/v3/market/data/sector-knowledge/facts` | `sector_name`, `sector_type`, `market`, `keyword`, `keyword_expression`, `fact_category`, `start_date`, `end_date`, `min_influence_score`, `min_reliability_score`, `sort`, `page`, `page_size` | `板块事实检索.md` |
+| [`sector_knowledge_insights`](#api-sector-knowledge-insights) | 板块洞察检索 | `GET` | `api/v3/market/data/sector-knowledge/insights` | `sector_name`, `sector_type`, `market`, `keyword`, `keyword_expression`, `insight_category`, `start_date`, `end_date`, `min_influence_score`, `min_confidence`, `sort`, `page`, `page_size` | `板块洞察检索.md` |
+| [`sector_knowledge_search_options`](#api-sector-knowledge-search-options) | 板块知识检索选项 | `GET` | `api/v3/market/data/sector-knowledge/search-options` | - | `板块知识检索选项.md` |
+| [`sector_knowledge_sectors`](#api-sector-knowledge-sectors) | 板块描述列表 | `GET` | `api/v3/market/data/sector-knowledge/sectors` | `market`, `sector_type`, `name_keyword` | `板块描述列表.md` |
 
 ### 港股数据
 
@@ -3582,6 +3586,152 @@ Returns:
     A pandas ``DataFrame`` by default, Python rows when
     ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
     payloads when multi-page fetching is used with ``raw=True``.
+```
+
+<h4 id="api-sector-knowledge-facts"><code>sector_knowledge_facts</code></h4>
+
+- 接口名称：板块事实检索
+- HTTP：`GET`
+- Path：`api/v3/market/data/sector-knowledge/facts`
+- 参数：`sector_name`, `sector_type`, `market`, `keyword`, `keyword_expression`, `fact_category`, `start_date`, `end_date`, `min_influence_score`, `min_reliability_score`, `sort`, `page`, `page_size`
+- 来源文档：`板块事实检索.md`
+- 原始接口：`sector_knowledge_facts`
+
+```text
+板块事实检索.
+
+Endpoint: ``api/v3/market/data/sector-knowledge/facts``.
+Method: ``GET``.
+Documented endpoint: ``sector_knowledge_facts``.
+
+Args:
+    sector_name: 板块标准名称，精确匹配 (type: string; required: N).
+    sector_type: 板块类型：industry / concept / region / index_style / macro_asset (type: string; required: N).
+    market: 市场：CN / US / HK / KR / JP / global (type: string; required: N).
+    keyword: 关键词子串匹配 title、content，最长 200 字符；与 keyword_expression 互斥 (type: string; required: N).
+    keyword_expression: 布尔表达式，支持 AND、OR、括号；与 keyword 互斥 (type: string; required: N).
+    fact_category: 板块事实分类，可重复传入；同维度多值为 OR (type: string; required: N).
+    start_date: 原始发布日期下界，YYYYMMDD (type: string; required: N).
+    end_date: 原始发布日期上界，YYYYMMDD (type: string; required: N).
+    min_influence_score: 最低影响力，0–100 (type: integer; required: N).
+    min_reliability_score: 最低可靠性，0–100 (type: integer; required: N).
+    sort: 排序方式：relevance / latest / influence，默认 relevance (type: string; required: N).
+    page: 页码，从 1 开始，默认 1，最大 1000.
+    page_size: 每页条数，默认 50，最大 200.
+    limit: Maximum number of rows to return when aggregating pages.
+    all_pages: Fetch every page.
+    max_pages: Safety bound when ``all_pages`` is enabled.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``。关键词或表达式检索须同时提供
+    ``sector_name``。
+```
+
+<h4 id="api-sector-knowledge-insights"><code>sector_knowledge_insights</code></h4>
+
+- 接口名称：板块洞察检索
+- HTTP：`GET`
+- Path：`api/v3/market/data/sector-knowledge/insights`
+- 参数：`sector_name`, `sector_type`, `market`, `keyword`, `keyword_expression`, `insight_category`, `start_date`, `end_date`, `min_influence_score`, `min_confidence`, `sort`, `page`, `page_size`
+- 来源文档：`板块洞察检索.md`
+- 原始接口：`sector_knowledge_insights`
+
+```text
+板块洞察检索.
+
+Endpoint: ``api/v3/market/data/sector-knowledge/insights``.
+Method: ``GET``.
+Documented endpoint: ``sector_knowledge_insights``.
+
+Args:
+    sector_name: 板块标准名称，精确匹配 (type: string; required: N).
+    sector_type: 板块类型：industry / concept / region / index_style / macro_asset (type: string; required: N).
+    market: 市场：CN / US / HK / KR / JP / global (type: string; required: N).
+    keyword: 关键词子串匹配 title、summary，最长 200 字符；与 keyword_expression 互斥 (type: string; required: N).
+    keyword_expression: 布尔表达式，支持 AND、OR、括号；与 keyword 互斥 (type: string; required: N).
+    insight_category: 板块洞察分类，可重复传入；同维度多值为 OR (type: string; required: N).
+    start_date: 板块洞察生成日期下界，YYYYMMDD (type: string; required: N).
+    end_date: 板块洞察生成日期上界，YYYYMMDD (type: string; required: N).
+    min_influence_score: 最低影响力，0–100 (type: integer; required: N).
+    min_confidence: 最低置信度，0–1 (type: number; required: N).
+    sort: 排序方式：relevance / latest / influence / confidence，默认 relevance (type: string; required: N).
+    page: 页码，从 1 开始，默认 1，最大 1000.
+    page_size: 每页条数，默认 50，最大 200.
+    limit: Maximum number of rows to return when aggregating pages.
+    all_pages: Fetch every page.
+    max_pages: Safety bound when ``all_pages`` is enabled.
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``。关键词、表达式或
+    ``min_confidence`` 检索须同时提供 ``sector_name``。
+```
+
+<h4 id="api-sector-knowledge-search-options"><code>sector_knowledge_search_options</code></h4>
+
+- 接口名称：板块知识检索选项
+- HTTP：`GET`
+- Path：`api/v3/market/data/sector-knowledge/search-options`
+- 参数：`-`
+- 来源文档：`板块知识检索选项.md`
+- 原始接口：`sector_knowledge_search_options`
+
+```text
+板块知识检索选项.
+
+Endpoint: ``api/v3/market/data/sector-knowledge/search-options``.
+Method: ``GET``.
+Documented endpoint: ``sector_knowledge_search_options``.
+
+Args:
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    默认返回单行 pandas ``DataFrame``；``as_dataframe=False`` 时返回 ``data`` 对象（含
+    ``fact``、``insight``、``sector_type_list``、``market_list``、``sort``），``raw=True``
+    时返回完整 JSON 信封。
+```
+
+<h4 id="api-sector-knowledge-sectors"><code>sector_knowledge_sectors</code></h4>
+
+- 接口名称：板块描述列表
+- HTTP：`GET`
+- Path：`api/v3/market/data/sector-knowledge/sectors`
+- 参数：`market`, `sector_type`, `name_keyword`
+- 来源文档：`板块描述列表.md`
+- 原始接口：`sector_knowledge_sectors`
+
+```text
+板块描述列表.
+
+Endpoint: ``api/v3/market/data/sector-knowledge/sectors``.
+Method: ``GET``.
+Documented endpoint: ``sector_knowledge_sectors``.
+
+Args:
+    market: 市场过滤：CN / US / HK / KR / JP / global (type: string; required: N).
+    sector_type: 板块类型过滤：industry / concept / region / index_style / macro_asset (type: string; required: N).
+    name_keyword: 板块标准名或别名关键词，最多返回 10 个候选，最长 100 字符 (type: string; required: N).
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``。不分页，返回当前查询匹配的完整板块列表。
 ```
 
 ### 港股数据
