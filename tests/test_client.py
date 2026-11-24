@@ -2223,3 +2223,29 @@ def test_sector_knowledge_search_options_unwraps_data_object():
     assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + ENDPOINTS["sector_knowledge_search_options"].path
     assert session.calls[0]["params"] == {}
     assert result == data
+
+
+def test_futures_dominant_mapping_calls_route_without_pagination():
+    data = [
+        {"trade_date": "20261123", "exchange": "CFFEX", "variety": "IF", "dominant_symbol": "IF2612", "rule_version": "v1"},
+        {"trade_date": "20261123", "exchange": "CZCE", "variety": "AP", "dominant_symbol": "AP2701", "rule_version": "v1"},
+    ]
+    session = FakeSession([FakeResponse(payload={"code": 200, "message": "success", "data": data})])
+    client = FtshareClient(session=session)
+
+    rows = client.futures_dominant_mapping(trade_date="20261123", as_dataframe=False)
+
+    assert session.calls[0]["url"] == "https://market.ft.tech/gateway/" + ENDPOINTS["futures_dominant_mapping"].path
+    assert session.calls[0]["params"] == {"trade_date": "20261123"}
+    assert rows == data
+
+
+def test_futures_dominant_mapping_forwards_rule_version():
+    data = [{"trade_date": "20261123", "exchange": "DCE", "variety": "A", "dominant_symbol": "a2701", "rule_version": "v4"}]
+    session = FakeSession([FakeResponse(payload={"code": 200, "message": "success", "data": data})])
+    client = FtshareClient(session=session)
+
+    rows = client.futures_dominant_mapping(trade_date="20261123", rule_version="v4", as_dataframe=False)
+
+    assert session.calls[0]["params"] == {"trade_date": "20261123", "rule_version": "v4"}
+    assert rows == data

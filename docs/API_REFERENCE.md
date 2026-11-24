@@ -6,7 +6,7 @@
 
 | 指标 | 数量 |
 |---|---:|
-| SDK 方法总数 | 254 |
+| SDK 方法总数 | 255 |
 
 ## 专题分布
 
@@ -18,7 +18,7 @@
 | 指数专题 | 16 | `ftshare.apis.index` | `ftshare.endpoints.index` |
 | ETF专题 | 17 | `ftshare.apis.etf` | `ftshare.endpoints.etf` |
 | 公募基金 | 18 | `ftshare.apis.fund` | `ftshare.endpoints.fund` |
-| 期货数据 | 22 | `ftshare.apis.futures` | `ftshare.endpoints.futures` |
+| 期货数据 | 23 | `ftshare.apis.futures` | `ftshare.endpoints.futures` |
 | 债券专题 | 9 | `ftshare.apis.bond` | `ftshare.endpoints.bond` |
 | 宏观经济 | 23 | `ftshare.apis.economic` | `ftshare.endpoints.economic` |
 | 大模型语料 | 7 | `ftshare.apis.llm_corpus` | `ftshare.endpoints.llm_corpus` |
@@ -269,6 +269,7 @@
 | [`fut_weekly_detail`](#api-fut-weekly-detail) | 期货主要品种交易周报 | `GET` | `api/v1/market/data/futures/fut-weekly-detail` | `week`, `prd`, `start_week`, `end_week`, `exchange`, `page`, `page_size` | `期货主要品种交易周报.md` |
 | [`fut_wsr`](#api-fut-wsr) | 期货仓单日报 | `GET` | `api/v1/market/data/futures/fut-wsr` | `trade_date`, `start_date`, `end_date`, `symbol`, `exchange`, `page`, `page_size` | `期货仓单日报.md` |
 | [`futures_daily_kline`](#api-futures-daily-kline) | 期货官方日K与9999主连 | `GET` | `api/v1/market/data/futures/daily-kline` | `symbol`, `trade_date`, `start_date`, `end_date`, `rule_version`, `page`, `page_size` | `期货官方日K与9999主连.md` |
+| [`futures_dominant_mapping`](#api-futures-dominant-mapping) | 期货主力合约映射 | `GET` | `api/v1/market/data/futures/dominant-mapping` | `trade_date`, `rule_version` | `期货主力合约映射.md` |
 | [`futures_kline`](#api-futures-kline) | 期货合约历史K线 | `GET` | `api/v1/market/data/futures/kline` | `symbol`, `interval`, `start`, `end`, `limit` | `期货合约历史K线.md` |
 | [`futures_kline_batch`](#api-futures-kline-batch) | 批量期货合约历史K线 | `GET` | `api/v2/market/data/futures/kline/batch` | `symbols`, `interval`, `start`, `end`, `limit` | `批量期货合约历史K线.md` |
 | [`futures_minutes`](#api-futures-minutes) | 期货历史分钟K线 | `GET` | `api/v2/market/data/futures_minutes` | `symbol`, `symbols`, `interval`, `start`, `end`, `limit` | `期货历史分钟K线.md` |
@@ -5354,6 +5355,37 @@ Returns:
     A pandas ``DataFrame`` by default, Python rows when
     ``as_dataframe=False``, raw JSON when ``raw=True``, or raw page
     payloads when multi-page fetching is used with ``raw=True``.
+```
+
+<h4 id="api-futures-dominant-mapping"><code>futures_dominant_mapping</code></h4>
+
+- 接口名称：期货主力合约映射
+- HTTP：`GET`
+- Path：`api/v1/market/data/futures/dominant-mapping`
+- 参数：`trade_date`, `rule_version`
+- 来源文档：`期货主力合约映射.md`
+- 原始接口：`futures_dominant_mapping`
+
+```text
+期货主力合约映射.
+
+Endpoint: ``api/v1/market/data/futures/dominant-mapping``.
+Method: ``GET``.
+Documented endpoint: ``futures_dominant_mapping``.
+
+Args:
+    trade_date: 主力映射生效交易日，格式 ``YYYYMMDD``，例如 ``20261123`` (type: string; required: Y).
+    rule_version: 主力规则版本，支持 ``v1``、``v2``、``v3``、``v4``，区分大小写；省略或传空值时默认 ``v1``，传入不支持的版本返回空数组 (type: string; required: N).
+    raw: Return the decoded JSON payload without tabular extraction.
+    fields: Optional field list or comma-separated field string applied after extraction.
+    as_dataframe: Return a pandas ``DataFrame`` by default; set to ``False`` for Python rows.
+    **kwargs: Extra request parameters forwarded unchanged. Useful when the service adds parameters before the SDK is regenerated.
+
+Returns:
+    A pandas ``DataFrame`` by default, Python rows when
+    ``as_dataframe=False``, raw JSON when ``raw=True``。服务端返回
+    ``data`` 数组（``trade_date`` / ``exchange`` / ``variety`` /
+    ``dominant_symbol`` / ``rule_version``），不分页。
 ```
 
 <h4 id="api-futures-kline"><code>futures_kline</code></h4>

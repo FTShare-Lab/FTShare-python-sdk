@@ -312,6 +312,7 @@ SPECIAL_CALLS.update({
     "futures_kline": {"symbol": "A2609", "interval": "daily", "start": _millis("2026-05-01"), "end": _millis("2026-07-17", "15:00:00"), "limit": 5},
     "futures_kline_batch": {"symbols": "A2609", "interval": "daily", "start": _millis("2026-05-01"), "end": _millis("2026-07-17", "15:00:00"), "limit": 5},
     "futures_daily_kline": {"symbol": "A9999.DCE", "trade_date": None, "start_date": "20261101", "end_date": "20261117", "rule_version": "v1", "page": 1, "page_size": 5},
+    "futures_dominant_mapping": {"trade_date": "20261123", "rule_version": "v2"},
     "futures_minutes": {"symbol": "A2609", "symbols": None, "interval": "1min", "start": _millis("2026-07-17", "09:30:00"), "end": _millis("2026-07-17", "10:00:00"), "limit": 5},
     "futures_minutes_single": {"symbol": "A2611.DCE", "interval": "5min", "start": _millis("2026-07-17", "09:30:00"), "end": _millis("2026-07-17", "10:00:00"), "limit": 5},
     "futures_minutes_realtime": {"symbols": "A2609"},
